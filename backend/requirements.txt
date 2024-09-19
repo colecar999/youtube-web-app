@@ -11,4 +11,3 @@ assemblyai
 sentence-transformers
 scikit-learn
 yt-dlp
-concurrent.futures

@@ -7,7 +7,6 @@ from fastapi import FastAPI, WebSocket, WebSocketDisconnect, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 from supabase import create_client, Client
-from tasks import process_videos
 
 # Load environment variables from .env file
 load_dotenv()
@@ -45,6 +44,9 @@ async def initiate_processing(data: dict, background_tasks: BackgroundTasks):
     """
     Endpoint to initiate the processing of YouTube videos.
     """
+    # Import process_videos here
+    from tasks import process_videos
+    
     # Generate a unique session ID
     session_id = str(uuid.uuid4())
 
