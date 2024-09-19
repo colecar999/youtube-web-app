@@ -1,0 +1,14 @@
+# backend/requirements.txt
+fastapi
+uvicorn
+python-dotenv
+supabase
+requests
+pandas
+spacy
+openai
+assemblyai
+sentence-transformers
+scikit-learn
+yt-dlp
+concurrent.futures
