@@ -3,10 +3,11 @@
 import os
 import uuid
 import json
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect, BackgroundTasks
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, BackgroundTasks, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 from supabase import create_client, Client
+import logging
 
 # Load environment variables from .env file
 load_dotenv()
@@ -72,6 +73,15 @@ async def initiate_processing(data: dict, background_tasks: BackgroundTasks):
     # Return the session ID to the client
     return {"session_id": session_id}
 
+@app.post("/process")
+async def initiate_processing(data: dict, background_tasks: BackgroundTasks):
+    try:
+        # Your existing code here
+        return {"session_id": session_id}
+    except Exception as e:
+        logging.error(f"Error in initiate_processing: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
 @app.websocket("/ws/{session_id}")
 async def websocket_endpoint(websocket: WebSocket, session_id: str):
     """
@@ -104,3 +114,7 @@ def send_update(session_id: str, message: str):
                 connection.send_json({"message": message})
             except:
                 pass  # Handle broken connections silently
+
+@app.get("/")
+async def root():
+    return {"message": "Welcome to YouTube Video Processor API"}
