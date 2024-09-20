@@ -1,0 +1,14 @@
+   [Unit]
+   Description=YT Web App FastAPI application
+   After=network.target
+
+   [Service]
+   User=appuser
+   Group=appuser
+   WorkingDirectory=/home/appuser/youtube-web-app/backend
+   Environment="PATH=/home/appuser/youtube-web-app/backend/venv/bin"
+   EnvironmentFile=/home/appuser/youtube-web-app/backend/.env
+   ExecStart=/home/appuser/youtube-web-app/backend/venv/bin/uvicorn main:app --host 0.0.0.0 --port 8000
+
+   [Install]
+   WantedBy=multi-user.target
