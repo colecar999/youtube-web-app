@@ -31,7 +31,7 @@ export default function Home() {
     try {
       // Send POST request to backend to start processing
       const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/process`, {
-        video_ids: videoIds.split('\\n').map(id => id.trim()).filter(id => id),
+        video_ids: videoIds.split('\n').map(id => id.trim()).filter(id => id),
         num_videos: parseInt(numVideos),
         num_comments: parseInt(numComments),
         num_tags: parseInt(numTags),
@@ -64,67 +64,60 @@ export default function Home() {
   };
 
   return (
-    <ErrorBoundary fallback={<div>Something went wrong</div>}>
-      <div>
-        <h1>Welcome to the YouTube Web App</h1>
-        <RealtimeUpdates updates={updates} />
-      </div>
-    </ErrorBoundary>
+    <div>
+      <h1>Welcome to the YouTube Web App</h1>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label htmlFor="videoIds">List of YouTube Video IDs (one per line):</label>
+          <textarea
+            id="videoIds"
+            value={videoIds}
+            onChange={(e) => setVideoIds(e.target.value)}
+            rows="5"
+          />
+        </div>
+        <div>
+          <label htmlFor="numVideos">Number of Top Videos per Channel (NUM_VIDEOS):</label>
+          <input
+            type="number"
+            id="numVideos"
+            value={numVideos}
+            onChange={(e) => setNumVideos(e.target.value)}
+          />
+        </div>
+        <div>
+          <label htmlFor="numComments">Number of Comments per Video to Retrieve (NUM_COMMENTS_RETRIEVED):</label>
+          <input
+            type="number"
+            id="numComments"
+            value={numComments}
+            onChange={(e) => setNumComments(e.target.value)}
+          />
+        </div>
+        <div>
+          <label htmlFor="numTags">Number of Tags per Video:</label>
+          <input
+            type="number"
+            id="numTags"
+            value={numTags}
+            onChange={(e) => setNumTags(e.target.value)}
+          />
+        </div>
+        <div>
+          <label htmlFor="clusteringStrength">Strength of Tag Clustering (0.0 - 1.0):</label>
+          <input
+            type="number"
+            id="clusteringStrength"
+            value={clusteringStrength}
+            onChange={(e) => setClusteringStrength(e.target.value)}
+            step="0.1"
+            min="0"
+            max="1"
+          />
+        </div>
+        <button type="submit">Start Processing</button>
+      </form>
+      <RealtimeUpdates updates={updates} />
+    </div>
   );
 }
-
-class ErrorBoundary extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { hasError: false };
-  }
-
-  static getDerivedStateFromError(error) {
-    return { hasError: true };
-  }
-
-  componentDidCatch(error, errorInfo) {
-    console.error('Error caught by ErrorBoundary:', error, errorInfo);
-  }
-
-  render() {
-    if (this.state.hasError) {
-      return this.props.fallback;
-    }
-    return this.props.children;
-  }
-}
-
-// Inline styles for simplicity; consider using CSS modules or styled-components for larger projects
-const styles = {
-  container: {
-    padding: '20px',
-    fontFamily: 'Arial, sans-serif'
-  },
-  form: {
-    display: 'flex',
-    flexDirection: 'column',
-    maxWidth: '600px'
-  },
-  label: {
-    marginBottom: '15px'
-  },
-  textarea: {
-    width: '100%',
-    padding: '10px',
-    fontSize: '16px'
-  },
-  input: {
-    width: '100%',
-    padding: '8px',
-    fontSize: '16px'
-  },
-  button: {
-    padding: '10px',
-    fontSize: '16px',
-    backgroundColor: '#0070f3',
-    color: '#fff',
-    border: 'none',
-    cursor: 'pointer'
-  }
-};
