@@ -8,6 +8,10 @@
 **/.env.test.local
 **/.env.production.local
 
+# Instructions and prompts
+**/instructions.txt
+**/prompt.txt
+
 # OS files
 .DS_Store
 Thumbs.db
