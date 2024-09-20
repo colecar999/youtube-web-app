@@ -4,7 +4,25 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import RealtimeUpdates from '../components/RealtimeUpdates';
 import { supabase } from '../lib/supabaseClient';
-import { Button, Input, Textarea, Label, Container, Heading, Form, FormField } from '@shadcn/ui'; // Import ShadCN UI components
+import {
+  Button,
+  Input,
+  Textarea,
+  FormControl,
+  FormLabel,
+  Container,
+  Heading,
+  VStack,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  NumberIncrementStepper,
+  NumberDecrementStepper,
+  Box,
+  Spinner,
+  Alert,
+  AlertIcon,
+} from '@chakra-ui/react';
 
 export default function Home() {
   const [isSupabaseInitialized, setIsSupabaseInitialized] = useState(false);
@@ -31,7 +49,7 @@ export default function Home() {
       channel
         .on('broadcast', { event: 'update' }, (payload) => {
           console.log('Received update:', payload);
-          setUpdates(prev => [...prev, payload.message]);
+          setUpdates((prev) => [...prev, payload.message]);
         })
         .subscribe((status) => {
           console.log('Subscription status:', status);
@@ -58,11 +76,11 @@ export default function Home() {
     try {
       // Send POST request to backend to start processing
       const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/process`, {
-        video_ids: videoIds.split('\n').map(id => id.trim()).filter(id => id),
+        video_ids: videoIds.split('\n').map((id) => id.trim()).filter((id) => id),
         num_videos: parseInt(numVideos),
         num_comments: parseInt(numComments),
         num_tags: parseInt(numTags),
-        clustering_strength: parseFloat(clusteringStrength)
+        clustering_strength: parseFloat(clusteringStrength),
       });
 
       const { session_id } = response.data;
@@ -73,7 +91,7 @@ export default function Home() {
       newChannel
         .on('broadcast', { event: 'update' }, (payload) => {
           console.log('Received update:', payload);
-          setUpdates(prev => [...prev, payload.message]);
+          setUpdates((prev) => [...prev, payload.message]);
         })
         .subscribe((status) => {
           console.log('Subscription status:', status);
@@ -81,10 +99,9 @@ export default function Home() {
             console.log('Successfully subscribed to channel');
           }
         });
-
     } catch (error) {
       console.error('Error initiating processing:', error);
-      setUpdates(prev => [...prev, 'Error initiating processing. Please check your inputs and try again.']);
+      setUpdates((prev) => [...prev, 'Error initiating processing. Please check your inputs and try again.']);
     }
   };
 
@@ -96,76 +113,93 @@ export default function Home() {
   const [clusteringStrength, setClusteringStrength] = useState(0.3);
 
   if (error) {
-    return <div>Error: {error}</div>;
+    return (
+      <Container centerContent>
+        <Alert status="error">
+          <AlertIcon />
+          {error}
+        </Alert>
+      </Container>
+    );
   }
 
   if (!isSupabaseInitialized) {
-    return <div>Loading...</div>;
+    return (
+      <Container centerContent>
+        <Spinner size="xl" />
+      </Container>
+    );
   }
 
   return (
-    <Container className="p-8">
-      <Heading className="mb-6">YouTube Video Processor</Heading>
-      <Form onSubmit={handleSubmit}>
-        <FormField>
-          <Label htmlFor="videoIds">List of YouTube Video IDs (one per line):</Label>
-          <Textarea
-            id="videoIds"
-            value={videoIds}
-            onChange={(e) => setVideoIds(e.target.value)}
-            rows="5"
-            className="mt-1 mb-4"
-            placeholder="Enter video IDs here..."
-          />
-        </FormField>
-        <FormField>
-          <Label htmlFor="numVideos">Number of Top Videos per Channel (NUM_VIDEOS):</Label>
-          <Input
-            type="number"
-            id="numVideos"
-            value={numVideos}
-            onChange={(e) => setNumVideos(e.target.value)}
-            className="mt-1 mb-4"
-            min="1"
-          />
-        </FormField>
-        <FormField>
-          <Label htmlFor="numComments">Number of Comments per Video to Retrieve (NUM_COMMENTS_RETRIEVED):</Label>
-          <Input
-            type="number"
-            id="numComments"
-            value={numComments}
-            onChange={(e) => setNumComments(e.target.value)}
-            className="mt-1 mb-4"
-            min="1"
-          />
-        </FormField>
-        <FormField>
-          <Label htmlFor="numTags">Number of Tags per Video:</Label>
-          <Input
-            type="number"
-            id="numTags"
-            value={numTags}
-            onChange={(e) => setNumTags(e.target.value)}
-            className="mt-1 mb-4"
-            min="1"
-          />
-        </FormField>
-        <FormField>
-          <Label htmlFor="clusteringStrength">Strength of Tag Clustering (0.0 - 1.0):</Label>
-          <Input
-            type="number"
-            id="clusteringStrength"
-            value={clusteringStrength}
-            onChange={(e) => setClusteringStrength(e.target.value)}
-            step="0.1"
-            min="0"
-            max="1"
-            className="mt-1 mb-4"
-          />
-        </FormField>
-        <Button type="submit" className="mt-4">Start Processing</Button>
-      </Form>
+    <Container maxW="container.md" p={8}>
+      <Heading mb={6}>YouTube Video Processor</Heading>
+      <Box as="form" onSubmit={handleSubmit}>
+        <VStack spacing={4} align="stretch">
+          <FormControl id="videoIds" isRequired>
+            <FormLabel>List of YouTube Video IDs (one per line):</FormLabel>
+            <Textarea
+              value={videoIds}
+              onChange={(e) => setVideoIds(e.target.value)}
+              placeholder="Enter video IDs here..."
+            />
+          </FormControl>
+
+          <FormControl id="numVideos" isRequired>
+            <FormLabel>Number of Top Videos per Channel (NUM_VIDEOS):</FormLabel>
+            <NumberInput min={1} value={numVideos} onChange={(valueString) => setNumVideos(valueString)}>
+              <NumberInputField />
+              <NumberInputStepper>
+                <NumberIncrementStepper />
+                <NumberDecrementStepper />
+              </NumberInputStepper>
+            </NumberInput>
+          </FormControl>
+
+          <FormControl id="numComments" isRequired>
+            <FormLabel>Number of Comments per Video to Retrieve (NUM_COMMENTS_RETRIEVED):</FormLabel>
+            <NumberInput min={1} value={numComments} onChange={(valueString) => setNumComments(valueString)}>
+              <NumberInputField />
+              <NumberInputStepper>
+                <NumberIncrementStepper />
+                <NumberDecrementStepper />
+              </NumberInputStepper>
+            </NumberInput>
+          </FormControl>
+
+          <FormControl id="numTags" isRequired>
+            <FormLabel>Number of Tags per Video:</FormLabel>
+            <NumberInput min={1} value={numTags} onChange={(valueString) => setNumTags(valueString)}>
+              <NumberInputField />
+              <NumberInputStepper>
+                <NumberIncrementStepper />
+                <NumberDecrementStepper />
+              </NumberInputStepper>
+            </NumberInput>
+          </FormControl>
+
+          <FormControl id="clusteringStrength" isRequired>
+            <FormLabel>Strength of Tag Clustering (0.0 - 1.0):</FormLabel>
+            <NumberInput
+              min={0}
+              max={1}
+              step={0.1}
+              value={clusteringStrength}
+              onChange={(valueString) => setClusteringStrength(valueString)}
+            >
+              <NumberInputField />
+              <NumberInputStepper>
+                <NumberIncrementStepper />
+                <NumberDecrementStepper />
+              </NumberInputStepper>
+            </NumberInput>
+          </FormControl>
+
+          <Button type="submit" colorScheme="teal">
+            Start Processing
+          </Button>
+        </VStack>
+      </Box>
       <RealtimeUpdates updates={updates} />
     </Container>
   );
