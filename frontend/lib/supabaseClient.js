@@ -6,14 +6,31 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 console.log('Supabase URL:', supabaseUrl);
 console.log('Supabase Anon Key:', supabaseAnonKey ? 'Set' : 'Not set');
 
+if (!supabaseUrl || !supabaseAnonKey) {
+  console.error('Supabase URL or Anon Key is missing');
+  throw new Error('Supabase configuration is incomplete');
+}
+
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-// Remove these lines as they are not compatible with the current Supabase version
-// supabase.realtime.onOpen(() => console.log('Realtime connection opened'));
-// supabase.realtime.onClose(() => console.log('Realtime connection closed'));
-// supabase.realtime.onError((error) => console.error('Realtime error:', error));
+// Set up real-time listeners using the new approach
+const channel = supabase.channel('custom-all-channel')
 
-// Instead, you can use the following if you want to log connection status:
-supabase.channel('system').on('system', { event: '*' }, (payload) => {
-  console.log('Realtime event:', payload);
-}).subscribe();
+channel
+  .on('presence', { event: 'sync' }, () => {
+    console.log('Realtime connection synced');
+  })
+  .on('presence', { event: 'join' }, ({ key, newPresences }) => {
+    console.log('New connection joined:', key, newPresences);
+  })
+  .on('presence', { event: 'leave' }, ({ key, leftPresences }) => {
+    console.log('Connection left:', key, leftPresences);
+  })
+  .subscribe((status) => {
+    if (status === 'SUBSCRIBED') {
+      console.log('Successfully subscribed to real-time channel');
+    }
+  })
+
+// Export the channel for use in other parts of your application if needed
+export { channel as supabaseChannel };
