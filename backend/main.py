@@ -42,7 +42,7 @@ supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Add this class and instance
+# Add ConnectionManager as before
 class ConnectionManager:
     def __init__(self):
         self.active_connections: List[WebSocket] = []
@@ -63,18 +63,17 @@ class ConnectionManager:
 
 manager = ConnectionManager()
 
-# Remove the duplicate @app.post("/process") route and keep only this one
 @app.post("/process")
 async def initiate_processing(data: dict, background_tasks: BackgroundTasks):
     try:
-        # Your existing code here
         session_id = str(uuid.uuid4())
-        # ... (rest of your existing code)
+        background_tasks.add_task(process_videos, session_id, supabase, **data)
         return {"session_id": session_id}
     except Exception as e:
         logger.error(f"Error in initiate_processing: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
+# WebSocket endpoint if still needed
 @app.websocket("/ws/{client_id}")
 async def websocket_endpoint(websocket: WebSocket, client_id: str):
     await manager.connect(websocket)
@@ -91,10 +90,4 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str):
         logger.error(f"Error in WebSocket connection for client {client_id}: {str(e)}")
         manager.disconnect(websocket)
 
-# Update this function to use the manager
-async def send_update(session_id: str, message: str):
-    await manager.broadcast(json.dumps({"session_id": session_id, "message": message}))
-
-@app.get("/")
-async def root():
-    return {"message": "Welcome to YouTube Video Processor API"}
+# The rest of your main.py remains unchanged

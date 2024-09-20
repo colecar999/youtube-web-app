@@ -1,50 +1,30 @@
 // frontend/components/RealtimeUpdates.js
 
-import React, { useEffect, useState } from 'react';
-import { supabase } from '../lib/supabaseClient';
+import React from 'react';
+import { Card, CardHeader, CardContent, Badge } from '@shadcn/ui';
 
-const RealtimeUpdates = () => {
-  const [updates, setUpdates] = useState([]);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    if (!supabase) {
-      setError('Supabase client is not initialized');
-      return;
-    }
-
-    const channel = supabase.channel('custom-all-channel');
-
-    channel
-      .on('broadcast', { event: 'test' }, (payload) => {
-        console.log('Received broadcast:', payload);
-        setUpdates(prevUpdates => [...prevUpdates, JSON.stringify(payload)]);
-      })
-      .subscribe((status) => {
-        console.log('Subscription status:', status);
-        if (status === 'SUBSCRIBED') {
-          console.log('Successfully subscribed to channel');
-        }
-      });
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, []);
-
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
-
+const RealtimeUpdates = ({ updates }) => {
   return (
-    <div>
-      <h2>Real-time Updates</h2>
-      <div>
-        {updates.map((update, index) => (
-          <p key={index}>{update}</p>
-        ))}
-      </div>
-    </div>
+    <Card className="mt-8">
+      <CardHeader>
+        <h2 className="text-xl">Real-time Updates</h2>
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-2">
+          {updates.map((update, index) => {
+            const isError = update.toLowerCase().includes('error');
+            return (
+              <div key={index} className="flex items-start">
+                <Badge variant={isError ? 'destructive' : 'default'} className="mr-2">
+                  {isError ? 'Error' : 'Info'}
+                </Badge>
+                <p>{new Date().toLocaleTimeString()}: {update}</p>
+              </div>
+            );
+          })}
+        </div>
+      </CardContent>
+    </Card>
   );
 };
 
