@@ -3,6 +3,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import RealtimeUpdates from '../components/RealtimeUpdates';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY;
+
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 export default function Home() {
   // State variables for form inputs
@@ -40,23 +46,23 @@ export default function Home() {
 
       const { session_id } = response.data;
 
-      // Establish WebSocket connection for real-time updates
-      const ws = new WebSocket(`wss://${process.env.NEXT_PUBLIC_BACKEND_URL.replace(/^https?:\/\//, '')}/ws/${session_id}`);
+      // Use Supabase for real-time updates instead of WebSocket
+      const channel = supabase.channel(session_id);
 
-      ws.onopen = () => {
-        console.log('WebSocket connection established.');
-      };
+      channel
+        .on('broadcast', { event: 'update' }, (payload) => {
+          console.log('Received update:', payload);
+          setUpdates(prev => [...prev, payload.message]);
+        })
+        .subscribe((status) => {
+          console.log('Subscription status:', status);
+          if (status === 'SUBSCRIBED') {
+            console.log('Successfully subscribed to channel');
+          }
+        });
 
-      ws.onmessage = (event) => {
-        const data = JSON.parse(event.data);
-        setUpdates(prev => [...prev, data.message]);
-      };
-
-      ws.onclose = () => {
-        console.log('WebSocket connection closed.');
-      };
-
-      setSocket(ws);
+      // Store the channel in state to unsubscribe later if needed
+      setSocket(channel);
     } catch (error) {
       console.error('Error initiating processing:', error);
       setUpdates(prev => [...prev, 'Error initiating processing. Please check your inputs and try again.']);
