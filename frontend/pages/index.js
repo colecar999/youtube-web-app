@@ -45,7 +45,7 @@ export default function Home() {
       const { session_id } = response.data;
 
       // Establish WebSocket connection for real-time updates
-      const ws = new WebSocket(`ws://${process.env.NEXT_PUBLIC_BACKEND_URL.replace(/^https?:\/\//, '')}/ws/${session_id}`);
+      const ws = new WebSocket(`wss://${process.env.NEXT_PUBLIC_BACKEND_URL.replace(/^https?:\/\//, '')}/ws/${session_id}`);
 
       ws.onopen = () => {
         console.log('WebSocket connection established.');
