@@ -1,8 +1,31 @@
 // frontend/components/RealtimeUpdates.js
 
-import React from 'react';
+import React, { useEffect } from 'react';
+import { supabase } from './supabaseClient';
 
-const RealtimeUpdates = ({ updates }) => {
+const RealtimeUpdates = () => {
+  useEffect(() => {
+    console.log('RealtimeUpdates component mounted');
+    const channel = supabase.channel('custom-all-channel');
+
+    channel
+      .on('broadcast', { event: 'test' }, (payload) => {
+        console.log('Received broadcast:', payload);
+        // Handle the payload
+      })
+      .subscribe((status) => {
+        console.log('Subscription status:', status);
+        if (status === 'SUBSCRIBED') {
+          console.log('Successfully subscribed to channel');
+        }
+      });
+
+    return () => {
+      console.log('RealtimeUpdates component unmounting');
+      supabase.removeChannel(channel);
+    };
+  }, []);
+
   return (
     <div style={styles.container}>
       <h2>Real-time Updates</h2>

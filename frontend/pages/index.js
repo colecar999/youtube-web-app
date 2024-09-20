@@ -17,13 +17,9 @@ export default function Home() {
   const [updates, setUpdates] = useState([]);
 
   useEffect(() => {
-    // Cleanup WebSocket on component unmount
-    return () => {
-      if (socket) {
-        socket.close();
-      }
-    };
-  }, [socket]);
+    console.log('Home component mounted');
+    return () => console.log('Home component unmounting');
+  }, []);
 
   // Handler for form submission
   const handleSubmit = async (e) => {
@@ -68,71 +64,35 @@ export default function Home() {
   };
 
   return (
-    <div style={styles.container}>
-      <h1>YouTube Video Processor</h1>
-      <form onSubmit={handleSubmit} style={styles.form}>
-        <label style={styles.label}>
-          List of YouTube Video IDs (one per line):
-          <textarea
-            value={videoIds}
-            onChange={(e) => setVideoIds(e.target.value)}
-            rows="5"
-            style={styles.textarea}
-            required
-          />
-        </label>
-        <label style={styles.label}>
-          Number of Top Videos per Channel (NUM_VIDEOS):
-          <input
-            type="number"
-            value={numVideos}
-            onChange={(e) => setNumVideos(e.target.value)}
-            min="1"
-            style={styles.input}
-            required
-          />
-        </label>
-        <label style={styles.label}>
-          Number of Comments per Video to Retrieve (NUM_COMMENTS_RETRIEVED):
-          <input
-            type="number"
-            value={numComments}
-            onChange={(e) => setNumComments(e.target.value)}
-            min="1"
-            style={styles.input}
-            required
-          />
-        </label>
-        <label style={styles.label}>
-          Number of Tags per Video:
-          <input
-            type="number"
-            value={numTags}
-            onChange={(e) => setNumTags(e.target.value)}
-            min="1"
-            style={styles.input}
-            required
-          />
-        </label>
-        <label style={styles.label}>
-          Strength of Tag Clustering (0.0 - 1.0):
-          <input
-            type="number"
-            step="0.1"
-            value={clusteringStrength}
-            onChange={(e) => setClusteringStrength(e.target.value)}
-            min="0.0"
-            max="1.0"
-            style={styles.input}
-            required
-          />
-        </label>
-        <button type="submit" style={styles.button}>Start Processing</button>
-      </form>
-
-      <RealtimeUpdates updates={updates} />
-    </div>
+    <ErrorBoundary fallback={<div>Something went wrong</div>}>
+      <div>
+        <h1>Welcome to the YouTube Web App</h1>
+        <RealtimeUpdates updates={updates} />
+      </div>
+    </ErrorBoundary>
   );
+}
+
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.error('Error caught by ErrorBoundary:', error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return this.props.fallback;
+    }
+    return this.props.children;
+  }
 }
 
 // Inline styles for simplicity; consider using CSS modules or styled-components for larger projects

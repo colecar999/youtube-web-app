@@ -1,0 +1,1144 @@
+Creating a comprehensive web application that integrates video processing, transcription, comment retrieval, and tag generation involves several components. Below, I'll guide you through refactoring your existing `code_transcripts` and `code_comments` scripts into a robust web application architecture using modern best practices. We'll structure the application with a **Next.js** frontend deployed on **Vercel**, a **FastAPI** backend hosted on **DigitalOcean**, and **Supabase** as the backend database.
+
+## Table of Contents
+
+1. [Architecture Overview](https://www.notion.so/YT-Podcast-Analytics-App-10457a7e0147804a8b7cd0f03e2ee118?pvs=21)
+2. [Project Structure](https://www.notion.so/YT-Podcast-Analytics-App-10457a7e0147804a8b7cd0f03e2ee118?pvs=21)
+3. [Frontend Implementation (Next.js)](https://www.notion.so/YT-Podcast-Analytics-App-10457a7e0147804a8b7cd0f03e2ee118?pvs=21)
+    - [1. `package.json`](https://www.notion.so/YT-Podcast-Analytics-App-10457a7e0147804a8b7cd0f03e2ee118?pvs=21)
+    - [2. `.env.local`](https://www.notion.so/YT-Podcast-Analytics-App-10457a7e0147804a8b7cd0f03e2ee118?pvs=21)
+    - [3. `pages/index.js`](https://www.notion.so/YT-Podcast-Analytics-App-10457a7e0147804a8b7cd0f03e2ee118?pvs=21)
+    - [4. `components/RealtimeUpdates.js`](https://www.notion.so/YT-Podcast-Analytics-App-10457a7e0147804a8b7cd0f03e2ee118?pvs=21)
+4. [Backend Implementation (FastAPI)](https://www.notion.so/YT-Podcast-Analytics-App-10457a7e0147804a8b7cd0f03e2ee118?pvs=21)
+    - [1. `requirements.txt`](https://www.notion.so/YT-Podcast-Analytics-App-10457a7e0147804a8b7cd0f03e2ee118?pvs=21)
+    - [2. `.env`](https://www.notion.so/YT-Podcast-Analytics-App-10457a7e0147804a8b7cd0f03e2ee118?pvs=21)
+    - [3. `main.py`](https://www.notion.so/YT-Podcast-Analytics-App-10457a7e0147804a8b7cd0f03e2ee118?pvs=21)
+    - [4. `tasks.py`](https://www.notion.so/YT-Podcast-Analytics-App-10457a7e0147804a8b7cd0f03e2ee118?pvs=21)
+    - [5. `supabase_tables.sql`](https://www.notion.so/YT-Podcast-Analytics-App-10457a7e0147804a8b7cd0f03e2ee118?pvs=21)
+5. [Supabase Setup](https://www.notion.so/YT-Podcast-Analytics-App-10457a7e0147804a8b7cd0f03e2ee118?pvs=21)
+6. [Deployment Instructions](https://www.notion.so/YT-Podcast-Analytics-App-10457a7e0147804a8b7cd0f03e2ee118?pvs=21)
+    - [1. Deploying Frontend to Vercel](https://www.notion.so/YT-Podcast-Analytics-App-10457a7e0147804a8b7cd0f03e2ee118?pvs=21)
+    - [2. Deploying Backend to DigitalOcean](https://www.notion.so/YT-Podcast-Analytics-App-10457a7e0147804a8b7cd0f03e2ee118?pvs=21)
+    - [3. Setting Up Supabase](https://www.notion.so/YT-Podcast-Analytics-App-10457a7e0147804a8b7cd0f03e2ee118?pvs=21)
+7. [Best Practices Implemented](https://www.notion.so/YT-Podcast-Analytics-App-10457a7e0147804a8b7cd0f03e2ee118?pvs=21)
+8. [Conclusion](https://www.notion.so/YT-Podcast-Analytics-App-10457a7e0147804a8b7cd0f03e2ee118?pvs=21)
+
+---
+
+## Architecture Overview
+
+The application consists of three primary components:
+
+1. **Frontend (Next.js on Vercel):**
+    - **Functionality:**
+        - User inputs: List of YouTube video IDs, `NUM_VIDEOS`, `NUM_COMMENTS_RETRIEVED`, number of tags per video, and clustering strength.
+        - Display real-time updates and errors during processing.
+2. **Backend (FastAPI on DigitalOcean):**
+    - **Functionality:**
+        - Receives input from the frontend.
+        - Processes videos: Retrieves channel info, video details, comments, transcriptions, and generates tags.
+        - Stores data in Supabase.
+        - Sends real-time updates to the frontend via WebSockets.
+3. **Backend Database (Supabase):**
+    - **Functionality:**
+        - Stores data related to channels, videos, comments, transcriptions, and tags.
+        - Provides a secure and scalable database solution.
+
+**Communication Flow:**
+
+1. **User Interaction:**
+    - User submits data through the frontend form.
+2. **Backend Processing:**
+    - Frontend sends data to the backend API.
+    - Backend starts processing and communicates progress via WebSockets.
+3. **Data Storage:**
+    - Processed data is stored in Supabase tables.
+4. **Real-time Updates:**
+    - Frontend displays processing status and errors in real-time.
+
+---
+
+## Project Structure
+
+Here's the recommended project structure for the application:
+
+```
+youtube-web-app/
+├── frontend/
+│   ├── components/
+│   │   └── RealtimeUpdates.js
+│   ├── pages/
+│   │   └── index.js
+│   ├── public/
+│   ├── styles/
+│   ├── package.json
+│   └── .env.local
+├── backend/
+│   ├── main.py
+│   ├── tasks.py
+│   ├── requirements.txt
+│   ├── .env
+│   └── supabase_tables.sql
+├── supabase/
+│   └── supabase_tables.sql
+└── README.md
+
+```
+
+---
+
+## Frontend Implementation (Next.js)
+
+We'll use **Next.js** for the frontend due to its seamless integration with Vercel, server-side rendering capabilities, and ease of development.
+
+### 1. `package.json`
+
+This file manages the frontend dependencies and scripts.
+
+```json
+// frontend/package.json
+{
+  "name": "youtube-web-app-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "axios": "^1.4.0",
+    "next": "13.4.10",
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
+  }
+}
+
+```
+
+### 2. `.env.local`
+
+Store environment variables securely. **Do not** commit this file to version control.
+
+```
+// frontend/.env.local
+NEXT_PUBLIC_BACKEND_URL=http://YOUR_DIGITALOCEAN_SERVER_IP:8000
+
+```
+
+**Note:** Replace `YOUR_DIGITALOCEAN_SERVER_IP` with your actual backend server's IP address or domain.
+
+### 3. `pages/index.js`
+
+This is the main page where users will input data and view real-time updates.
+
+```jsx
+// frontend/pages/index.js
+
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import RealtimeUpdates from '../components/RealtimeUpdates';
+
+export default function Home() {
+  // State variables for form inputs
+  const [videoIds, setVideoIds] = useState('');
+  const [numVideos, setNumVideos] = useState(10);
+  const [numComments, setNumComments] = useState(50);
+  const [numTags, setNumTags] = useState(5);
+  const [clusteringStrength, setClusteringStrength] = useState(0.3);
+
+  // State variables for handling the WebSocket connection
+  const [socket, setSocket] = useState(null);
+  const [updates, setUpdates] = useState([]);
+
+  useEffect(() => {
+    // Cleanup WebSocket on component unmount
+    return () => {
+      if (socket) {
+        socket.close();
+      }
+    };
+  }, [socket]);
+
+  // Handler for form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // Clear previous updates
+    setUpdates([]);
+
+    try {
+      // Send POST request to backend to start processing
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/process`, {
+        video_ids: videoIds.split('\\n').map(id => id.trim()).filter(id => id),
+        num_videos: parseInt(numVideos),
+        num_comments: parseInt(numComments),
+        num_tags: parseInt(numTags),
+        clustering_strength: parseFloat(clusteringStrength)
+      });
+
+      const { session_id } = response.data;
+
+      // Establish WebSocket connection for real-time updates
+      const ws = new WebSocket(`ws://${process.env.NEXT_PUBLIC_BACKEND_URL.replace(/^http/, 'ws')}/ws/${session_id}`);
+
+      ws.onopen = () => {
+        console.log('WebSocket connection established.');
+      };
+
+      ws.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        setUpdates(prev => [...prev, data.message]);
+      };
+
+      ws.onclose = () => {
+        console.log('WebSocket connection closed.');
+      };
+
+      setSocket(ws);
+    } catch (error) {
+      console.error('Error initiating processing:', error);
+      setUpdates(prev => [...prev, 'Error initiating processing. Please check your inputs and try again.']);
+    }
+  };
+
+  return (
+    <div style={styles.container}>
+      <h1>YouTube Video Processor</h1>
+      <form onSubmit={handleSubmit} style={styles.form}>
+        <label style={styles.label}>
+          List of YouTube Video IDs (one per line):
+          <textarea
+            value={videoIds}
+            onChange={(e) => setVideoIds(e.target.value)}
+            rows="5"
+            style={styles.textarea}
+            required
+          />
+        </label>
+        <label style={styles.label}>
+          Number of Top Videos per Channel (NUM_VIDEOS):
+          <input
+            type="number"
+            value={numVideos}
+            onChange={(e) => setNumVideos(e.target.value)}
+            min="1"
+            style={styles.input}
+            required
+          />
+        </label>
+        <label style={styles.label}>
+          Number of Comments per Video to Retrieve (NUM_COMMENTS_RETRIEVED):
+          <input
+            type="number"
+            value={numComments}
+            onChange={(e) => setNumComments(e.target.value)}
+            min="1"
+            style={styles.input}
+            required
+          />
+        </label>
+        <label style={styles.label}>
+          Number of Tags per Video:
+          <input
+            type="number"
+            value={numTags}
+            onChange={(e) => setNumTags(e.target.value)}
+            min="1"
+            style={styles.input}
+            required
+          />
+        </label>
+        <label style={styles.label}>
+          Strength of Tag Clustering (0.0 - 1.0):
+          <input
+            type="number"
+            step="0.1"
+            value={clusteringStrength}
+            onChange={(e) => setClusteringStrength(e.target.value)}
+            min="0.0"
+            max="1.0"
+            style={styles.input}
+            required
+          />
+        </label>
+        <button type="submit" style={styles.button}>Start Processing</button>
+      </form>
+
+      <RealtimeUpdates updates={updates} />
+    </div>
+  );
+}
+
+// Inline styles for simplicity; consider using CSS modules or styled-components for larger projects
+const styles = {
+  container: {
+    padding: '20px',
+    fontFamily: 'Arial, sans-serif'
+  },
+  form: {
+    display: 'flex',
+    flexDirection: 'column',
+    maxWidth: '600px'
+  },
+  label: {
+    marginBottom: '15px'
+  },
+  textarea: {
+    width: '100%',
+    padding: '10px',
+    fontSize: '16px'
+  },
+  input: {
+    width: '100%',
+    padding: '8px',
+    fontSize: '16px'
+  },
+  button: {
+    padding: '10px',
+    fontSize: '16px',
+    backgroundColor: '#0070f3',
+    color: '#fff',
+    border: 'none',
+    cursor: 'pointer'
+  }
+};
+
+```
+
+### 4. `components/RealtimeUpdates.js`
+
+This component displays real-time updates and errors received from the backend.
+
+```jsx
+// frontend/components/RealtimeUpdates.js
+
+import React from 'react';
+
+const RealtimeUpdates = ({ updates }) => {
+  return (
+    <div style={styles.container}>
+      <h2>Real-time Updates</h2>
+      <div style={styles.updates}>
+        {updates.map((update, index) => (
+          <p key={index} style={styles.update}>
+            {update}
+          </p>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const styles = {
+  container: {
+    marginTop: '30px'
+  },
+  updates: {
+    maxHeight: '400px',
+    overflowY: 'scroll',
+    border: '1px solid #ccc',
+    padding: '10px',
+    backgroundColor: '#f9f9f9'
+  },
+  update: {
+    margin: '5px 0'
+  }
+};
+
+export default RealtimeUpdates;
+
+```
+
+---
+
+## Backend Implementation (FastAPI)
+
+We'll use **FastAPI** for the backend due to its high performance, ease of use, and excellent support for asynchronous operations. The backend will handle processing tasks, interact with Supabase, and communicate real-time updates via WebSockets.
+
+### 1. `requirements.txt`
+
+List of Python dependencies required for the backend.
+
+```
+# backend/requirements.txt
+fastapi
+uvicorn
+python-dotenv
+supabase
+requests
+pandas
+spacy
+openai
+assemblyai
+sentence-transformers
+scikit-learn
+yt-dlp
+concurrent.futures
+
+```
+
+### 2. `.env`
+
+Store sensitive information such as API keys and Supabase credentials. **Do not** commit this file to version control.
+
+```
+# backend/.env
+SUPABASE_URL=your_supabase_url
+SUPABASE_KEY=your_supabase_key
+YOUTUBE_API_KEY=your_youtube_api_key
+ASSEMBLYAI_API_KEY=your_assemblyai_api_key
+OPENAI_API_KEY=your_openai_api_key
+
+```
+
+**Note:** Replace placeholder values with your actual keys.
+
+### 3. `main.py`
+
+The main FastAPI application handling API endpoints and WebSocket connections.
+
+```python
+# backend/main.py
+
+import os
+import uuid
+import json
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, BackgroundTasks
+from fastapi.middleware.cors import CORSMiddleware
+from dotenv import load_dotenv
+from supabase import create_client, Client
+from tasks import process_videos
+
+# Load environment variables from .env file
+load_dotenv()
+
+# Initialize FastAPI app
+app = FastAPI(
+    title="YouTube Video Processor API",
+    description="API for processing YouTube videos, retrieving comments, transcribing, and generating tags.",
+    version="1.0.0"
+)
+
+# Setup CORS middleware to allow frontend access
+origins = [
+    "*",  # In production, specify the exact origin
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Initialize Supabase client
+SUPABASE_URL = os.getenv("SUPABASE_URL")
+SUPABASE_KEY = os.getenv("SUPABASE_KEY")
+supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+
+# Dictionary to manage active WebSocket connections
+active_connections = {}
+
+@app.post("/process")
+async def initiate_processing(data: dict, background_tasks: BackgroundTasks):
+    """
+    Endpoint to initiate the processing of YouTube videos.
+    """
+    # Generate a unique session ID
+    session_id = str(uuid.uuid4())
+
+    # Extract data from request
+    video_ids = data.get("video_ids", [])
+    num_videos = data.get("num_videos", 10)
+    num_comments = data.get("num_comments", 50)
+    num_tags = data.get("num_tags", 5)
+    clustering_strength = data.get("clustering_strength", 0.3)
+
+    # Start background task for processing
+    background_tasks.add_task(
+        process_videos,
+        session_id,
+        supabase,
+        video_ids,
+        num_videos,
+        num_comments,
+        num_tags,
+        clustering_strength
+    )
+
+    # Return the session ID to the client
+    return {"session_id": session_id}
+
+@app.websocket("/ws/{session_id}")
+async def websocket_endpoint(websocket: WebSocket, session_id: str):
+    """
+    WebSocket endpoint for real-time updates.
+    """
+    await websocket.accept()
+
+    # Add connection to active_connections
+    if session_id not in active_connections:
+        active_connections[session_id] = []
+    active_connections[session_id].append(websocket)
+
+    try:
+        while True:
+            # Keep the connection open
+            await websocket.receive_text()
+    except WebSocketDisconnect:
+        # Remove connection on disconnect
+        active_connections[session_id].remove(websocket)
+        if not active_connections[session_id]:
+            del active_connections[session_id]
+
+def send_update(session_id: str, message: str):
+    """
+    Function to send updates to all active WebSocket connections for a session.
+    """
+    if session_id in active_connections:
+        for connection in active_connections[session_id]:
+            try:
+                connection.send_json({"message": message})
+            except:
+                pass  # Handle broken connections silently
+
+```
+
+### 4. `tasks.py`
+
+Contains the core logic for processing videos, interacting with Supabase, and sending updates via WebSockets.
+
+```python
+# backend/tasks.py
+
+import os
+import re
+import sys
+import json
+import time
+import requests
+import pandas as pd
+from datetime import datetime
+from threading import Lock
+from sentence_transformers import SentenceTransformer
+from sklearn.cluster import AgglomerativeClustering
+from sklearn.metrics.pairwise import cosine_similarity
+from collections import Counter
+import spacy
+import yt_dlp
+import openai
+import assemblyai as aai
+
+from supabase import Client
+from main import send_update
+
+# Initialize SpaCy model
+nlp = spacy.load("en_core_web_sm")
+
+# Load environment variables
+ASSEMBLYAI_API_KEY = os.getenv('ASSEMBLYAI_API_KEY')
+OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
+YOUTUBE_API_KEY = os.getenv('YOUTUBE_API_KEY')
+SENTENCE_TRANSFORMER_MODEL = os.getenv('SENTENCE_TRANSFORMER_MODEL', 'paraphrase-MiniLM-L6-v2')
+
+# Set up AssemblyAI and OpenAI API keys
+aai.settings.api_key = ASSEMBLYAI_API_KEY
+openai.api_key = OPENAI_API_KEY
+
+# Lock for status updates
+status_lock = Lock()
+
+# Default configuration values
+NUM_TAGS_DEFAULT = 5
+DISTANCE_THRESHOLD_DEFAULT = 0.3
+MAX_CONCURRENT_REQUESTS = 10  # Adjust based on server capacity
+
+def load_transcription_ids():
+    """
+    Load transcription IDs from a persistent storage.
+    For simplicity, using a JSON file. In production, consider using a database.
+    """
+    transcription_ids_filename = "transcription_ids.json"
+    try:
+        with open(transcription_ids_filename, 'r') as file:
+            transcription_ids = json.load(file)
+            return transcription_ids
+    except FileNotFoundError:
+        return {}
+
+def save_transcription_ids(transcription_ids):
+    """
+    Save transcription IDs to a persistent storage.
+    """
+    transcription_ids_filename = "transcription_ids.json"
+    with open(transcription_ids_filename, 'w') as file:
+        json.dump(transcription_ids, file, indent=4)
+
+def send_progress_update(supabase: Client, session_id: str, message: str):
+    """
+    Wrapper to send updates via WebSocket.
+    """
+    send_update(session_id, message)
+
+def get_audio_url(youtube_url):
+    """
+    Extract the best audio format URL from YouTube using yt-dlp.
+    """
+    video_id = youtube_url.split('=')[-1]
+    send_update(session_id, f"Extracting audio URL for {video_id} using yt-dlp...")
+    with yt_dlp.YoutubeDL() as ydl:
+        try:
+            info = ydl.extract_info(youtube_url, download=False)
+        except Exception as e:
+            raise Exception(f"Failed to extract info for {video_id}: {e}")
+
+    for format in info["formats"][::-1]:
+        if format.get("vcodec") == "none" and format.get("acodec") == "mp4a.40.2":
+            send_update(session_id, f"Selected audio URL for {video_id} found.")
+            return format["url"]
+    raise Exception(f"No suitable audio format found for {video_id}")
+
+def get_transcription(audio_url, video_id, session_id):
+    """
+    Get transcription from AssemblyAI with speaker diarization.
+    """
+    send_update(session_id, f"Requesting transcription for {video_id} from AssemblyAI...")
+    transcriber = aai.Transcriber()
+    config = aai.TranscriptionConfig(speaker_labels=True)
+    retry_count = 0
+    max_retries = 3
+
+    while retry_count < max_retries:
+        try:
+            transcript = transcriber.transcribe(audio_url, config)
+            break
+        except Exception as e:
+            retry_count += 1
+            send_update(session_id, f"Retry {retry_count}/{max_retries} for transcription of {video_id} due to error: {e}")
+            time.sleep(5)  # Wait before retrying
+            if retry_count == max_retries:
+                raise Exception(f"Failed to transcribe audio for {video_id} after {max_retries} attempts: {e}")
+
+    transcript_id = transcript.id
+    if not transcript_id:
+        raise Exception(f"Failed to get transcription ID for {video_id}.")
+
+    headers = {
+        "authorization": ASSEMBLYAI_API_KEY,
+        "content-type": "application/json"
+    }
+
+    send_update(session_id, f"Starting transcription status check loop for {video_id}")
+
+    while True:
+        try:
+            status_response = requests.get(
+                f"<https://api.assemblyai.com/v2/transcript/{transcript_id}>",
+                headers=headers
+            )
+            status_data = status_response.json()
+            status = status_data.get('status')
+
+            if status == 'completed':
+                send_update(session_id, f"Transcription for {video_id} completed.")
+                return transcript.utterances
+            elif status == 'failed':
+                send_update(session_id, f"Transcription for {video_id} failed.")
+                raise Exception(f"Transcription for {video_id} failed. Error: {status_data.get('error', 'Unknown error')}")
+            else:
+                send_update(session_id, f"Transcription for {video_id} is in progress.")
+            time.sleep(15)  # Update status every 15 seconds
+        except requests.RequestException as e:
+            send_update(session_id, f"Error checking transcription status for {video_id}: {e}")
+            time.sleep(15)  # Wait before retrying status check
+
+def generate_tags(transcript_text, num_tags=NUM_TAGS_DEFAULT):
+    """
+    Generate tags using OpenAI GPT-4.
+    """
+    prompt = f"Generate {num_tags} relevant tags for the following transcript. Provide the tags as a list separated by commas with no numbers:\\n\\n{transcript_text}"
+    response = openai.ChatCompletion.create(
+        model="gpt-4",
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": prompt}
+        ]
+    )
+    tags = response['choices'][0]['message']['content'].strip().split(',')
+    tags = [tag.strip() for tag in tags if tag.strip()]
+    return tags
+
+def identify_interviewees(title, description):
+    """
+    Identify interviewees using OpenAI GPT-3.5 Turbo.
+    """
+    prompt = (
+        f"Based on the following title and description, identify the names of the people being interviewed."
+        f" Do not include the host. Do not include any information other than the interviewees."
+        f" If there are multiple people, their names should be listed and separated by a comma.\\n\\n"
+        f"Title: {title}\\nDescription: {description}"
+    )
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": prompt}
+        ]
+    )
+    interviewees = response['choices'][0]['message']['content'].strip().split(',')
+    interviewees = [person.strip() for person in interviewees if person.strip()]
+    return interviewees
+
+def normalize_tag(tag):
+    """
+    Normalize a tag string.
+    """
+    tag = tag.strip().lower()
+    tag = re.sub(r'[^a-z0-9\\s]', '', tag)  # Remove special characters
+    tag = re.sub(r'\\s+', ' ', tag)  # Replace multiple spaces with single space
+    return tag
+
+def detect_names(tags):
+    """
+    Detect names in the tags and separate them from other tags.
+    """
+    names = []
+    non_names = []
+    for tag in tags:
+        doc = nlp(tag)
+        if any(ent.label_ == "PERSON" for ent in doc.ents):
+            names.append(tag)
+        else:
+            non_names.append(tag)
+    return names, non_names
+
+def handle_transcription_status(video_id, existing_transcript, session_id):
+    """
+    Handle existing transcription status.
+    """
+    status = existing_transcript.get('status')
+    if status == 'completed':
+        send_update(session_id, f"Existing transcription for video ID: {video_id} found and completed.")
+        return existing_transcript['transcript']
+    elif status == 'in_progress':
+        send_update(session_id, f"Existing transcription for video ID: {video_id} is in progress.")
+        # Implement further logic if needed
+        return None
+    elif status == 'failed':
+        send_update(session_id, f"Previous transcription failed for video ID: {video_id}. Requesting new transcription...")
+        audio_url = get_audio_url(f"<https://www.youtube.com/watch?v={video_id}>")
+        return get_transcription(audio_url, video_id, session_id)
+    else:
+        return None
+
+def process_video(row, supabase: Client, transcription_ids, session_id):
+    """
+    Process each video: extract audio URL, get transcription and tags, and identify interviewees.
+    """
+    video_id = row['video_id']
+    channel_name = row['channel_name'].replace(" ", "_")
+    video_title = row['title'].replace(" ", "_")
+    description = row['description']
+    youtube_url = f"<https://www.youtube.com/watch?v={video_id}>"
+    send_update(session_id, f"Processing video ID: {video_id}")
+
+    filename = f"{video_id}_{channel_name}_{video_title}_transcript.json"
+    # Placeholder for saving or loading transcripts if needed
+
+    existing_transcript = supabase.table('transcripts').select('*').eq('video_id', video_id).single().execute()
+
+    if existing_transcript.data:
+        send_update(session_id, f"Found existing transcript for video ID: {video_id}")
+        if existing_transcript.data['status'] == 'completed':
+            transcript_text = existing_transcript.data['transcript']
+        elif existing_transcript.data['status'] == 'in_progress':
+            transcript_text = handle_transcription_status(video_id, existing_transcript.data, session_id)
+        elif existing_transcript.data['status'] == 'failed':
+            transcript_text = handle_transcription_status(video_id, existing_transcript.data, session_id)
+    else:
+        try:
+            audio_url = get_audio_url(youtube_url)
+            transcript_utterances = get_transcription(audio_url, video_id, session_id)
+            transcript_text = " ".join([utterance['text'] for utterance in transcript_utterances])
+
+            # Save transcription to Supabase
+            supabase.table('transcripts').insert({
+                'video_id': video_id,
+                'transcript': transcript_text,
+                'retrieval_date': datetime.utcnow().isoformat(),
+                'status': 'completed'
+            }).execute()
+
+        except Exception as e:
+            send_update(session_id, f"Error processing video {video_id}: {e}")
+            return
+
+    if transcript_text:
+        # Generate tags
+        tags = generate_tags(transcript_text)
+        normalized_tags = [normalize_tag(tag) for tag in tags]
+        interviewees = identify_interviewees(video_title, description)
+
+        # Detect names
+        names, non_names = detect_names(normalized_tags)
+
+        # Store tags in Supabase
+        for tag in normalized_tags:
+            supabase.table('tags').insert({
+                'video_id': video_id,
+                'tag': tag,
+                'processed_date': datetime.utcnow().isoformat()
+            }).execute()
+
+        # Update tags in videos table
+        supabase.table('videos').update({
+            'tags': ", ".join(normalized_tags),
+            'interviewees': ", ".join(interviewees)
+        }).eq('video_id', video_id).execute()
+
+        send_update(session_id, f"Generated tags and identified interviewees for video ID: {video_id}")
+
+def process_videos(session_id: str, supabase: Client, video_ids: list, num_videos: int, num_comments: int, num_tags: int, clustering_strength: float):
+    """
+    Core function to process videos: fetch channel info, videos, comments, transcribe, and generate tags.
+    """
+    send_update(session_id, "Starting video processing...")
+
+    transcription_ids = load_transcription_ids()
+
+    for video_id in video_ids:
+        try:
+            # Step 1: Get channel ID from YouTube API
+            video_info_url = '<https://www.googleapis.com/youtube/v3/videos>'
+            params = {
+                'part': 'snippet',
+                'id': video_id,
+                'key': YOUTUBE_API_KEY
+            }
+            response = requests.get(video_info_url, params=params)
+            if response.status_code != 200:
+                send_update(session_id, f"Failed to retrieve video info for {video_id}: {response.text}")
+                continue
+
+            data = response.json()
+            if not data['items']:
+                send_update(session_id, f"No data found for video ID: {video_id}")
+                continue
+
+            snippet = data['items'][0]['snippet']
+            channel_id = snippet['channelId']
+            channel_title = snippet['channelTitle']
+            channel_url = f"<https://www.youtube.com/channel/{channel_id}>"
+            channel_description = snippet.get('description', '')
+            subscribers = 0  # YouTube API requires additional calls to get subscriber count
+
+            # Step 2: Fetch top videos for the channel
+            search_url = '<https://www.googleapis.com/youtube/v3/search>'
+            search_params = {
+                'part': 'id',
+                'channelId': channel_id,
+                'maxResults': num_videos,
+                'order': 'viewCount',
+                'type': 'video',
+                'key': YOUTUBE_API_KEY
+            }
+            search_response = requests.get(search_url, params=search_params)
+            if search_response.status_code != 200:
+                send_update(session_id, f"Failed to retrieve top videos for channel {channel_id}: {search_response.text}")
+                continue
+
+            search_data = search_response.json()
+            top_video_ids = [item['id']['videoId'] for item in search_data['items']]
+
+            # Step 3: Fetch detailed information for these videos
+            videos_info_url = '<https://www.googleapis.com/youtube/v3/videos>'
+            videos_params = {
+                'part': 'snippet,statistics,contentDetails',
+                'id': ','.join(top_video_ids),
+                'key': YOUTUBE_API_KEY
+            }
+            videos_response = requests.get(videos_info_url, params=videos_params)
+            if videos_response.status_code != 200:
+                send_update(session_id, f"Failed to retrieve video details for channel {channel_id}: {videos_response.text}")
+                continue
+
+            videos_data = videos_response.json()
+            videos = []
+            for item in videos_data['items']:
+                snippet = item['snippet']
+                statistics = item.get('statistics', {})
+                content_details = item.get('contentDetails', {})
+                videos.append({
+                    'video_id': item['id'],
+                    'title': snippet['title'],
+                    'description': snippet.get('description', ''),
+                    'duration': content_details.get('duration', 'N/A'),
+                    'view_count': int(statistics.get('viewCount', 0)),
+                    'like_count': int(statistics.get('likeCount', 0)),
+                    'comment_count': int(statistics.get('commentCount', 0)),
+                    'retrieval_date': datetime.utcnow().isoformat()
+                })
+
+            # Step 4: Save channel and videos to Supabase
+            supabase.table('channels').upsert({
+                'channel_id': channel_id,
+                'channel_name': channel_title,
+                'link_to_channel': channel_url,
+                'about': channel_description,
+                'number_of_total_videos': 0,  # Requires additional API calls
+                'number_of_retrieved_videos': len(videos),
+                'ids_of_retrieved_videos': json.dumps(top_video_ids),
+                'subscribers': subscribers,
+                'channel_retrieval_date': datetime.utcnow().isoformat()
+            }).execute()
+
+            supabase.table('videos').upsert(videos).execute()
+            send_update(session_id, f"Saved channel and videos for channel ID: {channel_id}")
+
+            # Step 5: Fetch and save comments for each video
+            comments_url = '<https://www.googleapis.com/youtube/v3/commentThreads>'
+            for video in videos:
+                comments_params = {
+                    'part': 'snippet',
+                    'videoId': video['video_id'],
+                    'maxResults': num_comments,
+                    'order': 'relevance',
+                    'key': YOUTUBE_API_KEY
+                }
+                comments_response = requests.get(comments_url, params=comments_params)
+                if comments_response.status_code != 200:
+                    send_update(session_id, f"Failed to retrieve comments for video {video['video_id']}: {comments_response.text}")
+                    continue
+
+                comments_data = comments_response.json()
+                comments = []
+                for item in comments_data['items']:
+                    comment = item['snippet']['topLevelComment']['snippet']
+                    comments.append({
+                        'video_id': video['video_id'],
+                        'comment_id': item['id'],
+                        'comment_author': comment.get('authorDisplayName', ''),
+                        'comment_likes': int(comment.get('likeCount', 0)),
+                        'comment_published_at': comment.get('publishedAt', ''),
+                        'comment_updated_at': comment.get('updatedAt', ''),
+                        'comment_parent_id': '',  # No parent ID for top-level comments
+                        'comment_text': comment.get('textOriginal', ''),
+                        'comment_retrieval_date': datetime.utcnow().isoformat()
+                    })
+
+                supabase.table('comments').upsert(comments).execute()
+                send_update(session_id, f"Saved comments for video ID: {video['video_id']}")
+
+            # Step 6: Process each video for transcription and tagging
+            for video in videos:
+                process_video(video, supabase, transcription_ids, session_id)
+
+        except Exception as e:
+            send_update(session_id, f"Error processing video ID {video_id}: {e}")
+
+    # Save transcription IDs if any new ones were added
+    save_transcription_ids(transcription_ids)
+
+    send_update(session_id, "Video processing completed.")
+
+```
+
+### 5. `supabase_tables.sql`
+
+SQL script to create the necessary tables in Supabase.
+
+```sql
+-- backend/supabase_tables.sql
+
+-- Table: channels
+CREATE TABLE IF NOT EXISTS channels (
+    channel_id TEXT PRIMARY KEY,
+    channel_name TEXT,
+    link_to_channel TEXT,
+    about TEXT,
+    number_of_total_videos INTEGER,
+    number_of_retrieved_videos INTEGER,
+    ids_of_retrieved_videos JSONB,
+    subscribers INTEGER,
+    channel_retrieval_date TIMESTAMP
+);
+
+-- Table: videos
+CREATE TABLE IF NOT EXISTS videos (
+    video_id TEXT PRIMARY KEY,
+    title TEXT,
+    description TEXT,
+    duration TEXT,
+    view_count INTEGER,
+    like_count INTEGER,
+    comment_count INTEGER,
+    retrieval_date TIMESTAMP,
+    tags TEXT,
+    interviewees TEXT
+);
+
+-- Table: comments
+CREATE TABLE IF NOT EXISTS comments (
+    video_id TEXT,
+    comment_id TEXT PRIMARY KEY,
+    comment_author TEXT,
+    comment_likes INTEGER,
+    comment_published_at TIMESTAMP,
+    comment_updated_at TIMESTAMP,
+    comment_parent_id TEXT,
+    comment_text TEXT,
+    comment_retrieval_date TIMESTAMP
+);
+
+-- Table: transcripts
+CREATE TABLE IF NOT EXISTS transcripts (
+    video_id TEXT PRIMARY KEY,
+    transcript JSONB,
+    retrieval_date TIMESTAMP,
+    status TEXT
+);
+
+-- Table: tags
+CREATE TABLE IF NOT EXISTS tags (
+    video_id TEXT,
+    tag TEXT,
+    processed_date TIMESTAMP
+);
+
+```
+
+---
+
+## Supabase Setup
+
+1. **Create a Supabase Project:**
+    - Sign up or log in to [Supabase](https://supabase.io/).
+    - Create a new project and obtain the `SUPABASE_URL` and `SUPABASE_KEY`.
+2. **Create Tables:**
+    - Navigate to the SQL Editor in the Supabase dashboard.
+    - Run the `supabase_tables.sql` script provided above to create the necessary tables.
+3. **Configure API Keys:**
+    - Ensure that the `SUPABASE_URL` and `SUPABASE_KEY` are correctly set in the backend's `.env` file.
+
+---
+
+## Deployment Instructions
+
+### 1. Deploying Frontend to Vercel
+
+1. **Initialize the Frontend Project:**
+    - Navigate to the `frontend` directory.
+    - Run `npm install` to install dependencies.
+2. **Setup Environment Variables:**
+    - Ensure the `.env.local` file contains the `NEXT_PUBLIC_BACKEND_URL`.
+3. **Deploy to Vercel:**
+    - Push the `frontend` directory to a GitHub repository.
+    - Log in to [Vercel](https://vercel.com/) and import the repository.
+    - Vercel will automatically detect the Next.js project and deploy it.
+    - After deployment, update the `NEXT_PUBLIC_BACKEND_URL` with the live backend URL if it's different.
+
+### 2. Deploying Backend to DigitalOcean
+
+1. **Create a Droplet:**
+    - Log in to [DigitalOcean](https://www.digitalocean.com/) and create a new Droplet with your preferred specifications.
+    - Choose an operating system (e.g., Ubuntu 22.04).
+2. **Access the Droplet:**
+    - Use SSH to connect to your Droplet:
+        
+        ```bash
+        ssh root@your_droplet_ip
+        
+        ```
+        
+3. **Setup the Backend Environment:**
+    - **Install Python and Pip:**
+        
+        ```bash
+        apt update
+        apt install python3-pip python3-dev
+        
+        ```
+        
+    - **Clone the Backend Repository:**
+        - If using Git, clone your repository. Otherwise, transfer files via SCP or another method.
+    - **Navigate to Backend Directory:**
+        
+        ```bash
+        cd backend
+        
+        ```
+        
+    - **Install Dependencies:**
+        
+        ```bash
+        pip3 install -r requirements.txt
+        
+        ```
+        
+    - **Setup Environment Variables:**
+        - Create a `.env` file with the necessary environment variables as shown above.
+4. **Run the FastAPI Application:**
+    - **Install Uvicorn:**
+        
+        ```bash
+        pip3 install uvicorn
+        
+        ```
+        
+    - **Start the Server:**
+        
+        ```bash
+        uvicorn main:app --host 0.0.0.0 --port 8000
+        
+        ```
+        
+    - **(Optional) Use a Process Manager:**
+        - For production, consider using `supervisor` or `systemd` to manage the FastAPI service.
+5. **Security:**
+    - **Firewall Setup:**
+        - Allow only necessary ports (e.g., 8000 for FastAPI, 22 for SSH).
+    - **Use HTTPS:**
+        - Consider setting up an Nginx reverse proxy with SSL certificates using Let's Encrypt.
+
+### 3. Setting Up Supabase
+
+As detailed in the [Supabase Setup](https://www.notion.so/YT-Podcast-Analytics-App-10457a7e0147804a8b7cd0f03e2ee118?pvs=21) section, ensure that:
+
+- The tables are created using the SQL script.
+- The backend has the correct `SUPABASE_URL` and `SUPABASE_KEY`.
+- API keys and environment variables are securely stored.
+
+---
+
+## Best Practices Implemented
+
+1. **Environment Variables:**
+    - Sensitive information like API keys and database credentials are stored in `.env` files and accessed via environment variables.
+2. **Modular Code Structure:**
+    - Separation of concerns by dividing frontend and backend code.
+    - Use of separate modules (`main.py` and `tasks.py`) for different functionalities.
+3. **Asynchronous Programming:**
+    - Leveraging FastAPI's asynchronous capabilities for handling concurrent requests and WebSockets.
+4. **Real-time Communication:**
+    - Implemented WebSockets for sending real-time updates to the frontend.
+5. **Error Handling:**
+    - Comprehensive try-except blocks with informative error messages sent to the frontend.
+6. **Database Integration:**
+    - Efficient use of Supabase for data storage with appropriate table schemas.
+7. **Code Comments and Debugging:**
+    - Detailed comments throughout the codebase to explain functionality.
+    - Informative update messages for easier debugging and user transparency.
+8. **Security:**
+    - CORS configuration to control access.
+    - Recommendations for securing the backend server.
+
+---
+
+## Conclusion
+
+By following this structured approach, you've transformed your existing scripts into a scalable web application architecture. This setup ensures that the application is maintainable, secure, and user-friendly, providing real-time processing updates and robust data management.
+
+Feel free to extend and customize this foundation further based on specific requirements or additional features you'd like to implement.

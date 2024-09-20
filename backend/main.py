@@ -82,27 +82,21 @@ async def initiate_processing(data: dict, background_tasks: BackgroundTasks):
         logging.error(f"Error in initiate_processing: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.websocket("/ws/{session_id}")
-async def websocket_endpoint(websocket: WebSocket, session_id: str):
-    """
-    WebSocket endpoint for real-time updates.
-    """
-    await websocket.accept()
-
-    # Add connection to active_connections
-    if session_id not in active_connections:
-        active_connections[session_id] = []
-    active_connections[session_id].append(websocket)
-
+@app.websocket("/ws/{client_id}")
+async def websocket_endpoint(websocket: WebSocket, client_id: str):
+    await manager.connect(websocket)
     try:
+        logger.info(f"WebSocket connection opened for client {client_id}")
         while True:
-            # Keep the connection open
-            await websocket.receive_text()
+            data = await websocket.receive_text()
+            logger.debug(f"Received message from client {client_id}: {data}")
+            # Process the message
     except WebSocketDisconnect:
-        # Remove connection on disconnect
-        active_connections[session_id].remove(websocket)
-        if not active_connections[session_id]:
-            del active_connections[session_id]
+        logger.info(f"WebSocket connection closed for client {client_id}")
+        manager.disconnect(websocket)
+    except Exception as e:
+        logger.error(f"Error in WebSocket connection for client {client_id}: {str(e)}")
+        manager.disconnect(websocket)
 
 def send_update(session_id: str, message: str):
     """
