@@ -3,13 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import RealtimeUpdates from '../components/RealtimeUpdates';
-import { createClient } from '@supabase/supabase-js';
 import { supabase } from '../lib/supabaseClient';
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY;
-
-const supabase = createClient(supabaseUrl, supabaseKey);
 
 export default function Home() {
   const [isSupabaseInitialized, setIsSupabaseInitialized] = useState(false);
