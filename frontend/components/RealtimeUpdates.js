@@ -1,7 +1,7 @@
 // frontend/components/RealtimeUpdates.js
 
 import React, { useEffect } from 'react';
-import { supabase } from './supabaseClient';
+import { supabase } from '../lib/supabaseClient';
 
 const RealtimeUpdates = () => {
   useEffect(() => {
