@@ -1,18 +1,28 @@
 // frontend/pages/index.js
 
-import React, { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import RealtimeUpdates from '../components/RealtimeUpdates';
 import { supabase } from '../lib/supabaseClient';
 
 export default function Home() {
   const [isSupabaseInitialized, setIsSupabaseInitialized] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (supabase) {
-      setIsSupabaseInitialized(true);
+    try {
+      if (supabase) {
+        setIsSupabaseInitialized(true);
+      }
+    } catch (err) {
+      console.error('Error initializing Supabase:', err);
+      setError(err.message);
     }
   }, []);
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   if (!isSupabaseInitialized) {
     return <div>Loading...</div>;

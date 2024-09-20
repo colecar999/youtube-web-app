@@ -1,6 +1,6 @@
 import { createClient } from '@supabase/supabase-js'
 
-let supabase;
+let supabase = null;
 
 if (typeof window !== 'undefined') {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -11,10 +11,9 @@ if (typeof window !== 'undefined') {
 
   if (!supabaseUrl || !supabaseAnonKey) {
     console.error('Supabase URL or Anon Key is missing');
-    throw new Error('Supabase configuration is incomplete');
+  } else {
+    supabase = createClient(supabaseUrl, supabaseAnonKey);
   }
-
-  supabase = createClient(supabaseUrl, supabaseAnonKey);
 } else {
   console.log('Supabase client not initialized (server-side)');
 }

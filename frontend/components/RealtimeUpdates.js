@@ -5,9 +5,14 @@ import { supabase } from '../lib/supabaseClient';
 
 const RealtimeUpdates = () => {
   const [updates, setUpdates] = useState([]);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    console.log('RealtimeUpdates component mounted');
+    if (!supabase) {
+      setError('Supabase client is not initialized');
+      return;
+    }
+
     const channel = supabase.channel('custom-all-channel');
 
     channel
@@ -23,39 +28,24 @@ const RealtimeUpdates = () => {
       });
 
     return () => {
-      console.log('RealtimeUpdates component unmounting');
       supabase.removeChannel(channel);
     };
   }, []);
 
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
   return (
-    <div style={styles.container}>
+    <div>
       <h2>Real-time Updates</h2>
-      <div style={styles.updates}>
+      <div>
         {updates.map((update, index) => (
-          <p key={index} style={styles.update}>
-            {update}
-          </p>
+          <p key={index}>{update}</p>
         ))}
       </div>
     </div>
   );
-};
-
-const styles = {
-  container: {
-    marginTop: '30px'
-  },
-  updates: {
-    maxHeight: '400px',
-    overflowY: 'scroll',
-    border: '1px solid #ccc',
-    padding: '10px',
-    backgroundColor: '#f9f9f9'
-  },
-  update: {
-    margin: '5px 0'
-  }
 };
 
 export default RealtimeUpdates;
