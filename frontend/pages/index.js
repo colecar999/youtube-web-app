@@ -24,15 +24,25 @@ import {
   AlertIcon,
 } from '@chakra-ui/react';
 
+console.log('Index.js loaded');
+
 export default function Home() {
+  console.log('Home component rendering');
+
   const [isSupabaseInitialized, setIsSupabaseInitialized] = useState(false);
   const [error, setError] = useState(null);
   const [updates, setUpdates] = useState([]);
 
   useEffect(() => {
+    console.log('Home component mounted');
     try {
+      console.log('Supabase object:', supabase);
       if (supabase) {
+        console.log('Supabase initialized successfully');
         setIsSupabaseInitialized(true);
+      } else {
+        console.error('Supabase object is undefined');
+        setError('Supabase initialization failed');
       }
     } catch (err) {
       console.error('Error initializing Supabase:', err);
@@ -127,9 +137,12 @@ export default function Home() {
     return (
       <Container centerContent>
         <Spinner size="xl" />
+        <Box mt={4}>Initializing Supabase...</Box>
       </Container>
     );
   }
+
+  console.log('Rendering Home component', { isSupabaseInitialized, error });
 
   return (
     <Container maxW="container.md" p={8}>

@@ -9,6 +9,8 @@ from dotenv import load_dotenv
 from supabase import create_client, Client
 import logging
 from typing import List
+from utils import send_update
+from tasks import process_videos
 
 # Load environment variables from .env file
 load_dotenv()
@@ -63,14 +65,35 @@ class ConnectionManager:
 
 manager = ConnectionManager()
 
+# Update the initiate_processing function
 @app.post("/process")
 async def initiate_processing(data: dict, background_tasks: BackgroundTasks):
     try:
         session_id = str(uuid.uuid4())
-        background_tasks.add_task(process_videos, session_id, supabase, **data)
+        
+        # Extract data from request
+        video_ids = data.get("video_ids", [])
+        num_videos = data.get("num_videos", 10)
+        num_comments = data.get("num_comments", 50)
+        num_tags = data.get("num_tags", 5)
+        clustering_strength = data.get("clustering_strength", 0.3)
+
+        # Start background task for processing
+        background_tasks.add_task(
+            process_videos,
+            manager,  # Pass the manager here
+            session_id,
+            supabase,
+            video_ids,
+            num_videos,
+            num_comments,
+            num_tags,
+            clustering_strength
+        )
+
         return {"session_id": session_id}
     except Exception as e:
-        logger.error(f"Error in initiate_processing: {str(e)}")
+        logging.error(f"Error in initiate_processing: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
 # WebSocket endpoint if still needed
@@ -82,7 +105,7 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str):
         while True:
             data = await websocket.receive_text()
             logger.debug(f"Received message from client {client_id}: {data}")
-            await manager.broadcast(f"Message from client {client_id}: {data}")
+            await send_update(manager, client_id, f"Message received: {data}")
     except WebSocketDisconnect:
         logger.info(f"WebSocket connection closed for client {client_id}")
         manager.disconnect(websocket)
@@ -90,4 +113,6 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str):
         logger.error(f"Error in WebSocket connection for client {client_id}: {str(e)}")
         manager.disconnect(websocket)
 
-# The rest of your main.py remains unchanged
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
