@@ -66,7 +66,7 @@ def save_transcription_ids(transcription_ids):
     with open(transcription_ids_filename, 'w') as file:
         json.dump(transcription_ids, file, indent=4)
 
-async def get_transcript(manager, video_id, session_id, supabase):
+async def get_transcript(video_id, session_id, supabase):
     try:
         # Fetch the transcript
         transcript_data = YouTubeTranscriptApi.get_transcript(video_id)
@@ -174,7 +174,7 @@ def detect_names(tags):
             non_names.append(tag)
     return names, non_names
 
-async def handle_transcription_status(manager, video_id, existing_transcript, session_id, supabase):
+async def handle_transcription_status(video_id, existing_transcript, session_id, supabase):
     """
     Handle existing transcription status.
     """
@@ -194,18 +194,18 @@ async def handle_transcription_status(manager, video_id, existing_transcript, se
         success = await send_update(session_id, f"Previous transcription failed for video ID: {video_id}. Requesting new transcription...", supabase)
         if not success:
             logger.error(f"Failed to send update for video {video_id}")
-        audio_url = await get_audio_url(manager, f"https://www.youtube.com/watch?v={video_id}", session_id, supabase)
-        return await get_transcription(manager, audio_url, video_id, session_id, supabase)
+        audio_url = await get_audio_url(f"https://www.youtube.com/watch?v={video_id}", session_id, supabase)
+        return await get_transcription(audio_url, video_id, session_id, supabase)
     else:
         return None
 
-async def process_video(manager, video, supabase: Client, transcription_ids, session_id, clustering_strength):
+async def process_video(video, supabase: Client, transcription_ids, session_id, clustering_strength):
     try:
         video_id = video['video_id']
         logger.info(f"Processing video ID: {video_id}")
         
         # Fetch or retrieve transcript
-        transcript_data = await get_transcript(manager, video_id, session_id, supabase)
+        transcript_data = await get_transcript(video_id, session_id, supabase)
 
         if transcript_data:
             # Convert transcript data to plain text
@@ -480,7 +480,7 @@ async def process_videos(session_id: str, supabase: Client, video_ids: list, num
                 logger.info("Starting to process individual videos")
                 for video in videos:
                     try:
-                        await process_video(session_id, video, supabase, transcription_ids, session_id, clustering_strength)
+                        await process_video(video, supabase, transcription_ids, session_id, clustering_strength)
                     except Exception as e:
                         error_message = f"Error processing video ID {video['video_id']}: {str(e)}"
                         logger.error(error_message)
