@@ -1,4 +1,4 @@
-# frontend/pages/index.js
+// frontend/pages/index.js
 
 import { useEffect, useState } from 'react';
 import axios from 'axios';
