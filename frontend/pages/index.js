@@ -66,13 +66,6 @@ export default function Home() {
             if (payload.new && payload.new.session_id === sessionId) {
               console.log('Updating state with new message:', payload.new.message);
               setUpdates((prev) => [...prev, payload.new.message]);
-              toast({
-                title: "New Update",
-                description: payload.new.message,
-                status: "info",
-                duration: 3000,
-                isClosable: true,
-              });
             } else {
               console.log('Received update for different session, ignoring');
             }

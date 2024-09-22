@@ -430,7 +430,7 @@ async def process_videos(session_id: str, supabase: Client, video_ids: list, num
                 comments_url = 'https://www.googleapis.com/youtube/v3/commentThreads'
                 for video in videos:
                     comments_params = {
-                        'part': 'snippet,replies',  # Add 'replies' to fetch reply comments
+                        'part': 'snippet,replies',
                         'videoId': video['video_id'],
                         'maxResults': num_comments,
                         'order': 'relevance',
@@ -471,6 +471,13 @@ async def process_videos(session_id: str, supabase: Client, video_ids: list, num
                                     'comment_retrieval_date': datetime.utcnow().isoformat()
                                 })
 
+                        # Break the loop if we've reached the desired number of comments
+                        if len(comments) >= num_comments:
+                            break
+                    
+                    # Truncate comments list if it exceeds num_comments
+                    comments = comments[:num_comments]
+                    
                     supabase.table('comments').upsert(comments).execute()
                     success = await send_update(session_id, f"Saved {len(comments)} comments for video ID: {video['video_id']}", supabase)
                     if not success:
