@@ -43,7 +43,6 @@ status_lock = Lock()
 
 # Default configuration values
 NUM_TAGS_DEFAULT = 5
-DISTANCE_THRESHOLD_DEFAULT = 0.3 #delete?
 MAX_CONCURRENT_REQUESTS = 10  # Adjust based on server capacity
 
 def load_transcription_ids():
@@ -91,14 +90,18 @@ async def get_transcript(manager, video_id, session_id, supabase):
         result = supabase.table('transcripts').insert(data).execute()
 
         # Send update
-        await send_update(manager, session_id, f"Transcript for video {video_id} retrieved and stored.", supabase)
+        success = await send_update(manager, session_id, f"Transcript for video {video_id} retrieved and stored.", supabase)
+        if not success:
+            logger.error(f"Failed to send update for video {video_id}")
 
         return transcript_data
 
     except Exception as e:
         error_message = f"Error retrieving transcript for video {video_id}: {str(e)}"
         logger.exception(error_message)  # This will log the full stack trace
-        await send_update(manager, session_id, error_message, supabase)
+        success = await send_update(manager, session_id, error_message, supabase)
+        if not success:
+            logger.error(f"Failed to send error update for video {video_id}")
         
         # Store the error status in the database
         error_data = {
@@ -177,14 +180,20 @@ async def handle_transcription_status(manager, video_id, existing_transcript, se
     """
     status = existing_transcript.get('status')
     if status == 'completed':
-        await send_update(manager, session_id, f"Existing transcription for video ID: {video_id} found and completed.", supabase)
+        success = await send_update(manager, session_id, f"Existing transcription for video ID: {video_id} found and completed.", supabase)
+        if not success:
+            logger.error(f"Failed to send update for video {video_id}")
         return existing_transcript['transcript']
     elif status == 'in_progress':
-        await send_update(manager, session_id, f"Existing transcription for video ID: {video_id} is in progress.", supabase)
+        success = await send_update(manager, session_id, f"Existing transcription for video ID: {video_id} is in progress.", supabase)
+        if not success:
+            logger.error(f"Failed to send update for video {video_id}")
         # Implement further logic if needed
         return None
     elif status == 'failed':
-        await send_update(manager, session_id, f"Previous transcription failed for video ID: {video_id}. Requesting new transcription...", supabase)
+        success = await send_update(manager, session_id, f"Previous transcription failed for video ID: {video_id}. Requesting new transcription...", supabase)
+        if not success:
+            logger.error(f"Failed to send update for video {video_id}")
         audio_url = await get_audio_url(manager, f"https://www.youtube.com/watch?v={video_id}", session_id, supabase)
         return await get_transcription(manager, audio_url, video_id, session_id, supabase)
     else:
@@ -263,12 +272,16 @@ async def process_video(manager, video, supabase: Client, transcription_ids, ses
             }).eq('video_id', video_id).execute()
             logger.info(f"Updated tags in videos table for video ID: {video_id}")
 
-            await send_update(manager, session_id, f"Generated and stored {len(final_tags)} tags for video ID: {video_id}", supabase)
+            success = await send_update(manager, session_id, f"Generated and stored {len(final_tags)} tags for video ID: {video_id}", supabase)
+            if not success:
+                logger.error(f"Failed to send update for video {video_id}")
 
     except Exception as e:
         error_message = f"Error processing video ID {video_id}: {str(e)}"
         logger.error(error_message)
-        await send_update(manager, session_id, error_message, supabase)
+        success = await send_update(manager, session_id, error_message, supabase)
+        if not success:
+            logger.error(f"Failed to send error update for video {video_id}")
 
 # Helper function to find representative tag
 def find_representative_tag(cluster, model):
@@ -293,7 +306,9 @@ async def process_videos(manager, session_id: str, supabase: Client, video_ids: 
     """
     logger.info("Starting process_videos function")
     try:
-        await send_update(manager, session_id, "Starting video processing...", supabase)
+        success = await send_update(manager, session_id, "Starting video processing...", supabase)
+        if not success:
+            logger.error(f"Failed to send initial update for session {session_id}")
         
         transcription_ids = load_transcription_ids()
         logger.debug(f"Loaded transcription_ids: {transcription_ids}")
@@ -315,7 +330,9 @@ async def process_videos(manager, session_id: str, supabase: Client, video_ids: 
 
                 if not data['items']:
                     logger.warning(f"No data found for video ID: {video_id}")
-                    await send_update(manager, session_id, f"No data found for video ID: {video_id}", supabase)
+                    success = await send_update(manager, session_id, f"No data found for video ID: {video_id}", supabase)
+                    if not success:
+                        logger.error(f"Failed to send update for video {video_id}")
                     continue
 
                 snippet = data['items'][0]['snippet']
@@ -399,10 +416,14 @@ async def process_videos(manager, session_id: str, supabase: Client, video_ids: 
                     'channel_retrieval_date': datetime.utcnow().isoformat()
                 }).execute()
 
-                await send_update(manager, session_id, f"Updated channel info for {channel_title}", supabase)
+                success = await send_update(manager, session_id, f"Updated channel info for {channel_title}", supabase)
+                if not success:
+                    logger.error(f"Failed to send update for channel {channel_title}")
 
                 supabase.table('videos').upsert(videos).execute()
-                await send_update(manager, session_id, f"Saved channel and videos for channel ID: {channel_id}", supabase)
+                success = await send_update(manager, session_id, f"Saved channel and videos for channel ID: {channel_id}", supabase)
+                if not success:
+                    logger.error(f"Failed to send update for channel {channel_id}")
 
                 # Step 5: Fetch and save comments for each video
                 logger.debug("Fetching and saving comments for each video")
@@ -451,7 +472,9 @@ async def process_videos(manager, session_id: str, supabase: Client, video_ids: 
                                 })
 
                     supabase.table('comments').upsert(comments).execute()
-                    await send_update(manager, session_id, f"Saved {len(comments)} comments for video ID: {video['video_id']}", supabase)
+                    success = await send_update(manager, session_id, f"Saved {len(comments)} comments for video ID: {video['video_id']}", supabase)
+                    if not success:
+                        logger.error(f"Failed to send update for video {video['video_id']}")
 
                 # Step 6: Process each video for transcription and tagging
                 logger.info("Starting to process individual videos")
@@ -461,19 +484,27 @@ async def process_videos(manager, session_id: str, supabase: Client, video_ids: 
                     except Exception as e:
                         error_message = f"Error processing video ID {video['video_id']}: {str(e)}"
                         logger.error(error_message)
-                        await send_update(manager, session_id, error_message, supabase)
+                        success = await send_update(manager, session_id, error_message, supabase)
+                        if not success:
+                            logger.error(f"Failed to send error update for video {video['video_id']}")
                 logger.info("Finished processing individual videos")
 
             except Exception as e:
                 error_message = f"Error processing video ID {video_id}: {str(e)}"
                 logger.error(error_message)
-                await send_update(manager, session_id, error_message, supabase)
+                success = await send_update(manager, session_id, error_message, supabase)
+                if not success:
+                    logger.error(f"Failed to send error update for video {video_id}")
 
         # Save transcription IDs if any new ones were added
         save_transcription_ids(transcription_ids)
 
-        await send_update(manager, session_id, "Video processing completed.", supabase)
+        success = await send_update(manager, session_id, "Video processing completed.", supabase)
+        if not success:
+            logger.error(f"Failed to send final update for session {session_id}")
     except Exception as e:
         error_message = f"Error in process_videos: {str(e)}"
         logger.error(error_message)
-        await send_update(manager, session_id, error_message, supabase)
+        success = await send_update(manager, session_id, error_message, supabase)
+        if not success:
+            logger.error(f"Failed to send error update for session {session_id}")

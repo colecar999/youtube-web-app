@@ -16,6 +16,7 @@ const RealtimeUpdates = ({ updates }) => {
   const scrollRef = useRef(null);
 
   useEffect(() => {
+    console.log("Updates changed:", updates);
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }

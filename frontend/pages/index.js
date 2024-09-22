@@ -1,4 +1,4 @@
-// frontend/pages/index.js
+# frontend/pages/index.js
 
 import { useEffect, useState } from 'react';
 import axios from 'axios';
@@ -55,16 +55,17 @@ export default function Home() {
 
   useEffect(() => {
     if (isSupabaseInitialized && sessionId) {
+      console.log(`Setting up Supabase subscription for session ${sessionId}`);
       const channel = supabase
         .channel('custom-all-channel')
         .on(
           'postgres_changes',
           { event: 'INSERT', schema: 'public', table: 'updates' },
           (payload) => {
-            console.log('Received update:', payload);
+            console.log('Received update from Supabase:', payload);
             if (payload.new && payload.new.session_id === sessionId) {
+              console.log('Updating state with new message:', payload.new.message);
               setUpdates((prev) => [...prev, payload.new.message]);
-              // Add this toast notification
               toast({
                 title: "New Update",
                 description: payload.new.message,
@@ -72,14 +73,17 @@ export default function Home() {
                 duration: 3000,
                 isClosable: true,
               });
+            } else {
+              console.log('Received update for different session, ignoring');
             }
           }
         )
         .subscribe((status) => {
-          console.log('Subscription status:', status);
+          console.log('Supabase subscription status:', status);
         });
 
       return () => {
+        console.log(`Removing Supabase channel for session ${sessionId}`);
         supabase.removeChannel(channel);
       };
     }
@@ -90,6 +94,13 @@ export default function Home() {
     e.preventDefault();
     setUpdates([]);
     try {
+      console.log('Submitting form with data:', {
+        video_ids: videoIds,
+        num_videos: numVideos,
+        num_comments: numComments,
+        num_tags: numTags,
+        clustering_strength: clusteringStrength,
+      });
       const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/process`, {
         video_ids: videoIds.split('\n').map((id) => id.trim()).filter((id) => id),
         num_videos: parseInt(numVideos),
@@ -98,9 +109,9 @@ export default function Home() {
         clustering_strength: parseFloat(clusteringStrength),
       });
       const { session_id } = response.data;
+      console.log('Received session_id:', session_id);
       setSessionId(session_id);
       setUpdates((prev) => [...prev, 'Processing started. Waiting for updates...']);
-      // Add this toast notification
       toast({
         title: "Processing Started",
         description: `Session ID: ${session_id}`,
@@ -111,7 +122,6 @@ export default function Home() {
     } catch (error) {
       console.error('Error initiating processing:', error);
       setUpdates((prev) => [...prev, 'Error initiating processing. Please check your inputs and try again.']);
-      // Add this toast notification
       toast({
         title: "Error",
         description: "Failed to start processing. Please try again.",
@@ -122,7 +132,6 @@ export default function Home() {
     }
   };
 
-  // State variables for form inputs
   const [videoIds, setVideoIds] = useState('');
   const [numVideos, setNumVideos] = useState(10);
   const [numComments, setNumComments] = useState(50);

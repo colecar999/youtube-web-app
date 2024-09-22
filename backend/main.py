@@ -82,7 +82,10 @@ async def initiate_processing(data: dict, background_tasks: BackgroundTasks):
         logger.info(f"Processing parameters: video_ids={video_ids}, num_videos={num_videos}, num_comments={num_comments}, num_tags={num_tags}, clustering_strength={clustering_strength}")
 
         # Send initial update
-        await send_update(manager, session_id, "Processing started. Waiting for updates...", supabase)
+        success = await send_update(manager, session_id, "Processing started. Waiting for updates...", supabase)
+        if not success:
+            logger.error(f"Failed to send initial update for session {session_id}")
+            # You might want to handle this failure, perhaps by raising an exception
 
         # Start background task for processing
         logger.info(f"Starting background task for session {session_id}")
@@ -112,7 +115,10 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str):
         while True:
             data = await websocket.receive_text()
             logger.debug(f"Received message from client {client_id}: {data}")
-            await send_update(manager, client_id, f"Message received: {data}")
+            success = await send_update(manager, client_id, f"Message received: {data}")
+            if not success:
+                logger.error(f"Failed to send WebSocket update for client {client_id}")
+                # Handle this failure as appropriate for your application
     except WebSocketDisconnect:
         logger.info(f"WebSocket connection closed for client {client_id}")
         manager.disconnect(websocket)
