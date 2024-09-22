@@ -3,6 +3,8 @@ import logging
 from supabase import Client
 import datetime
 
+logger = logging.getLogger(__name__)
+
 async def send_update(manager, session_id: str, message: str, supabase: Client):
     try:
         logger.info(f"Sending update for session {session_id}: {message}")
