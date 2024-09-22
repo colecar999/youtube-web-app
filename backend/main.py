@@ -41,7 +41,7 @@ SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 # Set up logging
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
 # Add ConnectionManager as before
@@ -78,10 +78,13 @@ async def initiate_processing(data: dict, background_tasks: BackgroundTasks):
         num_tags = data.get("num_tags", 5)
         clustering_strength = data.get("clustering_strength", 0.3)
 
+        # Send initial update
+        await send_update(manager, session_id, "Processing started. Waiting for updates...", supabase)
+
         # Start background task for processing
         background_tasks.add_task(
             process_videos,
-            manager,  # Pass the manager here
+            manager,
             session_id,
             supabase,
             video_ids,

@@ -63,12 +63,12 @@ def save_transcription_ids(transcription_ids):
     with open(transcription_ids_filename, 'w') as file:
         json.dump(transcription_ids, file, indent=4)
 
-def get_audio_url(manager, youtube_url, session_id):
+async def get_audio_url(manager, youtube_url, session_id):
     """
     Extract the best audio format URL from YouTube using yt-dlp.
     """
     video_id = youtube_url.split('=')[-1]
-    send_update(manager, session_id, f"Extracting audio URL for {video_id} using yt-dlp...")
+    await send_update(manager, session_id, f"Extracting audio URL for {video_id} using yt-dlp...", supabase)
     with yt_dlp.YoutubeDL() as ydl:
         try:
             info = ydl.extract_info(youtube_url, download=False)
@@ -77,15 +77,15 @@ def get_audio_url(manager, youtube_url, session_id):
 
     for format in info["formats"][::-1]:
         if format.get("vcodec") == "none" and format.get("acodec") == "mp4a.40.2":
-            send_update(manager, session_id, f"Selected audio URL for {video_id} found.")
+            await send_update(manager, session_id, f"Selected audio URL for {video_id} found.", supabase)
             return format["url"]
     raise Exception(f"No suitable audio format found for {video_id}")
 
-def get_transcription(manager, audio_url, video_id, session_id):
+async def get_transcription(manager, audio_url, video_id, session_id):
     """
     Get transcription from AssemblyAI with speaker diarization.
     """
-    send_update(manager, session_id, f"Requesting transcription for {video_id} from AssemblyAI...")
+    await send_update(manager, session_id, f"Requesting transcription for {video_id} from AssemblyAI...", supabase)
     transcriber = aai.Transcriber()
     config = aai.TranscriptionConfig(speaker_labels=True)
     retry_count = 0
@@ -97,7 +97,7 @@ def get_transcription(manager, audio_url, video_id, session_id):
             break
         except Exception as e:
             retry_count += 1
-            send_update(manager, session_id, f"Retry {retry_count}/{max_retries} for transcription of {video_id} due to error: {e}")
+            await send_update(manager, session_id, f"Retry {retry_count}/{max_retries} for transcription of {video_id} due to error: {e}", supabase)
             time.sleep(5)  # Wait before retrying
             if retry_count == max_retries:
                 raise Exception(f"Failed to transcribe audio for {video_id} after {max_retries} attempts: {e}")
@@ -111,7 +111,7 @@ def get_transcription(manager, audio_url, video_id, session_id):
         "content-type": "application/json"
     }
 
-    send_update(manager, session_id, f"Starting transcription status check loop for {video_id}")
+    await send_update(manager, session_id, f"Starting transcription status check loop for {video_id}", supabase)
 
     while True:
         try:
@@ -123,16 +123,16 @@ def get_transcription(manager, audio_url, video_id, session_id):
             status = status_data.get('status')
 
             if status == 'completed':
-                send_update(manager, session_id, f"Transcription for {video_id} completed.")
+                await send_update(manager, session_id, f"Transcription for {video_id} completed.", supabase)
                 return transcript.utterances
             elif status == 'failed':
-                send_update(manager, session_id, f"Transcription for {video_id} failed.")
+                await send_update(manager, session_id, f"Transcription for {video_id} failed.", supabase)
                 raise Exception(f"Transcription for {video_id} failed. Error: {status_data.get('error', 'Unknown error')}")
             else:
-                send_update(manager, session_id, f"Transcription for {video_id} is in progress.")
+                await send_update(manager, session_id, f"Transcription for {video_id} is in progress.", supabase)
             time.sleep(15)  # Update status every 15 seconds
         except requests.RequestException as e:
-            send_update(manager, session_id, f"Error checking transcription status for {video_id}: {e}")
+            await send_update(manager, session_id, f"Error checking transcription status for {video_id}: {e}", supabase)
             time.sleep(15)  # Wait before retrying status check
 
 def generate_tags(transcript_text, num_tags=NUM_TAGS_DEFAULT):
@@ -158,7 +158,7 @@ def identify_interviewees(title, description):
     prompt = (
         f"Based on the following title and description, identify the names of the people being interviewed."
         f" Do not include the host. Do not include any information other than the interviewees."
-        f" If there are multiple people, their names should be listed and separated by a comma.\\n\\n"
+        f" If there are multiple people, their names should be listed and separated by a comma.  For example: 'John Doe, Jane Smith'\\n\\n"
         f"Title: {title}\\nDescription: {description}"
     )
     response = openai.ChatCompletion.create(
@@ -195,26 +195,26 @@ def detect_names(tags):
             non_names.append(tag)
     return names, non_names
 
-def handle_transcription_status(manager, video_id, existing_transcript, session_id):
+async def handle_transcription_status(manager, video_id, existing_transcript, session_id):
     """
     Handle existing transcription status.
     """
     status = existing_transcript.get('status')
     if status == 'completed':
-        send_update(manager, session_id, f"Existing transcription for video ID: {video_id} found and completed.")
+        await send_update(manager, session_id, f"Existing transcription for video ID: {video_id} found and completed.", supabase)
         return existing_transcript['transcript']
     elif status == 'in_progress':
-        send_update(manager, session_id, f"Existing transcription for video ID: {video_id} is in progress.")
+        await send_update(manager, session_id, f"Existing transcription for video ID: {video_id} is in progress.", supabase)
         # Implement further logic if needed
         return None
     elif status == 'failed':
-        send_update(manager, session_id, f"Previous transcription failed for video ID: {video_id}. Requesting new transcription...")
-        audio_url = get_audio_url(manager, f"https://www.youtube.com/watch?v={video_id}", session_id)
-        return get_transcription(manager, audio_url, video_id, session_id)
+        await send_update(manager, session_id, f"Previous transcription failed for video ID: {video_id}. Requesting new transcription...", supabase)
+        audio_url = await get_audio_url(manager, f"https://www.youtube.com/watch?v={video_id}", session_id)
+        return await get_transcription(manager, audio_url, video_id, session_id)
     else:
         return None
 
-def process_video(manager, row, supabase: Client, transcription_ids, session_id):
+async def process_video(manager, row, supabase: Client, transcription_ids, session_id):
     """
     Process each video: extract audio URL, get transcription and tags, and identify interviewees.
     """
@@ -223,7 +223,7 @@ def process_video(manager, row, supabase: Client, transcription_ids, session_id)
     video_title = row['title'].replace(" ", "_")
     description = row['description']
     youtube_url = f"https://www.youtube.com/watch?v={video_id}"
-    send_update(manager, session_id, f"Processing video ID: {video_id}")
+    await send_update(manager, session_id, f"Processing video ID: {video_id}", supabase)
 
     filename = f"{video_id}_{channel_name}_{video_title}_transcript.json"
     # Placeholder for saving or loading transcripts if needed
@@ -231,17 +231,17 @@ def process_video(manager, row, supabase: Client, transcription_ids, session_id)
     existing_transcript = supabase.table('transcripts').select('*').eq('video_id', video_id).single().execute()
 
     if existing_transcript.data:
-        send_update(manager, session_id, f"Found existing transcript for video ID: {video_id}")
+        await send_update(manager, session_id, f"Found existing transcript for video ID: {video_id}", supabase)
         if existing_transcript.data['status'] == 'completed':
             transcript_text = existing_transcript.data['transcript']
         elif existing_transcript.data['status'] == 'in_progress':
-            transcript_text = handle_transcription_status(manager, video_id, existing_transcript.data, session_id)
+            transcript_text = await handle_transcription_status(manager, video_id, existing_transcript.data, session_id)
         elif existing_transcript.data['status'] == 'failed':
-            transcript_text = handle_transcription_status(manager, video_id, existing_transcript.data, session_id)
+            transcript_text = await handle_transcription_status(manager, video_id, existing_transcript.data, session_id)
     else:
         try:
-            audio_url = get_audio_url(manager, youtube_url, session_id)
-            transcript_utterances = get_transcription(manager, audio_url, video_id, session_id)
+            audio_url = await get_audio_url(manager, youtube_url, session_id)
+            transcript_utterances = await get_transcription(manager, audio_url, video_id, session_id)
             transcript_text = " ".join([utterance['text'] for utterance in transcript_utterances])
 
             # Save transcription to Supabase
@@ -253,7 +253,7 @@ def process_video(manager, row, supabase: Client, transcription_ids, session_id)
             }).execute()
 
         except Exception as e:
-            send_update(manager, session_id, f"Error processing video {video_id}: {e}")
+            await send_update(manager, session_id, f"Error processing video {video_id}: {e}", supabase)
             return
 
     if transcript_text:
@@ -279,13 +279,13 @@ def process_video(manager, row, supabase: Client, transcription_ids, session_id)
             'interviewees': ", ".join(interviewees)
         }).eq('video_id', video_id).execute()
 
-        send_update(manager, session_id, f"Generated tags and identified interviewees for video ID: {video_id}")
+        await send_update(manager, session_id, f"Generated tags and identified interviewees for video ID: {video_id}", supabase)
 
-def process_videos(manager, session_id: str, supabase: Client, video_ids: list, num_videos: int, num_comments: int, num_tags: int, clustering_strength: float):
+async def process_videos(manager, session_id: str, supabase: Client, video_ids: list, num_videos: int, num_comments: int, num_tags: int, clustering_strength: float):
     """
     Core function to process videos: fetch channel info, videos, comments, transcribe, and generate tags.
     """
-    send_update(manager, session_id, "Starting video processing...")
+    await send_update(manager, session_id, "Starting video processing...", supabase)
 
     transcription_ids = load_transcription_ids()
 
@@ -299,13 +299,11 @@ def process_videos(manager, session_id: str, supabase: Client, video_ids: list, 
                 'key': YOUTUBE_API_KEY
             }
             response = requests.get(video_info_url, params=params)
-            if response.status_code != 200:
-                send_update(manager, session_id, f"Failed to retrieve video info for {video_id}: {response.text}")
-                continue
-
+            response.raise_for_status()
             data = response.json()
+
             if not data['items']:
-                send_update(manager, session_id, f"No data found for video ID: {video_id}")
+                await send_update(manager, session_id, f"No data found for video ID: {video_id}", supabase)
                 continue
 
             snippet = data['items'][0]['snippet']
@@ -313,7 +311,6 @@ def process_videos(manager, session_id: str, supabase: Client, video_ids: list, 
             channel_title = snippet['channelTitle']
             channel_url = f"https://www.youtube.com/channel/{channel_id}"
             channel_description = snippet.get('description', '')
-            subscribers = 0  # YouTube API requires additional calls to get subscriber count
 
             # Step 2: Fetch top videos for the channel
             search_url = 'https://www.googleapis.com/youtube/v3/search'
@@ -326,10 +323,7 @@ def process_videos(manager, session_id: str, supabase: Client, video_ids: list, 
                 'key': YOUTUBE_API_KEY
             }
             search_response = requests.get(search_url, params=search_params)
-            if search_response.status_code != 200:
-                send_update(manager, session_id, f"Failed to retrieve top videos for channel {channel_id}: {search_response.text}")
-                continue
-
+            search_response.raise_for_status()
             search_data = search_response.json()
             top_video_ids = [item['id']['videoId'] for item in search_data['items']]
 
@@ -341,11 +335,9 @@ def process_videos(manager, session_id: str, supabase: Client, video_ids: list, 
                 'key': YOUTUBE_API_KEY
             }
             videos_response = requests.get(videos_info_url, params=videos_params)
-            if videos_response.status_code != 200:
-                send_update(manager, session_id, f"Failed to retrieve video details for channel {channel_id}: {videos_response.text}")
-                continue
-
+            videos_response.raise_for_status()
             videos_data = videos_response.json()
+            
             videos = []
             for item in videos_data['items']:
                 snippet = item['snippet']
@@ -362,38 +354,53 @@ def process_videos(manager, session_id: str, supabase: Client, video_ids: list, 
                     'retrieval_date': datetime.utcnow().isoformat()
                 })
 
-            # Step 4: Save channel and videos to Supabase
+            # Fetch channel statistics
+            channel_stats_url = 'https://www.googleapis.com/youtube/v3/channels'
+            channel_stats_params = {
+                'part': 'statistics',
+                'id': channel_id,
+                'key': YOUTUBE_API_KEY
+            }
+            channel_stats_response = requests.get(channel_stats_url, params=channel_stats_params)
+            channel_stats_response.raise_for_status()
+            channel_stats_data = channel_stats_response.json()
+            
+            channel_stats = channel_stats_data['items'][0]['statistics']
+            total_videos = int(channel_stats.get('videoCount', 0))
+            subscribers = int(channel_stats.get('subscriberCount', 0))
+
+            # Update the channel information
             supabase.table('channels').upsert({
                 'channel_id': channel_id,
                 'channel_name': channel_title,
                 'link_to_channel': channel_url,
                 'about': channel_description,
-                'number_of_total_videos': 0,  # Requires additional API calls
+                'number_of_total_videos': total_videos,
                 'number_of_retrieved_videos': len(videos),
                 'ids_of_retrieved_videos': json.dumps(top_video_ids),
                 'subscribers': subscribers,
                 'channel_retrieval_date': datetime.utcnow().isoformat()
             }).execute()
 
+            await send_update(manager, session_id, f"Updated channel info for {channel_title}", supabase)
+
             supabase.table('videos').upsert(videos).execute()
-            send_update(manager, session_id, f"Saved channel and videos for channel ID: {channel_id}")
+            await send_update(manager, session_id, f"Saved channel and videos for channel ID: {channel_id}", supabase)
 
             # Step 5: Fetch and save comments for each video
             comments_url = 'https://www.googleapis.com/youtube/v3/commentThreads'
             for video in videos:
                 comments_params = {
-                    'part': 'snippet',
+                    'part': 'snippet,replies',  # Add 'replies' to fetch reply comments
                     'videoId': video['video_id'],
                     'maxResults': num_comments,
                     'order': 'relevance',
                     'key': YOUTUBE_API_KEY
                 }
                 comments_response = requests.get(comments_url, params=comments_params)
-                if comments_response.status_code != 200:
-                    send_update(manager, session_id, f"Failed to retrieve comments for video {video['video_id']}: {comments_response.text}")
-                    continue
-
+                comments_response.raise_for_status()
                 comments_data = comments_response.json()
+                
                 comments = []
                 for item in comments_data['items']:
                     comment = item['snippet']['topLevelComment']['snippet']
@@ -404,22 +411,38 @@ def process_videos(manager, session_id: str, supabase: Client, video_ids: list, 
                         'comment_likes': int(comment.get('likeCount', 0)),
                         'comment_published_at': comment.get('publishedAt', ''),
                         'comment_updated_at': comment.get('updatedAt', ''),
-                        'comment_parent_id': '',  # No parent ID for top-level comments
+                        'comment_parent_id': '',  # Top-level comment, no parent
                         'comment_text': comment.get('textOriginal', ''),
                         'comment_retrieval_date': datetime.utcnow().isoformat()
                     })
+                    
+                    # Process reply comments
+                    if 'replies' in item:
+                        for reply in item['replies']['comments']:
+                            reply_snippet = reply['snippet']
+                            comments.append({
+                                'video_id': video['video_id'],
+                                'comment_id': reply['id'],
+                                'comment_author': reply_snippet.get('authorDisplayName', ''),
+                                'comment_likes': int(reply_snippet.get('likeCount', 0)),
+                                'comment_published_at': reply_snippet.get('publishedAt', ''),
+                                'comment_updated_at': reply_snippet.get('updatedAt', ''),
+                                'comment_parent_id': item['id'],  # Parent comment ID
+                                'comment_text': reply_snippet.get('textOriginal', ''),
+                                'comment_retrieval_date': datetime.utcnow().isoformat()
+                            })
 
                 supabase.table('comments').upsert(comments).execute()
-                send_update(manager, session_id, f"Saved comments for video ID: {video['video_id']}")
+                await send_update(manager, session_id, f"Saved {len(comments)} comments for video ID: {video['video_id']}", supabase)
 
             # Step 6: Process each video for transcription and tagging
             for video in videos:
-                process_video(manager, video, supabase, transcription_ids, session_id)
+                await process_video(manager, video, supabase, transcription_ids, session_id)
 
         except Exception as e:
-            send_update(manager, session_id, f"Error processing video ID {video_id}: {e}")
+            await send_update(manager, session_id, f"Error processing video ID {video_id}: {str(e)}", supabase)
 
     # Save transcription IDs if any new ones were added
     save_transcription_ids(transcription_ids)
 
-    send_update(manager, session_id, "Video processing completed.")
+    await send_update(manager, session_id, "Video processing completed.", supabase)

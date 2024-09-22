@@ -24,7 +24,9 @@ CREATE TABLE IF NOT EXISTS videos (
     comment_count INTEGER,
     retrieval_date TIMESTAMP,
     tags TEXT,
-    interviewees TEXT
+    interviewees TEXT,
+    processing_status TEXT,
+    error_message TEXT
 );
 
 -- Table: comments

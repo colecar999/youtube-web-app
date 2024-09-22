@@ -22,6 +22,7 @@ import {
   Spinner,
   Alert,
   AlertIcon,
+  useToast
 } from '@chakra-ui/react';
 
 console.log('Index.js loaded');
@@ -32,6 +33,8 @@ export default function Home() {
   const [isSupabaseInitialized, setIsSupabaseInitialized] = useState(false);
   const [error, setError] = useState(null);
   const [updates, setUpdates] = useState([]);
+  const [sessionId, setSessionId] = useState(null);
+  const toast = useToast();
 
   useEffect(() => {
     console.log('Home component mounted');
@@ -51,40 +54,42 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    let channel;
-
-    if (supabase && isSupabaseInitialized) {
-      channel = supabase.channel('custom-all-channel');
-
-      channel
-        .on('broadcast', { event: 'update' }, (payload) => {
-          console.log('Received update:', payload);
-          setUpdates((prev) => [...prev, payload.message]);
-        })
+    if (isSupabaseInitialized && sessionId) {
+      const channel = supabase
+        .channel('custom-all-channel')
+        .on(
+          'postgres_changes',
+          { event: 'INSERT', schema: 'public', table: 'updates' },
+          (payload) => {
+            console.log('Received update:', payload);
+            if (payload.new && payload.new.session_id === sessionId) {
+              setUpdates((prev) => [...prev, payload.new.message]);
+              // Add this toast notification
+              toast({
+                title: "New Update",
+                description: payload.new.message,
+                status: "info",
+                duration: 3000,
+                isClosable: true,
+              });
+            }
+          }
+        )
         .subscribe((status) => {
           console.log('Subscription status:', status);
-          if (status === 'SUBSCRIBED') {
-            console.log('Successfully subscribed to channel');
-          }
         });
-    }
 
-    return () => {
-      if (channel) {
+      return () => {
         supabase.removeChannel(channel);
-      }
-    };
-  }, [supabase, isSupabaseInitialized]);
+      };
+    }
+  }, [isSupabaseInitialized, sessionId, toast]);
 
   // Handler for form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Clear previous updates
     setUpdates([]);
-
     try {
-      // Send POST request to backend to start processing
       const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/process`, {
         video_ids: videoIds.split('\n').map((id) => id.trim()).filter((id) => id),
         num_videos: parseInt(numVideos),
@@ -92,26 +97,28 @@ export default function Home() {
         num_tags: parseInt(numTags),
         clustering_strength: parseFloat(clusteringStrength),
       });
-
       const { session_id } = response.data;
-
-      // Use Supabase for real-time updates
-      const newChannel = supabase.channel(session_id);
-
-      newChannel
-        .on('broadcast', { event: 'update' }, (payload) => {
-          console.log('Received update:', payload);
-          setUpdates((prev) => [...prev, payload.message]);
-        })
-        .subscribe((status) => {
-          console.log('Subscription status:', status);
-          if (status === 'SUBSCRIBED') {
-            console.log('Successfully subscribed to channel');
-          }
-        });
+      setSessionId(session_id);
+      setUpdates((prev) => [...prev, 'Processing started. Waiting for updates...']);
+      // Add this toast notification
+      toast({
+        title: "Processing Started",
+        description: `Session ID: ${session_id}`,
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
     } catch (error) {
       console.error('Error initiating processing:', error);
       setUpdates((prev) => [...prev, 'Error initiating processing. Please check your inputs and try again.']);
+      // Add this toast notification
+      toast({
+        title: "Error",
+        description: "Failed to start processing. Please try again.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
     }
   };
 
