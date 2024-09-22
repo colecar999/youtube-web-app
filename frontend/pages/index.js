@@ -57,12 +57,12 @@ export default function Home() {
     if (isSupabaseInitialized && sessionId) {
       console.log(`Setting up Supabase subscription for session ${sessionId}`);
       const channel = supabase
-        .channel('custom-all-channel')
+        .channel(`updates:${sessionId}`)
         .on(
           'postgres_changes',
-          { event: 'INSERT', schema: 'public', table: 'updates' },
+          { event: '*', schema: 'public', table: 'updates' },
           (payload) => {
-            console.log('Received update from Supabase:', payload);
+            console.log("Supabase update received:", payload);
             if (payload.new && payload.new.session_id === sessionId) {
               console.log('Updating state with new message:', payload.new.message);
               setUpdates((prev) => [...prev, payload.new.message]);
@@ -80,6 +80,12 @@ export default function Home() {
         )
         .subscribe((status) => {
           console.log('Supabase subscription status:', status);
+          if (status === 'CHANNEL_ERROR') {
+            console.error("Supabase channel error. Attempting to reconnect...");
+            channel.unsubscribe();
+            // Attempt to resubscribe after a short delay
+            setTimeout(() => channel.subscribe(), 5000);
+          }
         });
 
       return () => {
@@ -88,6 +94,22 @@ export default function Home() {
       };
     }
   }, [isSupabaseInitialized, sessionId, toast]);
+
+  useEffect(() => {
+    if (sessionId) {
+      console.log("Setting up WebSocket connection for session", sessionId);
+      const socket = new WebSocket(`ws://143.244.214.193:8000/ws/${sessionId}`);
+      socket.onopen = () => console.log("WebSocket connection established");
+      socket.onmessage = (event) => {
+        console.log("WebSocket message received:", event.data);
+        setUpdates(prev => [...prev, event.data]);
+      };
+      socket.onerror = (error) => console.error("WebSocket error:", error);
+      socket.onclose = () => console.log("WebSocket connection closed");
+
+      return () => socket.close();
+    }
+  }, [sessionId]);
 
   // Handler for form submission
   const handleSubmit = async (e) => {
@@ -111,7 +133,6 @@ export default function Home() {
       const { session_id } = response.data;
       console.log('Received session_id:', session_id);
       setSessionId(session_id);
-      setUpdates((prev) => [...prev, 'Processing started. Waiting for updates...']);
       toast({
         title: "Processing Started",
         description: `Session ID: ${session_id}`,

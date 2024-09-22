@@ -1,56 +1,589 @@
-Sep 22 04:04:50 YTWebApp uvicorn[35253]: INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
-Sep 22 04:08:33 YTWebApp uvicorn[35253]: INFO:     108.67.148.206:0 - "OPTIONS /process HTTP/1.0" 200 OK
-Sep 22 04:08:34 YTWebApp uvicorn[35253]: 2024-09-22 04:08:34,401 - INFO - HTTP Request: POST https://umljzrihvfmpneqxhnvc.supabase.co/rest/v1/updates "HTTP/2 201 Created"
-Sep 22 04:08:34 YTWebApp uvicorn[35253]: 2024-09-22 04:08:34,407 - ERROR - Error in send_update: object APIResponse[TypeVar] can't be used in 'await' expression
-Sep 22 04:08:34 YTWebApp uvicorn[35253]: INFO:     108.67.148.206:0 - "POST /process HTTP/1.0" 200 OK
-Sep 22 04:08:34 YTWebApp uvicorn[35253]: 2024-09-22 04:08:34,646 - INFO - HTTP Request: POST https://umljzrihvfmpneqxhnvc.supabase.co/rest/v1/updates "HTTP/2 201 Created"
-Sep 22 04:08:34 YTWebApp uvicorn[35253]: 2024-09-22 04:08:34,647 - ERROR - Error in send_update: object APIResponse[TypeVar] can't be used in 'await' expression
-Sep 22 04:08:35 YTWebApp uvicorn[35253]: 2024-09-22 04:08:35,491 - INFO - HTTP Request: POST https://umljzrihvfmpneqxhnvc.supabase.co/rest/v1/channels "HTTP/2 201 Created"
-Sep 22 04:08:35 YTWebApp uvicorn[35253]: 2024-09-22 04:08:35,724 - INFO - HTTP Request: POST https://umljzrihvfmpneqxhnvc.supabase.co/rest/v1/updates "HTTP/2 201 Created"
-Sep 22 04:08:35 YTWebApp uvicorn[35253]: 2024-09-22 04:08:35,726 - ERROR - Error in send_update: object APIResponse[TypeVar] can't be used in 'await' expression
-Sep 22 04:08:35 YTWebApp uvicorn[35253]: 2024-09-22 04:08:35,959 - INFO - HTTP Request: POST https://umljzrihvfmpneqxhnvc.supabase.co/rest/v1/videos?columns=%22view_count%22%2C%22description%22%2C%22title%22%2C%22like_count%22%2C%22retrieval_date%22%2C%22video_id%22%2C%22comment_count%22%2C%22duration%22 "HTTP/2 201 Created"
-Sep 22 04:08:36 YTWebApp uvicorn[35253]: 2024-09-22 04:08:36,054 - INFO - HTTP Request: POST https://umljzrihvfmpneqxhnvc.supabase.co/rest/v1/updates "HTTP/2 201 Created"
-Sep 22 04:08:36 YTWebApp uvicorn[35253]: 2024-09-22 04:08:36,056 - ERROR - Error in send_update: object APIResponse[TypeVar] can't be used in 'await' expression
-Sep 22 04:08:36 YTWebApp uvicorn[35253]: 2024-09-22 04:08:36,876 - INFO - HTTP Request: POST https://umljzrihvfmpneqxhnvc.supabase.co/rest/v1/comments?columns=%22comment_retrieval_date%22%2C%22comment_author%22%2C%22comment_published_at%22%2C%22video_id%22%2C%22comment_id%22%2C%22comment_parent_id%22%2C%22comment_likes%22%2C%22comment_text%22%2C%22comment_updated_at%22 "HTTP/2 201 Created"
-Sep 22 04:08:36 YTWebApp uvicorn[35253]: 2024-09-22 04:08:36,972 - INFO - HTTP Request: POST https://umljzrihvfmpneqxhnvc.supabase.co/rest/v1/updates "HTTP/2 201 Created"
-Sep 22 04:08:36 YTWebApp uvicorn[35253]: 2024-09-22 04:08:36,974 - ERROR - Error in send_update: object APIResponse[TypeVar] can't be used in 'await' expression
-Sep 22 04:08:37 YTWebApp uvicorn[35253]: 2024-09-22 04:08:37,746 - INFO - HTTP Request: POST https://umljzrihvfmpneqxhnvc.supabase.co/rest/v1/comments?columns=%22comment_retrieval_date%22%2C%22comment_author%22%2C%22comment_published_at%22%2C%22video_id%22%2C%22comment_id%22%2C%22comment_parent_id%22%2C%22comment_likes%22%2C%22comment_text%22%2C%22comment_updated_at%22 "HTTP/2 201 Created"
-Sep 22 04:08:37 YTWebApp uvicorn[35253]: 2024-09-22 04:08:37,840 - INFO - HTTP Request: POST https://umljzrihvfmpneqxhnvc.supabase.co/rest/v1/updates "HTTP/2 201 Created"
-Sep 22 04:08:37 YTWebApp uvicorn[35253]: 2024-09-22 04:08:37,841 - ERROR - Error in send_update: object APIResponse[TypeVar] can't be used in 'await' expression
-Sep 22 04:08:38 YTWebApp uvicorn[35253]: 2024-09-22 04:08:38,589 - INFO - HTTP Request: POST https://umljzrihvfmpneqxhnvc.supabase.co/rest/v1/comments?columns=%22comment_retrieval_date%22%2C%22comment_author%22%2C%22comment_published_at%22%2C%22video_id%22%2C%22comment_id%22%2C%22comment_parent_id%22%2C%22comment_likes%22%2C%22comment_text%22%2C%22comment_updated_at%22 "HTTP/2 201 Created"
-Sep 22 04:08:38 YTWebApp uvicorn[35253]: 2024-09-22 04:08:38,833 - INFO - HTTP Request: POST https://umljzrihvfmpneqxhnvc.supabase.co/rest/v1/updates "HTTP/2 201 Created"
-Sep 22 04:08:38 YTWebApp uvicorn[35253]: 2024-09-22 04:08:38,834 - ERROR - Error in send_update: object APIResponse[TypeVar] can't be used in 'await' expression
-Sep 22 04:08:38 YTWebApp uvicorn[35253]: 2024-09-22 04:08:38,834 - INFO - Starting to process individual videos
-Sep 22 04:08:38 YTWebApp uvicorn[35253]: 2024-09-22 04:08:38,834 - ERROR - Error processing video ID T647CGsuOVU: 'channel_name'
-Sep 22 04:08:38 YTWebApp uvicorn[35253]: 2024-09-22 04:08:38,836 - ERROR - Traceback (most recent call last):
-Sep 22 04:08:38 YTWebApp uvicorn[35253]:   File "/home/appuser/youtube-web-app/backend/tasks.py", line 445, in process_videos
-Sep 22 04:08:38 YTWebApp uvicorn[35253]:     await process_video(manager, video, supabase, transcription_ids, session_id)
-Sep 22 04:08:38 YTWebApp uvicorn[35253]:   File "/home/appuser/youtube-web-app/backend/tasks.py", line 224, in process_video
-Sep 22 04:08:38 YTWebApp uvicorn[35253]:     channel_name = row['channel_name'].replace(" ", "_")
-Sep 22 04:08:38 YTWebApp uvicorn[35253]:                    ~~~^^^^^^^^^^^^^^^^
-Sep 22 04:08:38 YTWebApp uvicorn[35253]: KeyError: 'channel_name'
-Sep 22 04:08:38 YTWebApp uvicorn[35253]: 2024-09-22 04:08:38,927 - INFO - HTTP Request: POST https://umljzrihvfmpneqxhnvc.supabase.co/rest/v1/updates "HTTP/2 201 Created"
-Sep 22 04:08:38 YTWebApp uvicorn[35253]: 2024-09-22 04:08:38,928 - ERROR - Error in send_update: object APIResponse[TypeVar] can't be used in 'await' expression
-Sep 22 04:08:38 YTWebApp uvicorn[35253]: 2024-09-22 04:08:38,928 - ERROR - Error processing video ID KpmrQdaQjGg: 'channel_name'
-Sep 22 04:08:38 YTWebApp uvicorn[35253]: 2024-09-22 04:08:38,929 - ERROR - Traceback (most recent call last):
-Sep 22 04:08:38 YTWebApp uvicorn[35253]:   File "/home/appuser/youtube-web-app/backend/tasks.py", line 445, in process_videos
-Sep 22 04:08:38 YTWebApp uvicorn[35253]:     await process_video(manager, video, supabase, transcription_ids, session_id)
-Sep 22 04:08:38 YTWebApp uvicorn[35253]:   File "/home/appuser/youtube-web-app/backend/tasks.py", line 224, in process_video
-Sep 22 04:08:38 YTWebApp uvicorn[35253]:     channel_name = row['channel_name'].replace(" ", "_")
-Sep 22 04:08:38 YTWebApp uvicorn[35253]:                    ~~~^^^^^^^^^^^^^^^^
-Sep 22 04:08:38 YTWebApp uvicorn[35253]: KeyError: 'channel_name'
-Sep 22 04:08:39 YTWebApp uvicorn[35253]: 2024-09-22 04:08:39,154 - INFO - HTTP Request: POST https://umljzrihvfmpneqxhnvc.supabase.co/rest/v1/updates "HTTP/2 201 Created"
-Sep 22 04:08:39 YTWebApp uvicorn[35253]: 2024-09-22 04:08:39,155 - ERROR - Error in send_update: object APIResponse[TypeVar] can't be used in 'await' expression
-Sep 22 04:08:39 YTWebApp uvicorn[35253]: 2024-09-22 04:08:39,156 - ERROR - Error processing video ID 35IpOK-WaNA: 'channel_name'
-Sep 22 04:08:39 YTWebApp uvicorn[35253]: 2024-09-22 04:08:39,156 - ERROR - Traceback (most recent call last):
-Sep 22 04:08:39 YTWebApp uvicorn[35253]:   File "/home/appuser/youtube-web-app/backend/tasks.py", line 445, in process_videos
-Sep 22 04:08:39 YTWebApp uvicorn[35253]:     await process_video(manager, video, supabase, transcription_ids, session_id)
-Sep 22 04:08:39 YTWebApp uvicorn[35253]:   File "/home/appuser/youtube-web-app/backend/tasks.py", line 224, in process_video
-Sep 22 04:08:39 YTWebApp uvicorn[35253]:     channel_name = row['channel_name'].replace(" ", "_")
-Sep 22 04:08:39 YTWebApp uvicorn[35253]:                    ~~~^^^^^^^^^^^^^^^^
-Sep 22 04:08:39 YTWebApp uvicorn[35253]: KeyError: 'channel_name'
-Sep 22 04:08:39 YTWebApp uvicorn[35253]: 2024-09-22 04:08:39,253 - INFO - HTTP Request: POST https://umljzrihvfmpneqxhnvc.supabase.co/rest/v1/updates "HTTP/2 201 Created"
-Sep 22 04:08:39 YTWebApp uvicorn[35253]: 2024-09-22 04:08:39,254 - ERROR - Error in send_update: object APIResponse[TypeVar] can't be used in 'await' expression
-Sep 22 04:08:39 YTWebApp uvicorn[35253]: 2024-09-22 04:08:39,254 - INFO - Finished processing individual videos
-Sep 22 04:08:39 YTWebApp uvicorn[35253]: 2024-09-22 04:08:39,345 - INFO - HTTP Request: POST https://umljzrihvfmpneqxhnvc.supabase.co/rest/v1/updates "HTTP/2 201 Created"
-Sep 22 04:08:39 YTWebApp uvicorn[35253]: 2024-09-22 04:08:39,347 - ERROR - Error in send_update: object APIResponse[TypeVar] can't be used in 'await' expression
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 3 with 7 bits
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b':authority', b'umljzrihvfmpneqxhnvc.supabase.co') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 91 with 7 bits
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b':scheme', b'https') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 7 with 7 bits
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b':path', b'/rest/v1/updates') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 90 with 7 bits
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'accept', b'*/*') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 89 with 7 bits
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'accept-encoding', b'gzip, deflate, br') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 88 with 7 bits
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'user-agent', b'python-httpx/0.27.2') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 87 with 7 bits
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'x-client-info', b'supabase-py/2.7.4') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 86 with 7 bits
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'apikey', b'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVtbGp6cmlodmZtcG5lcXhobnZjIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcyNjcyMDQzOCwiZXhwIjoyMDQyMjk2NDM4fQ.on1JilD54vMKBwbWBMMPdEpok4H5-3suIac2ihdegAc') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 85 with 7 bits
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'authorization', b'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVtbGp6cmlodmZtcG5lcXhobnZjIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcyNjcyMDQzOCwiZXhwIjoyMDQyMjk2NDM4fQ.on1JilD54vMKBwbWBMMPdEpok4H5-3suIac2ihdegAc') to the header table, sensitive:True, huffman:True
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 23 with 4 bits
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 179 with 7 bits
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'accept-profile', b'public') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 84 with 7 bits
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'content-profile', b'public') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 83 with 7 bits
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'prefer', b'return=representation') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 82 with 7 bits
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'content-length', b'740') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 65 with 7 bits
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'content-type', b'application/json') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 80 with 7 bits
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoded header block to b"\x83\xdb\x87\xda\xd9\xd8\xd7\xd6\xd5\x1f\x08\xff4\xbaQ\xd8[\x14/\xac\xb3\xc7\x88\x86\xd4l\xb98{\xc8\x1d&\xc8\x8c\x95ml\x97\xb29\x93\xad\x7f\x9coe}r\xfa\xcbY\x19\xd0mF\xcb\xeeO\xcb\xb3\xf3\xa7\x0f\xbf\xdd\xd9\x11\x92\xac\xb4~\x9b#\x99*\xe2\x98\xf1V\xe1)\xa0\xf2S\xfa\x92bn\x82~Nx\xea\xfd\xe9\x90\xde\x0cJ_G\xee\xec\x8ed\xabM\x04\xab\xf6\xbeb\xe3))}\x1f\xbb\xb2#%4O%\xec\x8eh\xdeOZz\x13\xd6\x8b\xfb=\xea\xbd\xe0\xdf\xbf\x93\xf8\xc9\xd0\xfe\xb4_\xd9\xebGN\xa2\xd3\x7fCR\xec\\\xf5\x07)\xa8\xbe\xdb]\xf4f\xbb\xe2>Wth\xd7&\n\xcf\xd5\xacm\xac\xca-\xc82\x08\xd3\xc8Y\xa1'\xd4\xd3\xd2\xc1\xd0"
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:send_request_headers.complete
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:send_request_body.started request=<Request [b'POST']> stream_id=41
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:send_request_body.complete
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:receive_response_headers.started request=<Request [b'POST']> stream_id=41
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoding b'\xeca\x96\xddm_J\x08Jn-j\x08\x02i@=p/\xdcl\nb\xd1\xbf\xeb\xea\x7f*\x8fx\x8e\x82IZ,\x8f:\x16\x85+k`\xe5\xb7\xe9\xe8\xe7\xe6\xe5\xe4\xe3\xe2\xdd\xe0'
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 108, consumed 1 bytes
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b':status', b'201'), consumed 1
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 33, consumed 1 bytes
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 22, consumed 1 bytes
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'date', b'Sun, 22 Sep 2024 08:19:50 GMT'), total consumed 24 bytes, indexed True
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 107, consumed 1 bytes
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'content-type', b'application/json; charset=utf-8'), consumed 1
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 106, consumed 1 bytes
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'content-range', <memory at 0x782d1e30df00>), consumed 1
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 105, consumed 2 bytes
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 15, consumed 1 bytes
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'cf-ray', b'8c70df4ed87142f5-EWR'), total consumed 18 bytes, indexed True
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 105, consumed 1 bytes
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'cf-cache-status', b'DYNAMIC'), consumed 1
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 104, consumed 1 bytes
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'content-encoding', b'gzip'), consumed 1
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 103, consumed 1 bytes
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'strict-transport-security', b'max-age=31536000; includeSubDomains'), consumed 1
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 102, consumed 1 bytes
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'vary', b'Accept-Encoding'), consumed 1
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 101, consumed 1 bytes
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'content-profile', b'public'), consumed 1
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 100, consumed 1 bytes
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'preference-applied', b'return=representation'), consumed 1
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 99, consumed 1 bytes
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'sb-gateway-version', <memory at 0x782d1e30de40>), consumed 1
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 98, consumed 1 bytes
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'x-envoy-attempt-count', <memory at 0x782d1e30dfc0>), consumed 1
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 93, consumed 1 bytes
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'x-envoy-upstream-service-time', <memory at 0x782d1e30e2c0>), consumed 1
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 96, consumed 1 bytes
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'server', b'cloudflare'), consumed 1
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:receive_response_headers.complete return_value=(201, [(b'date', b'Sun, 22 Sep 2024 08:19:50 GMT'), (b'content-type', b'application/json; charset=utf-8'), (b'content-range', b'*/*'), (b'cf-ray', b'8c70df4ed87142f5-EWR'), (b'cf-cache-status', b'DYNAMIC'), (b'content-encoding', b'gzip'), (b'strict-transport-security', b'max-age=31536000; includeSubDomains'), (b'vary', b'Accept-Encoding'), (b'content-profile', b'public'), (b'preference-applied', b'return=representation'), (b'sb-gateway-version', b'1'), (b'x-envoy-attempt-count', b'1'), (b'x-envoy-upstream-service-time', b'3'), (b'server', b'cloudflare')])
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: INFO:httpx:HTTP Request: POST https://umljzrihvfmpneqxhnvc.supabase.co/rest/v1/updates "HTTP/2 201 Created"
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:receive_response_body.started request=<Request [b'POST']> stream_id=41
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:receive_response_body.complete
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:response_closed.started stream_id=41
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:response_closed.complete
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:utils:Update sent to Supabase for session 86f9eb98-9646-4adc-bb7e-eb3b699cea3b
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: INFO:utils:Update successfully sent via both WebSocket and Supabase for session 86f9eb98-9646-4adc-bb7e-eb3b699cea3b
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:send_request_headers.started request=<Request [b'POST']> stream_id=43
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b':method', b'POST') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 3 with 7 bits
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b':authority', b'umljzrihvfmpneqxhnvc.supabase.co') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 91 with 7 bits
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b':scheme', b'https') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 7 with 7 bits
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b':path', b'/rest/v1/transcripts') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 64 with 7 bits
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'accept', b'*/*') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 89 with 7 bits
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'accept-encoding', b'gzip, deflate, br') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 88 with 7 bits
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'user-agent', b'python-httpx/0.27.2') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 87 with 7 bits
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'x-client-info', b'supabase-py/2.7.4') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 86 with 7 bits
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'apikey', b'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVtbGp6cmlodmZtcG5lcXhobnZjIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcyNjcyMDQzOCwiZXhwIjoyMDQyMjk2NDM4fQ.on1JilD54vMKBwbWBMMPdEpok4H5-3suIac2ihdegAc') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 85 with 7 bits
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'authorization', b'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVtbGp6cmlodmZtcG5lcXhobnZjIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcyNjcyMDQzOCwiZXhwIjoyMDQyMjk2NDM4fQ.on1JilD54vMKBwbWBMMPdEpok4H5-3suIac2ihdegAc') to the header table, sensitive:True, huffman:True
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 23 with 4 bits
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 179 with 7 bits
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'accept-profile', b'public') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 84 with 7 bits
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'content-profile', b'public') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 83 with 7 bits
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'prefer', b'return=representation') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 82 with 7 bits
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'content-length', b'131') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 63 with 7 bits
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'content-type', b'application/json') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 80 with 7 bits
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoded header block to b"\x83\xdb\x87\xc0\xd9\xd8\xd7\xd6\xd5\x1f\x08\xff4\xbaQ\xd8[\x14/\xac\xb3\xc7\x88\x86\xd4l\xb98{\xc8\x1d&\xc8\x8c\x95ml\x97\xb29\x93\xad\x7f\x9coe}r\xfa\xcbY\x19\xd0mF\xcb\xeeO\xcb\xb3\xf3\xa7\x0f\xbf\xdd\xd9\x11\x92\xac\xb4~\x9b#\x99*\xe2\x98\xf1V\xe1)\xa0\xf2S\xfa\x92bn\x82~Nx\xea\xfd\xe9\x90\xde\x0cJ_G\xee\xec\x8ed\xabM\x04\xab\xf6\xbeb\xe3))}\x1f\xbb\xb2#%4O%\xec\x8eh\xdeOZz\x13\xd6\x8b\xfb=\xea\xbd\xe0\xdf\xbf\x93\xf8\xc9\xd0\xfe\xb4_\xd9\xebGN\xa2\xd3\x7fCR\xec\\\xf5\x07)\xa8\xbe\xdb]\xf4f\xbb\xe2>Wth\xd7&\n\xcf\xd5\xacm\xac\xca-\xc82\x08\xd3\xc8Y\xa1'\xd4\xd3\xd2\xbf\xd0"
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:send_request_headers.complete
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:send_request_body.started request=<Request [b'POST']> stream_id=43
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:send_request_body.complete
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:receive_response_headers.started request=<Request [b'POST']> stream_id=43
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoding b'\xee\xbf\xec\xeb\x7f+\x8fx\x8e\x82I[\x03O\xb8\xdbB\x95\xb5\xb0r\xdb\xea\xe9\xe8\xe7\xe6\xe5\xe4\xe3\xde\xe1'
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 110, consumed 1 bytes
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b':status', b'201'), consumed 1
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 63, consumed 1 bytes
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'date', b'Sun, 22 Sep 2024 08:19:50 GMT'), consumed 1
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 108, consumed 1 bytes
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'content-type', b'application/json; charset=utf-8'), consumed 1
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 107, consumed 1 bytes
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'content-range', <memory at 0x782d1e30df00>), consumed 1
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 106, consumed 2 bytes
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 15, consumed 1 bytes
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'cf-ray', b'8c70df50496542f5-EWR'), total consumed 18 bytes, indexed True
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 106, consumed 1 bytes
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'cf-cache-status', b'DYNAMIC'), consumed 1
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 105, consumed 1 bytes
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'content-encoding', b'gzip'), consumed 1
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 104, consumed 1 bytes
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'strict-transport-security', b'max-age=31536000; includeSubDomains'), consumed 1
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 103, consumed 1 bytes
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'vary', b'Accept-Encoding'), consumed 1
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 102, consumed 1 bytes
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'content-profile', b'public'), consumed 1
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 101, consumed 1 bytes
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'preference-applied', b'return=representation'), consumed 1
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 100, consumed 1 bytes
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'sb-gateway-version', <memory at 0x782d1e30de40>), consumed 1
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 99, consumed 1 bytes
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'x-envoy-attempt-count', <memory at 0x782d1e30dfc0>), consumed 1
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 94, consumed 1 bytes
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'x-envoy-upstream-service-time', <memory at 0x782d1e30e2c0>), consumed 1
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 97, consumed 1 bytes
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'server', b'cloudflare'), consumed 1
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:receive_response_headers.complete return_value=(201, [(b'date', b'Sun, 22 Sep 2024 08:19:50 GMT'), (b'content-type', b'application/json; charset=utf-8'), (b'content-range', b'*/*'), (b'cf-ray', b'8c70df50496542f5-EWR'), (b'cf-cache-status', b'DYNAMIC'), (b'content-encoding', b'gzip'), (b'strict-transport-security', b'max-age=31536000; includeSubDomains'), (b'vary', b'Accept-Encoding'), (b'content-profile', b'public'), (b'preference-applied', b'return=representation'), (b'sb-gateway-version', b'1'), (b'x-envoy-attempt-count', b'1'), (b'x-envoy-upstream-service-time', b'3'), (b'server', b'cloudflare')])
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: INFO:httpx:HTTP Request: POST https://umljzrihvfmpneqxhnvc.supabase.co/rest/v1/transcripts "HTTP/2 201 Created"
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:receive_response_body.started request=<Request [b'POST']> stream_id=43
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:receive_response_body.complete
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:response_closed.started stream_id=43
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:response_closed.complete
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: ERROR:tasks:Error processing video ID slvaz8CJIR0:
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: Could not retrieve a transcript for the video https://www.youtube.com/watch?v=slvaz8CJIR0! This is most likely caused by:
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: Subtitles are disabled for this video
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: If you are sure that the described cause is not responsible for this error and that a transcript should be retrievable, please create an issue at https://github.com/jdepoix/youtube-transcript-api/issues. Please add which version of youtube_transcript_api you are using and provide the information needed to replicate the error. Also make sure that there are no open issues which already describe your problem!
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: INFO:utils:Attempting to send update for session 86f9eb98-9646-4adc-bb7e-eb3b699cea3b: Error processing video ID slvaz8CJIR0:
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: Could not retrieve a transcript for the video https://www.youtube.com/watch?v=slvaz8CJIR0! This is most likely caused by:
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: Subtitles are disabled for this video
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: If you are sure that the described cause is not responsible for this error and that a transcript should be retrievable, please create an issue at https://github.com/jdepoix/youtube-transcript-api/issues. Please add which version of youtube_transcript_api you are using and provide the information needed to replicate the error. Also make sure that there are no open issues which already describe your problem!
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:utils:Broadcast message sent via WebSocket for session 86f9eb98-9646-4adc-bb7e-eb3b699cea3b
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:send_request_headers.started request=<Request [b'POST']> stream_id=45
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b':method', b'POST') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 3 with 7 bits
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b':authority', b'umljzrihvfmpneqxhnvc.supabase.co') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 91 with 7 bits
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b':scheme', b'https') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 7 with 7 bits
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b':path', b'/rest/v1/updates') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 90 with 7 bits
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'accept', b'*/*') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 89 with 7 bits
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'accept-encoding', b'gzip, deflate, br') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 88 with 7 bits
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'user-agent', b'python-httpx/0.27.2') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 87 with 7 bits
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'x-client-info', b'supabase-py/2.7.4') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 86 with 7 bits
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'apikey', b'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVtbGp6cmlodmZtcG5lcXhobnZjIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcyNjcyMDQzOCwiZXhwIjoyMDQyMjk2NDM4fQ.on1JilD54vMKBwbWBMMPdEpok4H5-3suIac2ihdegAc') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 85 with 7 bits
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'authorization', b'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVtbGp6cmlodmZtcG5lcXhobnZjIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcyNjcyMDQzOCwiZXhwIjoyMDQyMjk2NDM4fQ.on1JilD54vMKBwbWBMMPdEpok4H5-3suIac2ihdegAc') to the header table, sensitive:True, huffman:True
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 23 with 4 bits
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 179 with 7 bits
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'accept-profile', b'public') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 84 with 7 bits
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'content-profile', b'public') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 83 with 7 bits
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'prefer', b'return=representation') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 82 with 7 bits
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'content-length', b'728') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 62 with 7 bits
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'content-type', b'application/json') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 80 with 7 bits
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoded header block to b"\x83\xdb\x87\xda\xd9\xd8\xd7\xd6\xd5\x1f\x08\xff4\xbaQ\xd8[\x14/\xac\xb3\xc7\x88\x86\xd4l\xb98{\xc8\x1d&\xc8\x8c\x95ml\x97\xb29\x93\xad\x7f\x9coe}r\xfa\xcbY\x19\xd0mF\xcb\xeeO\xcb\xb3\xf3\xa7\x0f\xbf\xdd\xd9\x11\x92\xac\xb4~\x9b#\x99*\xe2\x98\xf1V\xe1)\xa0\xf2S\xfa\x92bn\x82~Nx\xea\xfd\xe9\x90\xde\x0cJ_G\xee\xec\x8ed\xabM\x04\xab\xf6\xbeb\xe3))}\x1f\xbb\xb2#%4O%\xec\x8eh\xdeOZz\x13\xd6\x8b\xfb=\xea\xbd\xe0\xdf\xbf\x93\xf8\xc9\xd0\xfe\xb4_\xd9\xebGN\xa2\xd3\x7fCR\xec\\\xf5\x07)\xa8\xbe\xdb]\xf4f\xbb\xe2>Wth\xd7&\n\xcf\xd5\xacm\xac\xca-\xc82\x08\xd3\xc8Y\xa1'\xd4\xd3\xd2\xbe\xd0"
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:send_request_headers.complete
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:send_request_body.started request=<Request [b'POST']> stream_id=45
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:send_request_body.complete
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:receive_response_headers.started request=<Request [b'POST']> stream_id=45
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoding b'\xef\xc0\xed\xec\x7f,\x8fx\x8e\x82I[\x01_#-\nV\xd6\xc1\xcbo\xeb\xea\xe9\xe8\xe7\xe6\xe5\xe4\xd9\xe2'
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 111, consumed 1 bytes
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b':status', b'201'), consumed 1
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 64, consumed 1 bytes
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'date', b'Sun, 22 Sep 2024 08:19:50 GMT'), consumed 1
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 109, consumed 1 bytes
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'content-type', b'application/json; charset=utf-8'), consumed 1
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 108, consumed 1 bytes
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'content-range', <memory at 0x782d1e30df00>), consumed 1
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 107, consumed 2 bytes
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 15, consumed 1 bytes
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'cf-ray', b'8c70df50e9c342f5-EWR'), total consumed 18 bytes, indexed True
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 107, consumed 1 bytes
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'cf-cache-status', b'DYNAMIC'), consumed 1
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 106, consumed 1 bytes
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'content-encoding', b'gzip'), consumed 1
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 105, consumed 1 bytes
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'strict-transport-security', b'max-age=31536000; includeSubDomains'), consumed 1
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 104, consumed 1 bytes
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'vary', b'Accept-Encoding'), consumed 1
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 103, consumed 1 bytes
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'content-profile', b'public'), consumed 1
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 102, consumed 1 bytes
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'preference-applied', b'return=representation'), consumed 1
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 101, consumed 1 bytes
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'sb-gateway-version', <memory at 0x782d1e30de40>), consumed 1
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 100, consumed 1 bytes
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'x-envoy-attempt-count', <memory at 0x782d1e30dfc0>), consumed 1
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 89, consumed 1 bytes
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'x-envoy-upstream-service-time', <memory at 0x782d1e30eb00>), consumed 1
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 98, consumed 1 bytes
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'server', b'cloudflare'), consumed 1
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:receive_response_headers.complete return_value=(201, [(b'date', b'Sun, 22 Sep 2024 08:19:50 GMT'), (b'content-type', b'application/json; charset=utf-8'), (b'content-range', b'*/*'), (b'cf-ray', b'8c70df50e9c342f5-EWR'), (b'cf-cache-status', b'DYNAMIC'), (b'content-encoding', b'gzip'), (b'strict-transport-security', b'max-age=31536000; includeSubDomains'), (b'vary', b'Accept-Encoding'), (b'content-profile', b'public'), (b'preference-applied', b'return=representation'), (b'sb-gateway-version', b'1'), (b'x-envoy-attempt-count', b'1'), (b'x-envoy-upstream-service-time', b'2'), (b'server', b'cloudflare')])
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: INFO:httpx:HTTP Request: POST https://umljzrihvfmpneqxhnvc.supabase.co/rest/v1/updates "HTTP/2 201 Created"
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:receive_response_body.started request=<Request [b'POST']> stream_id=45
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:receive_response_body.complete
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:response_closed.started stream_id=45
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:response_closed.complete
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:utils:Update sent to Supabase for session 86f9eb98-9646-4adc-bb7e-eb3b699cea3b
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: INFO:utils:Update successfully sent via both WebSocket and Supabase for session 86f9eb98-9646-4adc-bb7e-eb3b699cea3b
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: INFO:tasks:Processing video ID: mMIFSUSyDrg
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): www.youtube.com:443
+Sep 22 08:19:50 YTWebApp uvicorn[39099]: DEBUG:urllib3.connectionpool:https://www.youtube.com:443 "GET /watch?v=mMIFSUSyDrg HTTP/11" 200 None
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: ERROR:tasks:Error retrieving transcript for video mMIFSUSyDrg:
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: Could not retrieve a transcript for the video https://www.youtube.com/watch?v=mMIFSUSyDrg! This is most likely caused by:
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: Subtitles are disabled for this video
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: If you are sure that the described cause is not responsible for this error and that a transcript should be retrievable, please create an issue at https://github.com/jdepoix/youtube-transcript-api/issues. Please add which version of youtube_transcript_api you are using and provide the information needed to replicate the error. Also make sure that there are no open issues which already describe your problem!
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: Traceback (most recent call last):
+Sep 22 08:19:51 YTWebApp uvicorn[39099]:   File "/home/appuser/youtube-web-app/backend/tasks.py", line 72, in get_transcript
+Sep 22 08:19:51 YTWebApp uvicorn[39099]:     transcript_data = YouTubeTranscriptApi.get_transcript(video_id)
+Sep 22 08:19:51 YTWebApp uvicorn[39099]:                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Sep 22 08:19:51 YTWebApp uvicorn[39099]:   File "/home/appuser/youtube-web-app/backend/venv/lib/python3.12/site-packages/youtube_transcript_api/_api.py", line 137, in get_transcript
+Sep 22 08:19:51 YTWebApp uvicorn[39099]:     return cls.list_transcripts(video_id, proxies, cookies).find_transcript(languages).fetch(preserve_formatting=preserve_formatting)
+Sep 22 08:19:51 YTWebApp uvicorn[39099]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Sep 22 08:19:51 YTWebApp uvicorn[39099]:   File "/home/appuser/youtube-web-app/backend/venv/lib/python3.12/site-packages/youtube_transcript_api/_api.py", line 71, in list_transcripts
+Sep 22 08:19:51 YTWebApp uvicorn[39099]:     return TranscriptListFetcher(http_client).fetch(video_id)
+Sep 22 08:19:51 YTWebApp uvicorn[39099]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Sep 22 08:19:51 YTWebApp uvicorn[39099]:   File "/home/appuser/youtube-web-app/backend/venv/lib/python3.12/site-packages/youtube_transcript_api/_transcripts.py", line 48, in fetch
+Sep 22 08:19:51 YTWebApp uvicorn[39099]:     self._extract_captions_json(self._fetch_video_html(video_id), video_id),
+Sep 22 08:19:51 YTWebApp uvicorn[39099]:     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Sep 22 08:19:51 YTWebApp uvicorn[39099]:   File "/home/appuser/youtube-web-app/backend/venv/lib/python3.12/site-packages/youtube_transcript_api/_transcripts.py", line 62, in _extract_captions_json
+Sep 22 08:19:51 YTWebApp uvicorn[39099]:     raise TranscriptsDisabled(video_id)
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: youtube_transcript_api._errors.TranscriptsDisabled:
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: Could not retrieve a transcript for the video https://www.youtube.com/watch?v=mMIFSUSyDrg! This is most likely caused by:
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: Subtitles are disabled for this video
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: If you are sure that the described cause is not responsible for this error and that a transcript should be retrievable, please create an issue at https://github.com/jdepoix/youtube-transcript-api/issues. Please add which version of youtube_transcript_api you are using and provide the information needed to replicate the error. Also make sure that there are no open issues which already describe your problem!
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: INFO:utils:Attempting to send update for session 86f9eb98-9646-4adc-bb7e-eb3b699cea3b: Error retrieving transcript for video mMIFSUSyDrg:
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: Could not retrieve a transcript for the video https://www.youtube.com/watch?v=mMIFSUSyDrg! This is most likely caused by:
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: Subtitles are disabled for this video
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: If you are sure that the described cause is not responsible for this error and that a transcript should be retrievable, please create an issue at https://github.com/jdepoix/youtube-transcript-api/issues. Please add which version of youtube_transcript_api you are using and provide the information needed to replicate the error. Also make sure that there are no open issues which already describe your problem!
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:utils:Broadcast message sent via WebSocket for session 86f9eb98-9646-4adc-bb7e-eb3b699cea3b
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:send_request_headers.started request=<Request [b'POST']> stream_id=47
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b':method', b'POST') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 3 with 7 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b':authority', b'umljzrihvfmpneqxhnvc.supabase.co') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 91 with 7 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b':scheme', b'https') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 7 with 7 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b':path', b'/rest/v1/updates') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 90 with 7 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'accept', b'*/*') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 89 with 7 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'accept-encoding', b'gzip, deflate, br') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 88 with 7 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'user-agent', b'python-httpx/0.27.2') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 87 with 7 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'x-client-info', b'supabase-py/2.7.4') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 86 with 7 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'apikey', b'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVtbGp6cmlodmZtcG5lcXhobnZjIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcyNjcyMDQzOCwiZXhwIjoyMDQyMjk2NDM4fQ.on1JilD54vMKBwbWBMMPdEpok4H5-3suIac2ihdegAc') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 85 with 7 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'authorization', b'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVtbGp6cmlodmZtcG5lcXhobnZjIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcyNjcyMDQzOCwiZXhwIjoyMDQyMjk2NDM4fQ.on1JilD54vMKBwbWBMMPdEpok4H5-3suIac2ihdegAc') to the header table, sensitive:True, huffman:True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 23 with 4 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 179 with 7 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'accept-profile', b'public') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 84 with 7 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'content-profile', b'public') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 83 with 7 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'prefer', b'return=representation') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 82 with 7 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'content-length', b'740') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 65 with 7 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'content-type', b'application/json') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 80 with 7 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoded header block to b"\x83\xdb\x87\xda\xd9\xd8\xd7\xd6\xd5\x1f\x08\xff4\xbaQ\xd8[\x14/\xac\xb3\xc7\x88\x86\xd4l\xb98{\xc8\x1d&\xc8\x8c\x95ml\x97\xb29\x93\xad\x7f\x9coe}r\xfa\xcbY\x19\xd0mF\xcb\xeeO\xcb\xb3\xf3\xa7\x0f\xbf\xdd\xd9\x11\x92\xac\xb4~\x9b#\x99*\xe2\x98\xf1V\xe1)\xa0\xf2S\xfa\x92bn\x82~Nx\xea\xfd\xe9\x90\xde\x0cJ_G\xee\xec\x8ed\xabM\x04\xab\xf6\xbeb\xe3))}\x1f\xbb\xb2#%4O%\xec\x8eh\xdeOZz\x13\xd6\x8b\xfb=\xea\xbd\xe0\xdf\xbf\x93\xf8\xc9\xd0\xfe\xb4_\xd9\xebGN\xa2\xd3\x7fCR\xec\\\xf5\x07)\xa8\xbe\xdb]\xf4f\xbb\xe2>Wth\xd7&\n\xcf\xd5\xacm\xac\xca-\xc82\x08\xd3\xc8Y\xa1'\xd4\xd3\xd2\xc1\xd0"
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:send_request_headers.complete
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:send_request_body.started request=<Request [b'POST']> stream_id=47
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:send_request_body.complete
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:receive_response_headers.started request=<Request [b'POST']> stream_id=47
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoding b'\xf0a\x96\xddm_J\x08Jn-j\x08\x02i@=p/\xdcl*b\xd1\xbf\xef\xee\x7f.\x8fx\x8e\x82I[i\xd8\xc8V\x85+k`\xe5\xb7\xed\xec\xeb\xea\xe9\xe8\xe7\xe6\xe1\xe4'
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 112, consumed 1 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b':status', b'201'), consumed 1
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 33, consumed 1 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 22, consumed 1 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'date', b'Sun, 22 Sep 2024 08:19:51 GMT'), total consumed 24 bytes, indexed True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 111, consumed 1 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'content-type', b'application/json; charset=utf-8'), consumed 1
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 110, consumed 1 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'content-range', <memory at 0x782d1e30df00>), consumed 1
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 109, consumed 2 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 15, consumed 1 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'cf-ray', b'8c70df547bce42f5-EWR'), total consumed 18 bytes, indexed True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 109, consumed 1 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'cf-cache-status', b'DYNAMIC'), consumed 1
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 108, consumed 1 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'content-encoding', b'gzip'), consumed 1
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 107, consumed 1 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'strict-transport-security', b'max-age=31536000; includeSubDomains'), consumed 1
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 106, consumed 1 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'vary', b'Accept-Encoding'), consumed 1
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 105, consumed 1 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'content-profile', b'public'), consumed 1
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 104, consumed 1 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'preference-applied', b'return=representation'), consumed 1
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 103, consumed 1 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'sb-gateway-version', <memory at 0x782d1e30de40>), consumed 1
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 102, consumed 1 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'x-envoy-attempt-count', <memory at 0x782d1e30dfc0>), consumed 1
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 97, consumed 1 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'x-envoy-upstream-service-time', <memory at 0x782d1e30e2c0>), consumed 1
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 100, consumed 1 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'server', b'cloudflare'), consumed 1
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:receive_response_headers.complete return_value=(201, [(b'date', b'Sun, 22 Sep 2024 08:19:51 GMT'), (b'content-type', b'application/json; charset=utf-8'), (b'content-range', b'*/*'), (b'cf-ray', b'8c70df547bce42f5-EWR'), (b'cf-cache-status', b'DYNAMIC'), (b'content-encoding', b'gzip'), (b'strict-transport-security', b'max-age=31536000; includeSubDomains'), (b'vary', b'Accept-Encoding'), (b'content-profile', b'public'), (b'preference-applied', b'return=representation'), (b'sb-gateway-version', b'1'), (b'x-envoy-attempt-count', b'1'), (b'x-envoy-upstream-service-time', b'3'), (b'server', b'cloudflare')])
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: INFO:httpx:HTTP Request: POST https://umljzrihvfmpneqxhnvc.supabase.co/rest/v1/updates "HTTP/2 201 Created"
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:receive_response_body.started request=<Request [b'POST']> stream_id=47
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:receive_response_body.complete
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:response_closed.started stream_id=47
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:response_closed.complete
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:utils:Update sent to Supabase for session 86f9eb98-9646-4adc-bb7e-eb3b699cea3b
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: INFO:utils:Update successfully sent via both WebSocket and Supabase for session 86f9eb98-9646-4adc-bb7e-eb3b699cea3b
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:send_request_headers.started request=<Request [b'POST']> stream_id=49
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b':method', b'POST') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 3 with 7 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b':authority', b'umljzrihvfmpneqxhnvc.supabase.co') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 91 with 7 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b':scheme', b'https') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 7 with 7 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b':path', b'/rest/v1/transcripts') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 64 with 7 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'accept', b'*/*') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 89 with 7 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'accept-encoding', b'gzip, deflate, br') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 88 with 7 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'user-agent', b'python-httpx/0.27.2') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 87 with 7 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'x-client-info', b'supabase-py/2.7.4') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 86 with 7 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'apikey', b'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVtbGp6cmlodmZtcG5lcXhobnZjIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcyNjcyMDQzOCwiZXhwIjoyMDQyMjk2NDM4fQ.on1JilD54vMKBwbWBMMPdEpok4H5-3suIac2ihdegAc') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 85 with 7 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'authorization', b'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVtbGp6cmlodmZtcG5lcXhobnZjIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcyNjcyMDQzOCwiZXhwIjoyMDQyMjk2NDM4fQ.on1JilD54vMKBwbWBMMPdEpok4H5-3suIac2ihdegAc') to the header table, sensitive:True, huffman:True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 23 with 4 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 179 with 7 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'accept-profile', b'public') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 84 with 7 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'content-profile', b'public') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 83 with 7 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'prefer', b'return=representation') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 82 with 7 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'content-length', b'131') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 63 with 7 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'content-type', b'application/json') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 80 with 7 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoded header block to b"\x83\xdb\x87\xc0\xd9\xd8\xd7\xd6\xd5\x1f\x08\xff4\xbaQ\xd8[\x14/\xac\xb3\xc7\x88\x86\xd4l\xb98{\xc8\x1d&\xc8\x8c\x95ml\x97\xb29\x93\xad\x7f\x9coe}r\xfa\xcbY\x19\xd0mF\xcb\xeeO\xcb\xb3\xf3\xa7\x0f\xbf\xdd\xd9\x11\x92\xac\xb4~\x9b#\x99*\xe2\x98\xf1V\xe1)\xa0\xf2S\xfa\x92bn\x82~Nx\xea\xfd\xe9\x90\xde\x0cJ_G\xee\xec\x8ed\xabM\x04\xab\xf6\xbeb\xe3))}\x1f\xbb\xb2#%4O%\xec\x8eh\xdeOZz\x13\xd6\x8b\xfb=\xea\xbd\xe0\xdf\xbf\x93\xf8\xc9\xd0\xfe\xb4_\xd9\xebGN\xa2\xd3\x7fCR\xec\\\xf5\x07)\xa8\xbe\xdb]\xf4f\xbb\xe2>Wth\xd7&\n\xcf\xd5\xacm\xac\xca-\xc82\x08\xd3\xc8Y\xa1'\xd4\xd3\xd2\xbf\xd0"
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:send_request_headers.complete
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:send_request_body.started request=<Request [b'POST']> stream_id=49
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:send_request_body.complete
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:receive_response_headers.started request=<Request [b'POST']> stream_id=49
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoding b'\xf2\xbf\xf0\xef\x7f/\x8fx\x8e\x82I[l$\x14\xad\nV\xd6\xc1\xcbo\xee\xed\xec\xeb\xea\xe9\xe8\xe7\xdc\xe5'
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 114, consumed 1 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b':status', b'201'), consumed 1
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 63, consumed 1 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'date', b'Sun, 22 Sep 2024 08:19:51 GMT'), consumed 1
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 112, consumed 1 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'content-type', b'application/json; charset=utf-8'), consumed 1
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 111, consumed 1 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'content-range', <memory at 0x782d1e30df00>), consumed 1
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 110, consumed 2 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 15, consumed 1 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'cf-ray', b'8c70df551c2f42f5-EWR'), total consumed 18 bytes, indexed True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 110, consumed 1 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'cf-cache-status', b'DYNAMIC'), consumed 1
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 109, consumed 1 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'content-encoding', b'gzip'), consumed 1
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 108, consumed 1 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'strict-transport-security', b'max-age=31536000; includeSubDomains'), consumed 1
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 107, consumed 1 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'vary', b'Accept-Encoding'), consumed 1
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 106, consumed 1 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'content-profile', b'public'), consumed 1
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 105, consumed 1 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'preference-applied', b'return=representation'), consumed 1
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 104, consumed 1 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'sb-gateway-version', <memory at 0x782d1e30de40>), consumed 1
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 103, consumed 1 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'x-envoy-attempt-count', <memory at 0x782d1e30dfc0>), consumed 1
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 92, consumed 1 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'x-envoy-upstream-service-time', <memory at 0x782d1e30eb00>), consumed 1
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 101, consumed 1 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'server', b'cloudflare'), consumed 1
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:receive_response_headers.complete return_value=(201, [(b'date', b'Sun, 22 Sep 2024 08:19:51 GMT'), (b'content-type', b'application/json; charset=utf-8'), (b'content-range', b'*/*'), (b'cf-ray', b'8c70df551c2f42f5-EWR'), (b'cf-cache-status', b'DYNAMIC'), (b'content-encoding', b'gzip'), (b'strict-transport-security', b'max-age=31536000; includeSubDomains'), (b'vary', b'Accept-Encoding'), (b'content-profile', b'public'), (b'preference-applied', b'return=representation'), (b'sb-gateway-version', b'1'), (b'x-envoy-attempt-count', b'1'), (b'x-envoy-upstream-service-time', b'2'), (b'server', b'cloudflare')])
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: INFO:httpx:HTTP Request: POST https://umljzrihvfmpneqxhnvc.supabase.co/rest/v1/transcripts "HTTP/2 201 Created"
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:receive_response_body.started request=<Request [b'POST']> stream_id=49
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:receive_response_body.complete
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:response_closed.started stream_id=49
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:response_closed.complete
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: ERROR:tasks:Error processing video ID mMIFSUSyDrg:
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: Could not retrieve a transcript for the video https://www.youtube.com/watch?v=mMIFSUSyDrg! This is most likely caused by:
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: Subtitles are disabled for this video
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: If you are sure that the described cause is not responsible for this error and that a transcript should be retrievable, please create an issue at https://github.com/jdepoix/youtube-transcript-api/issues. Please add which version of youtube_transcript_api you are using and provide the information needed to replicate the error. Also make sure that there are no open issues which already describe your problem!
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: INFO:utils:Attempting to send update for session 86f9eb98-9646-4adc-bb7e-eb3b699cea3b: Error processing video ID mMIFSUSyDrg:
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: Could not retrieve a transcript for the video https://www.youtube.com/watch?v=mMIFSUSyDrg! This is most likely caused by:
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: Subtitles are disabled for this video
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: If you are sure that the described cause is not responsible for this error and that a transcript should be retrievable, please create an issue at https://github.com/jdepoix/youtube-transcript-api/issues. Please add which version of youtube_transcript_api you are using and provide the information needed to replicate the error. Also make sure that there are no open issues which already describe your problem!
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:utils:Broadcast message sent via WebSocket for session 86f9eb98-9646-4adc-bb7e-eb3b699cea3b
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:send_request_headers.started request=<Request [b'POST']> stream_id=51
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b':method', b'POST') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 3 with 7 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b':authority', b'umljzrihvfmpneqxhnvc.supabase.co') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 91 with 7 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b':scheme', b'https') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 7 with 7 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b':path', b'/rest/v1/updates') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 90 with 7 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'accept', b'*/*') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 89 with 7 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'accept-encoding', b'gzip, deflate, br') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 88 with 7 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'user-agent', b'python-httpx/0.27.2') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 87 with 7 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'x-client-info', b'supabase-py/2.7.4') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 86 with 7 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'apikey', b'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVtbGp6cmlodmZtcG5lcXhobnZjIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcyNjcyMDQzOCwiZXhwIjoyMDQyMjk2NDM4fQ.on1JilD54vMKBwbWBMMPdEpok4H5-3suIac2ihdegAc') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 85 with 7 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'authorization', b'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVtbGp6cmlodmZtcG5lcXhobnZjIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcyNjcyMDQzOCwiZXhwIjoyMDQyMjk2NDM4fQ.on1JilD54vMKBwbWBMMPdEpok4H5-3suIac2ihdegAc') to the header table, sensitive:True, huffman:True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 23 with 4 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 179 with 7 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'accept-profile', b'public') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 84 with 7 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'content-profile', b'public') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 83 with 7 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'prefer', b'return=representation') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 82 with 7 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'content-length', b'728') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 62 with 7 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'content-type', b'application/json') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 80 with 7 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoded header block to b"\x83\xdb\x87\xda\xd9\xd8\xd7\xd6\xd5\x1f\x08\xff4\xbaQ\xd8[\x14/\xac\xb3\xc7\x88\x86\xd4l\xb98{\xc8\x1d&\xc8\x8c\x95ml\x97\xb29\x93\xad\x7f\x9coe}r\xfa\xcbY\x19\xd0mF\xcb\xeeO\xcb\xb3\xf3\xa7\x0f\xbf\xdd\xd9\x11\x92\xac\xb4~\x9b#\x99*\xe2\x98\xf1V\xe1)\xa0\xf2S\xfa\x92bn\x82~Nx\xea\xfd\xe9\x90\xde\x0cJ_G\xee\xec\x8ed\xabM\x04\xab\xf6\xbeb\xe3))}\x1f\xbb\xb2#%4O%\xec\x8eh\xdeOZz\x13\xd6\x8b\xfb=\xea\xbd\xe0\xdf\xbf\x93\xf8\xc9\xd0\xfe\xb4_\xd9\xebGN\xa2\xd3\x7fCR\xec\\\xf5\x07)\xa8\xbe\xdb]\xf4f\xbb\xe2>Wth\xd7&\n\xcf\xd5\xacm\xac\xca-\xc82\x08\xd3\xc8Y\xa1'\xd4\xd3\xd2\xbe\xd0"
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:send_request_headers.complete
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:send_request_body.started request=<Request [b'POST']> stream_id=51
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:send_request_body.complete
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:receive_response_headers.started request=<Request [b'POST']> stream_id=51
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoding b'\xf3\xc0\xf1\xf0\x7f0\x8fx\x8e\x82I[n2>\xfbB\x95\xb5\xb0r\xdb\xef\xee\xed\xec\xeb\xea\xe9\xe8\xe3\xe6'
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 115, consumed 1 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b':status', b'201'), consumed 1
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 64, consumed 1 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'date', b'Sun, 22 Sep 2024 08:19:51 GMT'), consumed 1
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 113, consumed 1 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'content-type', b'application/json; charset=utf-8'), consumed 1
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 112, consumed 1 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'content-range', <memory at 0x782d1e30df00>), consumed 1
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 111, consumed 2 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 15, consumed 1 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'cf-ray', b'8c70df55bc9942f5-EWR'), total consumed 18 bytes, indexed True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 111, consumed 1 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'cf-cache-status', b'DYNAMIC'), consumed 1
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 110, consumed 1 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'content-encoding', b'gzip'), consumed 1
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 109, consumed 1 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'strict-transport-security', b'max-age=31536000; includeSubDomains'), consumed 1
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 108, consumed 1 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'vary', b'Accept-Encoding'), consumed 1
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 107, consumed 1 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'content-profile', b'public'), consumed 1
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 106, consumed 1 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'preference-applied', b'return=representation'), consumed 1
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 105, consumed 1 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'sb-gateway-version', <memory at 0x782d1e30de40>), consumed 1
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 104, consumed 1 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'x-envoy-attempt-count', <memory at 0x782d1e30dfc0>), consumed 1
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 99, consumed 1 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'x-envoy-upstream-service-time', <memory at 0x782d1e30e2c0>), consumed 1
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 102, consumed 1 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'server', b'cloudflare'), consumed 1
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:receive_response_headers.complete return_value=(201, [(b'date', b'Sun, 22 Sep 2024 08:19:51 GMT'), (b'content-type', b'application/json; charset=utf-8'), (b'content-range', b'*/*'), (b'cf-ray', b'8c70df55bc9942f5-EWR'), (b'cf-cache-status', b'DYNAMIC'), (b'content-encoding', b'gzip'), (b'strict-transport-security', b'max-age=31536000; includeSubDomains'), (b'vary', b'Accept-Encoding'), (b'content-profile', b'public'), (b'preference-applied', b'return=representation'), (b'sb-gateway-version', b'1'), (b'x-envoy-attempt-count', b'1'), (b'x-envoy-upstream-service-time', b'3'), (b'server', b'cloudflare')])
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: INFO:httpx:HTTP Request: POST https://umljzrihvfmpneqxhnvc.supabase.co/rest/v1/updates "HTTP/2 201 Created"
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:receive_response_body.started request=<Request [b'POST']> stream_id=51
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:receive_response_body.complete
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:response_closed.started stream_id=51
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:response_closed.complete
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:utils:Update sent to Supabase for session 86f9eb98-9646-4adc-bb7e-eb3b699cea3b
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: INFO:utils:Update successfully sent via both WebSocket and Supabase for session 86f9eb98-9646-4adc-bb7e-eb3b699cea3b
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: INFO:tasks:Finished processing individual videos
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: INFO:utils:Attempting to send update for session 86f9eb98-9646-4adc-bb7e-eb3b699cea3b: Video processing completed.
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:utils:Broadcast message sent via WebSocket for session 86f9eb98-9646-4adc-bb7e-eb3b699cea3b
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:send_request_headers.started request=<Request [b'POST']> stream_id=53
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b':method', b'POST') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 3 with 7 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b':authority', b'umljzrihvfmpneqxhnvc.supabase.co') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 91 with 7 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b':scheme', b'https') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 7 with 7 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b':path', b'/rest/v1/updates') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 90 with 7 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'accept', b'*/*') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 89 with 7 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'accept-encoding', b'gzip, deflate, br') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 88 with 7 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'user-agent', b'python-httpx/0.27.2') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 87 with 7 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'x-client-info', b'supabase-py/2.7.4') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 86 with 7 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'apikey', b'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVtbGp6cmlodmZtcG5lcXhobnZjIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcyNjcyMDQzOCwiZXhwIjoyMDQyMjk2NDM4fQ.on1JilD54vMKBwbWBMMPdEpok4H5-3suIac2ihdegAc') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 85 with 7 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'authorization', b'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVtbGp6cmlodmZtcG5lcXhobnZjIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcyNjcyMDQzOCwiZXhwIjoyMDQyMjk2NDM4fQ.on1JilD54vMKBwbWBMMPdEpok4H5-3suIac2ihdegAc') to the header table, sensitive:True, huffman:True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 23 with 4 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 179 with 7 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'accept-profile', b'public') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 84 with 7 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'content-profile', b'public') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 83 with 7 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'prefer', b'return=representation') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 82 with 7 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'content-length', b'139') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 28 with 6 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 3 with 7 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Adding (b'content-type', b'application/json') to the header table, sensitive:False, huffman:True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoding 81 with 7 bits
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Encoded header block to b"\x83\xdb\x87\xda\xd9\xd8\xd7\xd6\xd5\x1f\x08\xff4\xbaQ\xd8[\x14/\xac\xb3\xc7\x88\x86\xd4l\xb98{\xc8\x1d&\xc8\x8c\x95ml\x97\xb29\x93\xad\x7f\x9coe}r\xfa\xcbY\x19\xd0mF\xcb\xeeO\xcb\xb3\xf3\xa7\x0f\xbf\xdd\xd9\x11\x92\xac\xb4~\x9b#\x99*\xe2\x98\xf1V\xe1)\xa0\xf2S\xfa\x92bn\x82~Nx\xea\xfd\xe9\x90\xde\x0cJ_G\xee\xec\x8ed\xabM\x04\xab\xf6\xbeb\xe3))}\x1f\xbb\xb2#%4O%\xec\x8eh\xdeOZz\x13\xd6\x8b\xfb=\xea\xbd\xe0\xdf\xbf\x93\xf8\xc9\xd0\xfe\xb4_\xd9\xebGN\xa2\xd3\x7fCR\xec\\\xf5\x07)\xa8\xbe\xdb]\xf4f\xbb\xe2>Wth\xd7&\n\xcf\xd5\xacm\xac\xca-\xc82\x08\xd3\xc8Y\xa1'\xd4\xd3\xd2\\\x83\x0b/\xff\xd1"
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:send_request_headers.complete
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:send_request_body.started request=<Request [b'POST']> stream_id=53
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:send_request_body.complete
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:receive_response_headers.started request=<Request [b'POST']> stream_id=53
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoding b'\xf4\xc1\xf2\xf1\x7f1\x8fx\x8e\x82I[q\xb2\x15\xc6\x85+k`\xe5\xb7\xf0\xef\xee\xed\xec\xeb\xea\xe9\xe4\xe7'
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 116, consumed 1 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b':status', b'201'), consumed 1
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 65, consumed 1 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'date', b'Sun, 22 Sep 2024 08:19:51 GMT'), consumed 1
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 114, consumed 1 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'content-type', b'application/json; charset=utf-8'), consumed 1
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 113, consumed 1 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'content-range', <memory at 0x782d1e30df00>), consumed 1
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 112, consumed 2 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 15, consumed 1 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'cf-ray', b'8c70df565ce642f5-EWR'), total consumed 18 bytes, indexed True
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 112, consumed 1 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'cf-cache-status', b'DYNAMIC'), consumed 1
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 111, consumed 1 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'content-encoding', b'gzip'), consumed 1
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 110, consumed 1 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'strict-transport-security', b'max-age=31536000; includeSubDomains'), consumed 1
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 109, consumed 1 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'vary', b'Accept-Encoding'), consumed 1
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 108, consumed 1 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'content-profile', b'public'), consumed 1
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 107, consumed 1 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'preference-applied', b'return=representation'), consumed 1
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 106, consumed 1 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'sb-gateway-version', <memory at 0x782d1e30de40>), consumed 1
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 105, consumed 1 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'x-envoy-attempt-count', <memory at 0x782d1e30dfc0>), consumed 1
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 100, consumed 1 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'x-envoy-upstream-service-time', <memory at 0x782d1e30e2c0>), consumed 1
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded 103, consumed 1 bytes
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:hpack.hpack:Decoded (b'server', b'cloudflare'), consumed 1
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:receive_response_headers.complete return_value=(201, [(b'date', b'Sun, 22 Sep 2024 08:19:51 GMT'), (b'content-type', b'application/json; charset=utf-8'), (b'content-range', b'*/*'), (b'cf-ray', b'8c70df565ce642f5-EWR'), (b'cf-cache-status', b'DYNAMIC'), (b'content-encoding', b'gzip'), (b'strict-transport-security', b'max-age=31536000; includeSubDomains'), (b'vary', b'Accept-Encoding'), (b'content-profile', b'public'), (b'preference-applied', b'return=representation'), (b'sb-gateway-version', b'1'), (b'x-envoy-attempt-count', b'1'), (b'x-envoy-upstream-service-time', b'3'), (b'server', b'cloudflare')])
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: INFO:httpx:HTTP Request: POST https://umljzrihvfmpneqxhnvc.supabase.co/rest/v1/updates "HTTP/2 201 Created"
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:receive_response_body.started request=<Request [b'POST']> stream_id=53
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:receive_response_body.complete
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:response_closed.started stream_id=53
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:httpcore.http2:response_closed.complete
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: DEBUG:utils:Update sent to Supabase for session 86f9eb98-9646-4adc-bb7e-eb3b699cea3b
+Sep 22 08:19:51 YTWebApp uvicorn[39099]: INFO:utils:Update successfully sent via both WebSocket and Supabase for session 86f9eb98-9646-4adc-bb7e-eb3b699cea3b
+Sep 22 08:20:52 YTWebApp uvicorn[39099]: INFO:     143.110.159.157:46294 - "GET / HTTP/1.1" 404 Not Found
