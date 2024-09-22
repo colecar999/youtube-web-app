@@ -70,6 +70,7 @@ manager = ConnectionManager()
 async def initiate_processing(data: dict, background_tasks: BackgroundTasks):
     try:
         session_id = str(uuid.uuid4())
+        logger.info(f"Initiating processing for session {session_id}")
         
         # Extract data from request
         video_ids = data.get("video_ids", [])
@@ -78,10 +79,13 @@ async def initiate_processing(data: dict, background_tasks: BackgroundTasks):
         num_tags = data.get("num_tags", 5)
         clustering_strength = data.get("clustering_strength", 0.3)
 
+        logger.info(f"Processing parameters: video_ids={video_ids}, num_videos={num_videos}, num_comments={num_comments}, num_tags={num_tags}, clustering_strength={clustering_strength}")
+
         # Send initial update
         await send_update(manager, session_id, "Processing started. Waiting for updates...", supabase)
 
         # Start background task for processing
+        logger.info(f"Starting background task for session {session_id}")
         background_tasks.add_task(
             process_videos,
             manager,
@@ -96,7 +100,7 @@ async def initiate_processing(data: dict, background_tasks: BackgroundTasks):
 
         return {"session_id": session_id}
     except Exception as e:
-        logging.error(f"Error in initiate_processing: {str(e)}")
+        logger.exception(f"Error in initiate_processing: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
 # WebSocket endpoint if still needed

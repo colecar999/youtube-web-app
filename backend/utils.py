@@ -5,8 +5,11 @@ import datetime
 
 async def send_update(manager, session_id: str, message: str, supabase: Client):
     try:
+        logger.info(f"Sending update for session {session_id}: {message}")
+        
         # Send update through WebSocket
         await manager.broadcast(json.dumps({"session_id": session_id, "message": message}))
+        logger.debug(f"Broadcast message sent for session {session_id}")
         
         # Send update through Supabase
         result = supabase.table('updates').insert({
@@ -19,7 +22,7 @@ async def send_update(manager, session_id: str, message: str, supabase: Client):
         if hasattr(result, '__await__'):
             await result
         
-        logging.info(f"Update sent to Supabase: {message}")
+        logger.info(f"Update sent to Supabase for session {session_id}: {message}")
     except Exception as e:
-        logging.error(f"Error in send_update: {str(e)}")
-        logging.error(f"Failed to send update: session_id={session_id}, message={message}")
+        logger.exception(f"Error in send_update for session {session_id}: {str(e)}")
+        logger.error(f"Failed to send update: session_id={session_id}, message={message}")

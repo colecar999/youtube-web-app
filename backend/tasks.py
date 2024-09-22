@@ -224,8 +224,7 @@ async def process_video(manager, row, supabase: Client, transcription_ids, sessi
     """
     Process each video: extract audio URL, get transcription and tags, and identify interviewees.
     """
-    logger.debug(f"Starting process_video with row: {row}")
-    
+    logger.info(f"Starting process_video for video ID: {row['video_id']}")
     try:
         video_id = row['video_id']
         logger.info(f"Processing video ID: {video_id}")
@@ -247,37 +246,24 @@ async def process_video(manager, row, supabase: Client, transcription_ids, sessi
         
         filename = f"{video_id}_{channel_name}_{video_title}_transcript.json"
 
-
-        existing_transcript = supabase.table('transcripts').select('*').eq('video_id', video_id).single().execute()
-
+        # Check for existing transcript
+        existing_transcript = supabase.table('transcripts').select('*').eq('video_id', video_id).execute()
+        
         if existing_transcript.data:
-            await send_update(manager, session_id, f"Found existing transcript for video ID: {video_id}", supabase)
-            if existing_transcript.data['status'] == 'completed':
-                transcript_text = existing_transcript.data['transcript']
-            elif existing_transcript.data['status'] == 'in_progress':
-                transcript_text = await handle_transcription_status(manager, video_id, existing_transcript.data, session_id, supabase)
-            elif existing_transcript.data['status'] == 'failed':
-                transcript_text = await handle_transcription_status(manager, video_id, existing_transcript.data, session_id, supabase)
+            logger.info(f"Found existing transcript for video ID: {video_id}")
+            if existing_transcript.data[0]['status'] == 'completed':
+                transcript_text = existing_transcript.data[0]['transcript']
+                logger.info(f"Using existing completed transcript for video ID: {video_id}")
+            else:
+                logger.info(f"Existing transcript for video ID: {video_id} is not completed. Fetching new transcript.")
+                transcript_text = await fetch_new_transcript(manager, row, session_id, supabase)
         else:
-            try:
-                audio_url = await get_audio_url(manager, youtube_url, session_id, supabase)
-                transcript_utterances = await get_transcription(manager, audio_url, video_id, session_id, supabase)
-                transcript_text = " ".join([utterance['text'] for utterance in transcript_utterances])
-
-                # Save transcription to Supabase
-                supabase.table('transcripts').insert({
-                    'video_id': video_id,
-                    'transcript': transcript_text,
-                    'retrieval_date': datetime.utcnow().isoformat(),
-                    'status': 'completed'
-                }).execute()
-
-            except Exception as e:
-                await send_update(manager, session_id, f"Error processing video {video_id}: {e}", supabase)
-                return
+            logger.info(f"No existing transcript found for video ID: {video_id}. Fetching new transcript.")
+            transcript_text = await fetch_new_transcript(manager, row, session_id, supabase)
 
         if transcript_text:
             # Generate tags
+            logger.info(f"Generating tags for video ID: {video_id}")
             tags = generate_tags(transcript_text)
             normalized_tags = [normalize_tag(tag) for tag in tags]
             interviewees = identify_interviewees(video_title, description)
@@ -286,24 +272,52 @@ async def process_video(manager, row, supabase: Client, transcription_ids, sessi
             names, non_names = detect_names(normalized_tags)
 
             # Store tags in Supabase
+            logger.info(f"Storing tags in Supabase for video ID: {video_id}")
             for tag in normalized_tags:
                 supabase.table('tags').insert({
                     'video_id': video_id,
                     'tag': tag,
                     'processed_date': datetime.utcnow().isoformat()
                 }).execute()
+            logger.info(f"Stored tags in Supabase for video ID: {video_id}")
 
             # Update tags in videos table
+            logger.info(f"Updating tags in videos table for video ID: {video_id}")
             supabase.table('videos').update({
                 'tags': ", ".join(normalized_tags),
                 'interviewees': ", ".join(interviewees)
             }).eq('video_id', video_id).execute()
+            logger.info(f"Updated tags in videos table for video ID: {video_id}")
 
             await send_update(manager, session_id, f"Generated tags and identified interviewees for video ID: {video_id}", supabase)
 
     except Exception as e:
-        logger.exception(f"Error in process_video for video ID {video_id}: {str(e)}")
-        await send_update(manager, session_id, f"Error processing video {video_id}: {str(e)}", supabase)
+        logger.exception(f"Error in process_video for video ID {row['video_id']}: {str(e)}")
+        await send_update(manager, session_id, f"Error processing video {row['video_id']}: {str(e)}", supabase)
+
+async def fetch_new_transcript(manager, row, session_id, supabase):
+    video_id = row['video_id']
+    youtube_url = f"https://www.youtube.com/watch?v={video_id}"
+    
+    try:
+        audio_url = await get_audio_url(manager, youtube_url, session_id, supabase)
+        transcript_utterances = await get_transcription(manager, audio_url, video_id, session_id, supabase)
+        transcript_text = " ".join([utterance['text'] for utterance in transcript_utterances])
+
+        # Save transcription to Supabase
+        supabase.table('transcripts').insert({
+            'video_id': video_id,
+            'transcript': transcript_text,
+            'retrieval_date': datetime.utcnow().isoformat(),
+            'status': 'completed'
+        }).execute()
+
+        logger.info(f"New transcript created and saved for video ID: {video_id}")
+        return transcript_text
+    except Exception as e:
+        logger.exception(f"Error fetching new transcript for video ID {video_id}: {str(e)}")
+        await send_update(manager, session_id, f"Error fetching transcript for video {video_id}: {str(e)}", supabase)
+        return None
 
 async def process_videos(manager, session_id: str, supabase: Client, video_ids: list, num_videos: int, num_comments: int, num_tags: int, clustering_strength: float):
     """
