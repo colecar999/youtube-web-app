@@ -1,28 +1,31 @@
-youtube-web-app
-├── backend
+youtube-web-app/
+├── backend/
 │   ├── .env
 │   ├── main.py
 │   ├── requirements.txt
 │   ├── supabase_tables.sql
-│   └── tasks.py
-├── deploy
-│   └── ytwebapp.service.template
-├── frontend
-│   ├── components
+│   ├── tasks.py
+│   ├── utils.py
+│   ├── deploy/
+│   │   └── ytwebapp.service.template
+├── frontend/
+│   ├── components/
+│   │   ├── ErrorBoundary.js
 │   │   └── RealtimeUpdates.js
-│   ├── lib
+│   ├── lib/
 │   │   └── supabaseClient.js
-│   ├── node_modules
-│   ├── pages
+│   ├── node_modules/
+│   ├── pages/
+│   │   ├── _app.js
 │   │   └── index.js
-│   ├── public
-│   ├── styles
+│   ├── public/
+│   ├── styles/
 │   ├── .env.local
+│   ├── next.config.js
 │   ├── package-lock.json
 │   └── package.json
-├── supabase
-│   └── supabase_tables.sql
-├── .gitignore
-├── readme.md
-├── instructions.txt
-└── prompt.txt
+└── supabase/
+    ├── supabase_tables.sql
+    ├── .gitignore
+    ├── folderrefs.txt
+    └── instructions.txt

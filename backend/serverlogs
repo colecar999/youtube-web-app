@@ -1,0 +1,56 @@
+Sep 22 04:04:50 YTWebApp uvicorn[35253]: INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+Sep 22 04:08:33 YTWebApp uvicorn[35253]: INFO:     108.67.148.206:0 - "OPTIONS /process HTTP/1.0" 200 OK
+Sep 22 04:08:34 YTWebApp uvicorn[35253]: 2024-09-22 04:08:34,401 - INFO - HTTP Request: POST https://umljzrihvfmpneqxhnvc.supabase.co/rest/v1/updates "HTTP/2 201 Created"
+Sep 22 04:08:34 YTWebApp uvicorn[35253]: 2024-09-22 04:08:34,407 - ERROR - Error in send_update: object APIResponse[TypeVar] can't be used in 'await' expression
+Sep 22 04:08:34 YTWebApp uvicorn[35253]: INFO:     108.67.148.206:0 - "POST /process HTTP/1.0" 200 OK
+Sep 22 04:08:34 YTWebApp uvicorn[35253]: 2024-09-22 04:08:34,646 - INFO - HTTP Request: POST https://umljzrihvfmpneqxhnvc.supabase.co/rest/v1/updates "HTTP/2 201 Created"
+Sep 22 04:08:34 YTWebApp uvicorn[35253]: 2024-09-22 04:08:34,647 - ERROR - Error in send_update: object APIResponse[TypeVar] can't be used in 'await' expression
+Sep 22 04:08:35 YTWebApp uvicorn[35253]: 2024-09-22 04:08:35,491 - INFO - HTTP Request: POST https://umljzrihvfmpneqxhnvc.supabase.co/rest/v1/channels "HTTP/2 201 Created"
+Sep 22 04:08:35 YTWebApp uvicorn[35253]: 2024-09-22 04:08:35,724 - INFO - HTTP Request: POST https://umljzrihvfmpneqxhnvc.supabase.co/rest/v1/updates "HTTP/2 201 Created"
+Sep 22 04:08:35 YTWebApp uvicorn[35253]: 2024-09-22 04:08:35,726 - ERROR - Error in send_update: object APIResponse[TypeVar] can't be used in 'await' expression
+Sep 22 04:08:35 YTWebApp uvicorn[35253]: 2024-09-22 04:08:35,959 - INFO - HTTP Request: POST https://umljzrihvfmpneqxhnvc.supabase.co/rest/v1/videos?columns=%22view_count%22%2C%22description%22%2C%22title%22%2C%22like_count%22%2C%22retrieval_date%22%2C%22video_id%22%2C%22comment_count%22%2C%22duration%22 "HTTP/2 201 Created"
+Sep 22 04:08:36 YTWebApp uvicorn[35253]: 2024-09-22 04:08:36,054 - INFO - HTTP Request: POST https://umljzrihvfmpneqxhnvc.supabase.co/rest/v1/updates "HTTP/2 201 Created"
+Sep 22 04:08:36 YTWebApp uvicorn[35253]: 2024-09-22 04:08:36,056 - ERROR - Error in send_update: object APIResponse[TypeVar] can't be used in 'await' expression
+Sep 22 04:08:36 YTWebApp uvicorn[35253]: 2024-09-22 04:08:36,876 - INFO - HTTP Request: POST https://umljzrihvfmpneqxhnvc.supabase.co/rest/v1/comments?columns=%22comment_retrieval_date%22%2C%22comment_author%22%2C%22comment_published_at%22%2C%22video_id%22%2C%22comment_id%22%2C%22comment_parent_id%22%2C%22comment_likes%22%2C%22comment_text%22%2C%22comment_updated_at%22 "HTTP/2 201 Created"
+Sep 22 04:08:36 YTWebApp uvicorn[35253]: 2024-09-22 04:08:36,972 - INFO - HTTP Request: POST https://umljzrihvfmpneqxhnvc.supabase.co/rest/v1/updates "HTTP/2 201 Created"
+Sep 22 04:08:36 YTWebApp uvicorn[35253]: 2024-09-22 04:08:36,974 - ERROR - Error in send_update: object APIResponse[TypeVar] can't be used in 'await' expression
+Sep 22 04:08:37 YTWebApp uvicorn[35253]: 2024-09-22 04:08:37,746 - INFO - HTTP Request: POST https://umljzrihvfmpneqxhnvc.supabase.co/rest/v1/comments?columns=%22comment_retrieval_date%22%2C%22comment_author%22%2C%22comment_published_at%22%2C%22video_id%22%2C%22comment_id%22%2C%22comment_parent_id%22%2C%22comment_likes%22%2C%22comment_text%22%2C%22comment_updated_at%22 "HTTP/2 201 Created"
+Sep 22 04:08:37 YTWebApp uvicorn[35253]: 2024-09-22 04:08:37,840 - INFO - HTTP Request: POST https://umljzrihvfmpneqxhnvc.supabase.co/rest/v1/updates "HTTP/2 201 Created"
+Sep 22 04:08:37 YTWebApp uvicorn[35253]: 2024-09-22 04:08:37,841 - ERROR - Error in send_update: object APIResponse[TypeVar] can't be used in 'await' expression
+Sep 22 04:08:38 YTWebApp uvicorn[35253]: 2024-09-22 04:08:38,589 - INFO - HTTP Request: POST https://umljzrihvfmpneqxhnvc.supabase.co/rest/v1/comments?columns=%22comment_retrieval_date%22%2C%22comment_author%22%2C%22comment_published_at%22%2C%22video_id%22%2C%22comment_id%22%2C%22comment_parent_id%22%2C%22comment_likes%22%2C%22comment_text%22%2C%22comment_updated_at%22 "HTTP/2 201 Created"
+Sep 22 04:08:38 YTWebApp uvicorn[35253]: 2024-09-22 04:08:38,833 - INFO - HTTP Request: POST https://umljzrihvfmpneqxhnvc.supabase.co/rest/v1/updates "HTTP/2 201 Created"
+Sep 22 04:08:38 YTWebApp uvicorn[35253]: 2024-09-22 04:08:38,834 - ERROR - Error in send_update: object APIResponse[TypeVar] can't be used in 'await' expression
+Sep 22 04:08:38 YTWebApp uvicorn[35253]: 2024-09-22 04:08:38,834 - INFO - Starting to process individual videos
+Sep 22 04:08:38 YTWebApp uvicorn[35253]: 2024-09-22 04:08:38,834 - ERROR - Error processing video ID T647CGsuOVU: 'channel_name'
+Sep 22 04:08:38 YTWebApp uvicorn[35253]: 2024-09-22 04:08:38,836 - ERROR - Traceback (most recent call last):
+Sep 22 04:08:38 YTWebApp uvicorn[35253]:   File "/home/appuser/youtube-web-app/backend/tasks.py", line 445, in process_videos
+Sep 22 04:08:38 YTWebApp uvicorn[35253]:     await process_video(manager, video, supabase, transcription_ids, session_id)
+Sep 22 04:08:38 YTWebApp uvicorn[35253]:   File "/home/appuser/youtube-web-app/backend/tasks.py", line 224, in process_video
+Sep 22 04:08:38 YTWebApp uvicorn[35253]:     channel_name = row['channel_name'].replace(" ", "_")
+Sep 22 04:08:38 YTWebApp uvicorn[35253]:                    ~~~^^^^^^^^^^^^^^^^
+Sep 22 04:08:38 YTWebApp uvicorn[35253]: KeyError: 'channel_name'
+Sep 22 04:08:38 YTWebApp uvicorn[35253]: 2024-09-22 04:08:38,927 - INFO - HTTP Request: POST https://umljzrihvfmpneqxhnvc.supabase.co/rest/v1/updates "HTTP/2 201 Created"
+Sep 22 04:08:38 YTWebApp uvicorn[35253]: 2024-09-22 04:08:38,928 - ERROR - Error in send_update: object APIResponse[TypeVar] can't be used in 'await' expression
+Sep 22 04:08:38 YTWebApp uvicorn[35253]: 2024-09-22 04:08:38,928 - ERROR - Error processing video ID KpmrQdaQjGg: 'channel_name'
+Sep 22 04:08:38 YTWebApp uvicorn[35253]: 2024-09-22 04:08:38,929 - ERROR - Traceback (most recent call last):
+Sep 22 04:08:38 YTWebApp uvicorn[35253]:   File "/home/appuser/youtube-web-app/backend/tasks.py", line 445, in process_videos
+Sep 22 04:08:38 YTWebApp uvicorn[35253]:     await process_video(manager, video, supabase, transcription_ids, session_id)
+Sep 22 04:08:38 YTWebApp uvicorn[35253]:   File "/home/appuser/youtube-web-app/backend/tasks.py", line 224, in process_video
+Sep 22 04:08:38 YTWebApp uvicorn[35253]:     channel_name = row['channel_name'].replace(" ", "_")
+Sep 22 04:08:38 YTWebApp uvicorn[35253]:                    ~~~^^^^^^^^^^^^^^^^
+Sep 22 04:08:38 YTWebApp uvicorn[35253]: KeyError: 'channel_name'
+Sep 22 04:08:39 YTWebApp uvicorn[35253]: 2024-09-22 04:08:39,154 - INFO - HTTP Request: POST https://umljzrihvfmpneqxhnvc.supabase.co/rest/v1/updates "HTTP/2 201 Created"
+Sep 22 04:08:39 YTWebApp uvicorn[35253]: 2024-09-22 04:08:39,155 - ERROR - Error in send_update: object APIResponse[TypeVar] can't be used in 'await' expression
+Sep 22 04:08:39 YTWebApp uvicorn[35253]: 2024-09-22 04:08:39,156 - ERROR - Error processing video ID 35IpOK-WaNA: 'channel_name'
+Sep 22 04:08:39 YTWebApp uvicorn[35253]: 2024-09-22 04:08:39,156 - ERROR - Traceback (most recent call last):
+Sep 22 04:08:39 YTWebApp uvicorn[35253]:   File "/home/appuser/youtube-web-app/backend/tasks.py", line 445, in process_videos
+Sep 22 04:08:39 YTWebApp uvicorn[35253]:     await process_video(manager, video, supabase, transcription_ids, session_id)
+Sep 22 04:08:39 YTWebApp uvicorn[35253]:   File "/home/appuser/youtube-web-app/backend/tasks.py", line 224, in process_video
+Sep 22 04:08:39 YTWebApp uvicorn[35253]:     channel_name = row['channel_name'].replace(" ", "_")
+Sep 22 04:08:39 YTWebApp uvicorn[35253]:                    ~~~^^^^^^^^^^^^^^^^
+Sep 22 04:08:39 YTWebApp uvicorn[35253]: KeyError: 'channel_name'
+Sep 22 04:08:39 YTWebApp uvicorn[35253]: 2024-09-22 04:08:39,253 - INFO - HTTP Request: POST https://umljzrihvfmpneqxhnvc.supabase.co/rest/v1/updates "HTTP/2 201 Created"
+Sep 22 04:08:39 YTWebApp uvicorn[35253]: 2024-09-22 04:08:39,254 - ERROR - Error in send_update: object APIResponse[TypeVar] can't be used in 'await' expression
+Sep 22 04:08:39 YTWebApp uvicorn[35253]: 2024-09-22 04:08:39,254 - INFO - Finished processing individual videos
+Sep 22 04:08:39 YTWebApp uvicorn[35253]: 2024-09-22 04:08:39,345 - INFO - HTTP Request: POST https://umljzrihvfmpneqxhnvc.supabase.co/rest/v1/updates "HTTP/2 201 Created"
+Sep 22 04:08:39 YTWebApp uvicorn[35253]: 2024-09-22 04:08:39,347 - ERROR - Error in send_update: object APIResponse[TypeVar] can't be used in 'await' expression

@@ -24,7 +24,9 @@ CREATE TABLE IF NOT EXISTS videos (
     comment_count INTEGER,
     retrieval_date TIMESTAMP,
     tags TEXT,
-    interviewees TEXT
+    interviewees TEXT,
+    processing_status TEXT,
+    error_message TEXT
 );
 
 -- Table: comments
@@ -53,4 +55,12 @@ CREATE TABLE IF NOT EXISTS tags (
     video_id TEXT,
     tag TEXT,
     processed_date TIMESTAMP
+);
+
+-- Table: updates
+CREATE TABLE IF NOT EXISTS updates (
+    id SERIAL PRIMARY KEY,
+    session_id TEXT,
+    message TEXT,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
