@@ -14,14 +14,14 @@ from sklearn.cluster import AgglomerativeClustering
 from sklearn.metrics.pairwise import cosine_similarity
 from collections import Counter
 import spacy
-import yt_dlp
 import openai
-import assemblyai as aai
 import logging
 import traceback
 
 from supabase import Client
 from utils import send_update
+
+from youtube_transcript_api import YouTubeTranscriptApi  # New import
 
 # Initialize SpaCy model
 nlp = spacy.load("en_core_web_sm")
@@ -31,13 +31,11 @@ logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 # Load environment variables
-ASSEMBLYAI_API_KEY = os.getenv('ASSEMBLYAI_API_KEY')
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 YOUTUBE_API_KEY = os.getenv('YOUTUBE_API_KEY')
 SENTENCE_TRANSFORMER_MODEL = os.getenv('SENTENCE_TRANSFORMER_MODEL', 'paraphrase-MiniLM-L6-v2')
 
-# Set up AssemblyAI and OpenAI API keys
-aai.settings.api_key = ASSEMBLYAI_API_KEY
+# Set up OpenAI API key
 openai.api_key = OPENAI_API_KEY
 
 # Lock for status updates
@@ -45,7 +43,7 @@ status_lock = Lock()
 
 # Default configuration values
 NUM_TAGS_DEFAULT = 5
-DISTANCE_THRESHOLD_DEFAULT = 0.3
+DISTANCE_THRESHOLD_DEFAULT = 0.3 #delete?
 MAX_CONCURRENT_REQUESTS = 10  # Adjust based on server capacity
 
 def load_transcription_ids():
@@ -69,83 +67,55 @@ def save_transcription_ids(transcription_ids):
     with open(transcription_ids_filename, 'w') as file:
         json.dump(transcription_ids, file, indent=4)
 
-async def get_audio_url(manager, youtube_url, session_id, supabase):
-    """
-    Extract the best audio format URL from YouTube using yt-dlp.
-    """
-    video_id = youtube_url.split('=')[-1]
-    await send_update(manager, session_id, f"Extracting audio URL for {video_id} using yt-dlp...", supabase)
-    with yt_dlp.YoutubeDL() as ydl:
-        try:
-            info = ydl.extract_info(youtube_url, download=False)
-        except Exception as e:
-            raise Exception(f"Failed to extract info for {video_id}: {e}")
+async def get_transcript(manager, video_id, session_id, supabase):
+    try:
+        # Fetch the transcript
+        transcript_data = YouTubeTranscriptApi.get_transcript(video_id)
+        
+        # Prepare the data for storage
+        transcript_json = json.dumps(transcript_data)
+        retrieval_date = datetime.now().isoformat()
+        source = 'youtube_transcript_api'
+        status = 'completed'
 
-    for format in info["formats"][::-1]:
-        if format.get("vcodec") == "none" and format.get("acodec") == "mp4a.40.2":
-            await send_update(manager, session_id, f"Selected audio URL for {video_id} found.", supabase)
-            return format["url"]
-    raise Exception(f"No suitable audio format found for {video_id}")
+        # Store in the database
+        data = {
+            'video_id': video_id,
+            'transcript': transcript_json,
+            'retrieval_date': retrieval_date,
+            'status': status,
+            'source': source
+        }
+        
+        # Assuming you have a 'transcripts' table in Supabase
+        result = supabase.table('transcripts').insert(data).execute()
 
-async def get_transcription(manager, audio_url, video_id, session_id, supabase):
-    """
-    Get transcription from AssemblyAI with speaker diarization.
-    """
-    await send_update(manager, session_id, f"Requesting transcription for {video_id} from AssemblyAI...", supabase)
-    transcriber = aai.Transcriber()
-    config = aai.TranscriptionConfig(speaker_labels=True)
-    retry_count = 0
-    max_retries = 3
+        # Send update
+        await send_update(manager, session_id, f"Transcript for video {video_id} retrieved and stored.", supabase)
 
-    while retry_count < max_retries:
-        try:
-            transcript = transcriber.transcribe(audio_url, config)
-            break
-        except Exception as e:
-            retry_count += 1
-            await send_update(manager, session_id, f"Retry {retry_count}/{max_retries} for transcription of {video_id} due to error: {e}", supabase)
-            time.sleep(5)  # Wait before retrying
-            if retry_count == max_retries:
-                raise Exception(f"Failed to transcribe audio for {video_id} after {max_retries} attempts: {e}")
+        return transcript_data
 
-    transcript_id = transcript.id
-    if not transcript_id:
-        raise Exception(f"Failed to get transcription ID for {video_id}.")
-
-    headers = {
-        "authorization": ASSEMBLYAI_API_KEY,
-        "content-type": "application/json"
-    }
-
-    await send_update(manager, session_id, f"Starting transcription status check loop for {video_id}", supabase)
-
-    while True:
-        try:
-            status_response = requests.get(
-                f"https://api.assemblyai.com/v2/transcript/{transcript_id}",
-                headers=headers
-            )
-            status_data = status_response.json()
-            status = status_data.get('status')
-
-            if status == 'completed':
-                await send_update(manager, session_id, f"Transcription for {video_id} completed.", supabase)
-                return transcript.utterances
-            elif status == 'failed':
-                await send_update(manager, session_id, f"Transcription for {video_id} failed.", supabase)
-                raise Exception(f"Transcription for {video_id} failed. Error: {status_data.get('error', 'Unknown error')}")
-            else:
-                await send_update(manager, session_id, f"Transcription for {video_id} is in progress.", supabase)
-            time.sleep(15)  # Update status every 15 seconds
-        except requests.RequestException as e:
-            await send_update(manager, session_id, f"Error checking transcription status for {video_id}: {e}", supabase)
-            time.sleep(15)  # Wait before retrying status check
+    except Exception as e:
+        error_message = f"Error retrieving transcript for video {video_id}: {str(e)}"
+        logger.exception(error_message)  # This will log the full stack trace
+        await send_update(manager, session_id, error_message, supabase)
+        
+        # Store the error status in the database
+        error_data = {
+            'video_id': video_id,
+            'retrieval_date': datetime.now().isoformat(),
+            'status': 'failed',
+            'source': 'youtube_transcript_api'
+        }
+        supabase.table('transcripts').insert(error_data).execute()
+        
+        raise
 
 def generate_tags(transcript_text, num_tags=NUM_TAGS_DEFAULT):
     """
     Generate tags using OpenAI GPT-4.
     """
-    prompt = f"Generate {num_tags} relevant tags for the following transcript. Provide the tags as a list separated by commas with no numbers:\\n\\n{transcript_text}"
+    prompt = f"Generate {num_tags} relevant tags for the following transcript. The tags are used to describe the content of the transcript.  Provide the tags as a list separated by commas with no numbers.  For example: 'tag1, tag2, tag3, tag4'.  They should be in order of most relevant to least relevant:\\n\\n{transcript_text}"
     response = openai.ChatCompletion.create(
         model="gpt-4",
         messages=[
@@ -220,104 +190,102 @@ async def handle_transcription_status(manager, video_id, existing_transcript, se
     else:
         return None
 
-async def process_video(manager, row, supabase: Client, transcription_ids, session_id):
-    """
-    Process each video: extract audio URL, get transcription and tags, and identify interviewees.
-    """
-    logger.info(f"Starting process_video for video ID: {row['video_id']}")
+async def process_video(manager, video, supabase: Client, transcription_ids, session_id, clustering_strength):
     try:
-        video_id = row['video_id']
+        video_id = video['video_id']
         logger.info(f"Processing video ID: {video_id}")
         
-        # Check if 'channel_name' exists in row
-        if 'channel_name' not in row:
-            logger.error(f"'channel_name' not found in row for video ID: {video_id}")
-            channel_name = "unknown_channel"
-        else:
-            channel_name = row['channel_name'].replace(" ", "_")
-        
-        video_title = row['title'].replace(" ", "_")
-        description = row.get('description', '')
-        youtube_url = f"https://www.youtube.com/watch?v={video_id}"
-        
-        logger.info(f"Extracted info - Channel: {channel_name}, Title: {video_title}")
-        
-        await send_update(manager, session_id, f"Processing video ID: {video_id}", supabase)
-        
-        filename = f"{video_id}_{channel_name}_{video_title}_transcript.json"
+        # Fetch or retrieve transcript
+        transcript_data = await get_transcript(manager, video_id, session_id, supabase)
 
-        # Check for existing transcript
-        existing_transcript = supabase.table('transcripts').select('*').eq('video_id', video_id).execute()
-        
-        if existing_transcript.data:
-            logger.info(f"Found existing transcript for video ID: {video_id}")
-            if existing_transcript.data[0]['status'] == 'completed':
-                transcript_text = existing_transcript.data[0]['transcript']
-                logger.info(f"Using existing completed transcript for video ID: {video_id}")
-            else:
-                logger.info(f"Existing transcript for video ID: {video_id} is not completed. Fetching new transcript.")
-                transcript_text = await fetch_new_transcript(manager, row, session_id, supabase)
-        else:
-            logger.info(f"No existing transcript found for video ID: {video_id}. Fetching new transcript.")
-            transcript_text = await fetch_new_transcript(manager, row, session_id, supabase)
-
-        if transcript_text:
-            # Generate tags
+        if transcript_data:
+            # Convert transcript data to plain text
+            transcript_text = ' '.join([entry['text'] for entry in transcript_data])
+            
+            # Generate tags using OpenAI
             logger.info(f"Generating tags for video ID: {video_id}")
-            tags = generate_tags(transcript_text)
+            tags = generate_tags(transcript_text, num_tags=NUM_TAGS_DEFAULT)
             normalized_tags = [normalize_tag(tag) for tag in tags]
-            interviewees = identify_interviewees(video_title, description)
-
-            # Detect names
+            
+            # Detect and separate names from other tags
             names, non_names = detect_names(normalized_tags)
+            logger.debug(f"Detected names: {names}")
+            logger.debug(f"Non-name tags to be embedded: {non_names}")
+
+            if non_names:
+                # Use sentence-transformers to embed the non-name tags
+                model = SentenceTransformer(SENTENCE_TRANSFORMER_MODEL)
+                non_name_embeddings = model.encode(non_names)
+
+                # Use Agglomerative Clustering with user-defined clustering strength
+                clustering = AgglomerativeClustering(n_clusters=None, distance_threshold=clustering_strength, affinity='cosine', linkage='average')
+                labels = clustering.fit_predict(non_name_embeddings)
+
+                # Create a dictionary to map cluster labels to representative tags
+                cluster_to_tag = {}
+                for tag, label in zip(non_names, labels):
+                    if label not in cluster_to_tag:
+                        cluster_to_tag[label] = [tag]
+                    else:
+                        cluster_to_tag[label].append(tag)
+
+                # Find the most representative tag in each cluster
+                consolidated_tags = set()
+                tag_mapping = {name: name for name in names}  # Map names to themselves
+
+                for label, tags in cluster_to_tag.items():
+                    representative_tag = find_representative_tag(tags, model)
+                    for tag in tags:
+                        tag_mapping[tag] = representative_tag
+                    consolidated_tags.add(representative_tag)
+                consolidated_tags.update(names)
+
+                # Map each tag to its cluster representative
+                final_tags = [tag_mapping[tag] for tag in normalized_tags]
+                final_tags = sorted(set(final_tags))
+            else:
+                final_tags = sorted(set(normalized_tags))
 
             # Store tags in Supabase
             logger.info(f"Storing tags in Supabase for video ID: {video_id}")
-            for tag in normalized_tags:
+            for tag in final_tags:
                 supabase.table('tags').insert({
                     'video_id': video_id,
                     'tag': tag,
                     'processed_date': datetime.utcnow().isoformat()
                 }).execute()
-            logger.info(f"Stored tags in Supabase for video ID: {video_id}")
+            logger.info(f"Stored {len(final_tags)} tags in Supabase for video ID: {video_id}")
 
             # Update tags in videos table
             logger.info(f"Updating tags in videos table for video ID: {video_id}")
             supabase.table('videos').update({
-                'tags': ", ".join(normalized_tags),
-                'interviewees': ", ".join(interviewees)
+                'tags': ", ".join(final_tags),
             }).eq('video_id', video_id).execute()
             logger.info(f"Updated tags in videos table for video ID: {video_id}")
 
-            await send_update(manager, session_id, f"Generated tags and identified interviewees for video ID: {video_id}", supabase)
+            await send_update(manager, session_id, f"Generated and stored {len(final_tags)} tags for video ID: {video_id}", supabase)
 
     except Exception as e:
-        logger.exception(f"Error in process_video for video ID {row['video_id']}: {str(e)}")
-        await send_update(manager, session_id, f"Error processing video {row['video_id']}: {str(e)}", supabase)
+        error_message = f"Error processing video ID {video_id}: {str(e)}"
+        logger.error(error_message)
+        await send_update(manager, session_id, error_message, supabase)
 
-async def fetch_new_transcript(manager, row, session_id, supabase):
-    video_id = row['video_id']
-    youtube_url = f"https://www.youtube.com/watch?v={video_id}"
+# Helper function to find representative tag
+def find_representative_tag(cluster, model):
+    """
+    Find the most representative tag in a cluster based on average similarity.
+    """
+    if len(cluster) == 1:
+        return cluster[0]
     
-    try:
-        audio_url = await get_audio_url(manager, youtube_url, session_id, supabase)
-        transcript_utterances = await get_transcription(manager, audio_url, video_id, session_id, supabase)
-        transcript_text = " ".join([utterance['text'] for utterance in transcript_utterances])
-
-        # Save transcription to Supabase
-        supabase.table('transcripts').insert({
-            'video_id': video_id,
-            'transcript': transcript_text,
-            'retrieval_date': datetime.utcnow().isoformat(),
-            'status': 'completed'
-        }).execute()
-
-        logger.info(f"New transcript created and saved for video ID: {video_id}")
-        return transcript_text
-    except Exception as e:
-        logger.exception(f"Error fetching new transcript for video ID {video_id}: {str(e)}")
-        await send_update(manager, session_id, f"Error fetching transcript for video {video_id}: {str(e)}", supabase)
-        return None
+    # Calculate similarity within the cluster
+    embeddings = model.encode(cluster)
+    similarity_matrix = cosine_similarity(embeddings)
+    
+    # Find the tag with the highest average similarity to all other tags in the cluster
+    avg_similarity = similarity_matrix.mean(axis=1)
+    most_representative_index = avg_similarity.argmax()
+    return cluster[most_representative_index]
 
 async def process_videos(manager, session_id: str, supabase: Client, video_ids: list, num_videos: int, num_comments: int, num_tags: int, clustering_strength: float):
     """
@@ -489,16 +457,16 @@ async def process_videos(manager, session_id: str, supabase: Client, video_ids: 
                 logger.info("Starting to process individual videos")
                 for video in videos:
                     try:
-                        await process_video(manager, video, supabase, transcription_ids, session_id)
+                        await process_video(manager, video, supabase, transcription_ids, session_id, clustering_strength)
                     except Exception as e:
                         error_message = f"Error processing video ID {video['video_id']}: {str(e)}"
-                        logger.exception(error_message)
+                        logger.error(error_message)
                         await send_update(manager, session_id, error_message, supabase)
                 logger.info("Finished processing individual videos")
 
             except Exception as e:
                 error_message = f"Error processing video ID {video_id}: {str(e)}"
-                logger.exception(error_message)
+                logger.error(error_message)
                 await send_update(manager, session_id, error_message, supabase)
 
         # Save transcription IDs if any new ones were added
@@ -507,5 +475,5 @@ async def process_videos(manager, session_id: str, supabase: Client, video_ids: 
         await send_update(manager, session_id, "Video processing completed.", supabase)
     except Exception as e:
         error_message = f"Error in process_videos: {str(e)}"
-        logger.exception(error_message)
+        logger.error(error_message)
         await send_update(manager, session_id, error_message, supabase)
