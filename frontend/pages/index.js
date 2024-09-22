@@ -95,23 +95,6 @@ export default function Home() {
     }
   }, [isSupabaseInitialized, sessionId, toast]);
 
-  useEffect(() => {
-    if (sessionId) {
-      console.log("Setting up WebSocket connection for session", sessionId);
-      const socket = new WebSocket(`ws://143.244.214.193:8000/ws/${sessionId}`);
-      socket.onopen = () => console.log("WebSocket connection established");
-      socket.onmessage = (event) => {
-        console.log("WebSocket message received:", event.data);
-        setUpdates(prev => [...prev, event.data]);
-      };
-      socket.onerror = (error) => console.error("WebSocket error:", error);
-      socket.onclose = () => console.log("WebSocket connection closed");
-
-      return () => socket.close();
-    }
-  }, [sessionId]);
-
-  // Handler for form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setUpdates([]);
