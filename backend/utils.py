@@ -1,6 +1,7 @@
 import json
 import logging
 from supabase import Client
+import datetime
 
 async def send_update(manager, session_id: str, message: str, supabase: Client):
     try:
@@ -10,8 +11,7 @@ async def send_update(manager, session_id: str, message: str, supabase: Client):
         # Send update through Supabase
         result = await supabase.table('updates').insert({
             "session_id": session_id,
-            "message": message,
-            "timestamp": supabase.table('updates').select('now()').execute().data[0]['now']
+            "message": message
         }).execute()
         logging.info(f"Update sent to Supabase: {result}")
     except Exception as e:

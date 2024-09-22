@@ -17,6 +17,8 @@ import spacy
 import yt_dlp
 import openai
 import assemblyai as aai
+import logging
+import traceback
 
 from supabase import Client
 from utils import send_update
@@ -285,164 +287,181 @@ async def process_videos(manager, session_id: str, supabase: Client, video_ids: 
     """
     Core function to process videos: fetch channel info, videos, comments, transcribe, and generate tags.
     """
-    await send_update(manager, session_id, "Starting video processing...", supabase)
+    try:
+        await send_update(manager, session_id, "Starting video processing...", supabase)
+        
+        transcription_ids = load_transcription_ids()
 
-    transcription_ids = load_transcription_ids()
-
-    for video_id in video_ids:
-        try:
-            # Step 1: Get channel ID from YouTube API
-            video_info_url = 'https://www.googleapis.com/youtube/v3/videos'
-            params = {
-                'part': 'snippet',
-                'id': video_id,
-                'key': YOUTUBE_API_KEY
-            }
-            response = requests.get(video_info_url, params=params)
-            response.raise_for_status()
-            data = response.json()
-
-            if not data['items']:
-                await send_update(manager, session_id, f"No data found for video ID: {video_id}", supabase)
-                continue
-
-            snippet = data['items'][0]['snippet']
-            channel_id = snippet['channelId']
-            channel_title = snippet['channelTitle']
-            channel_url = f"https://www.youtube.com/channel/{channel_id}"
-            channel_description = snippet.get('description', '')
-
-            # Step 2: Fetch top videos for the channel
-            search_url = 'https://www.googleapis.com/youtube/v3/search'
-            search_params = {
-                'part': 'id',
-                'channelId': channel_id,
-                'maxResults': num_videos,
-                'order': 'viewCount',
-                'type': 'video',
-                'key': YOUTUBE_API_KEY
-            }
-            search_response = requests.get(search_url, params=search_params)
-            search_response.raise_for_status()
-            search_data = search_response.json()
-            top_video_ids = [item['id']['videoId'] for item in search_data['items']]
-
-            # Step 3: Fetch detailed information for these videos
-            videos_info_url = 'https://www.googleapis.com/youtube/v3/videos'
-            videos_params = {
-                'part': 'snippet,statistics,contentDetails',
-                'id': ','.join(top_video_ids),
-                'key': YOUTUBE_API_KEY
-            }
-            videos_response = requests.get(videos_info_url, params=videos_params)
-            videos_response.raise_for_status()
-            videos_data = videos_response.json()
-            
-            videos = []
-            for item in videos_data['items']:
-                snippet = item['snippet']
-                statistics = item.get('statistics', {})
-                content_details = item.get('contentDetails', {})
-                videos.append({
-                    'video_id': item['id'],
-                    'title': snippet['title'],
-                    'description': snippet.get('description', ''),
-                    'duration': content_details.get('duration', 'N/A'),
-                    'view_count': int(statistics.get('viewCount', 0)),
-                    'like_count': int(statistics.get('likeCount', 0)),
-                    'comment_count': int(statistics.get('commentCount', 0)),
-                    'retrieval_date': datetime.utcnow().isoformat()
-                })
-
-            # Fetch channel statistics
-            channel_stats_url = 'https://www.googleapis.com/youtube/v3/channels'
-            channel_stats_params = {
-                'part': 'statistics',
-                'id': channel_id,
-                'key': YOUTUBE_API_KEY
-            }
-            channel_stats_response = requests.get(channel_stats_url, params=channel_stats_params)
-            channel_stats_response.raise_for_status()
-            channel_stats_data = channel_stats_response.json()
-            
-            channel_stats = channel_stats_data['items'][0]['statistics']
-            total_videos = int(channel_stats.get('videoCount', 0))
-            subscribers = int(channel_stats.get('subscriberCount', 0))
-
-            # Update the channel information
-            supabase.table('channels').upsert({
-                'channel_id': channel_id,
-                'channel_name': channel_title,
-                'link_to_channel': channel_url,
-                'about': channel_description,
-                'number_of_total_videos': total_videos,
-                'number_of_retrieved_videos': len(videos),
-                'ids_of_retrieved_videos': json.dumps(top_video_ids),
-                'subscribers': subscribers,
-                'channel_retrieval_date': datetime.utcnow().isoformat()
-            }).execute()
-
-            await send_update(manager, session_id, f"Updated channel info for {channel_title}", supabase)
-
-            supabase.table('videos').upsert(videos).execute()
-            await send_update(manager, session_id, f"Saved channel and videos for channel ID: {channel_id}", supabase)
-
-            # Step 5: Fetch and save comments for each video
-            comments_url = 'https://www.googleapis.com/youtube/v3/commentThreads'
-            for video in videos:
-                comments_params = {
-                    'part': 'snippet,replies',  # Add 'replies' to fetch reply comments
-                    'videoId': video['video_id'],
-                    'maxResults': num_comments,
-                    'order': 'relevance',
+        for video_id in video_ids:
+            try:
+                # Step 1: Get channel ID from YouTube API
+                video_info_url = 'https://www.googleapis.com/youtube/v3/videos'
+                params = {
+                    'part': 'snippet',
+                    'id': video_id,
                     'key': YOUTUBE_API_KEY
                 }
-                comments_response = requests.get(comments_url, params=comments_params)
-                comments_response.raise_for_status()
-                comments_data = comments_response.json()
+                response = requests.get(video_info_url, params=params)
+                response.raise_for_status()
+                data = response.json()
+
+                if not data['items']:
+                    await send_update(manager, session_id, f"No data found for video ID: {video_id}", supabase)
+                    continue
+
+                snippet = data['items'][0]['snippet']
+                channel_id = snippet['channelId']
+                channel_title = snippet['channelTitle']
+                channel_url = f"https://www.youtube.com/channel/{channel_id}"
+                channel_description = snippet.get('description', '')
+
+                # Step 2: Fetch top videos for the channel
+                search_url = 'https://www.googleapis.com/youtube/v3/search'
+                search_params = {
+                    'part': 'id',
+                    'channelId': channel_id,
+                    'maxResults': num_videos,
+                    'order': 'viewCount',
+                    'type': 'video',
+                    'key': YOUTUBE_API_KEY
+                }
+                search_response = requests.get(search_url, params=search_params)
+                search_response.raise_for_status()
+                search_data = search_response.json()
+                top_video_ids = [item['id']['videoId'] for item in search_data['items']]
+
+                # Step 3: Fetch detailed information for these videos
+                videos_info_url = 'https://www.googleapis.com/youtube/v3/videos'
+                videos_params = {
+                    'part': 'snippet,statistics,contentDetails',
+                    'id': ','.join(top_video_ids),
+                    'key': YOUTUBE_API_KEY
+                }
+                videos_response = requests.get(videos_info_url, params=videos_params)
+                videos_response.raise_for_status()
+                videos_data = videos_response.json()
                 
-                comments = []
-                for item in comments_data['items']:
-                    comment = item['snippet']['topLevelComment']['snippet']
-                    comments.append({
-                        'video_id': video['video_id'],
-                        'comment_id': item['id'],
-                        'comment_author': comment.get('authorDisplayName', ''),
-                        'comment_likes': int(comment.get('likeCount', 0)),
-                        'comment_published_at': comment.get('publishedAt', ''),
-                        'comment_updated_at': comment.get('updatedAt', ''),
-                        'comment_parent_id': '',  # Top-level comment, no parent
-                        'comment_text': comment.get('textOriginal', ''),
-                        'comment_retrieval_date': datetime.utcnow().isoformat()
+                videos = []
+                for item in videos_data['items']:
+                    snippet = item['snippet']
+                    statistics = item.get('statistics', {})
+                    content_details = item.get('contentDetails', {})
+                    videos.append({
+                        'video_id': item['id'],
+                        'title': snippet['title'],
+                        'description': snippet.get('description', ''),
+                        'duration': content_details.get('duration', 'N/A'),
+                        'view_count': int(statistics.get('viewCount', 0)),
+                        'like_count': int(statistics.get('likeCount', 0)),
+                        'comment_count': int(statistics.get('commentCount', 0)),
+                        'retrieval_date': datetime.utcnow().isoformat()
                     })
+
+                # Fetch channel statistics
+                channel_stats_url = 'https://www.googleapis.com/youtube/v3/channels'
+                channel_stats_params = {
+                    'part': 'statistics',
+                    'id': channel_id,
+                    'key': YOUTUBE_API_KEY
+                }
+                channel_stats_response = requests.get(channel_stats_url, params=channel_stats_params)
+                channel_stats_response.raise_for_status()
+                channel_stats_data = channel_stats_response.json()
+                
+                channel_stats = channel_stats_data['items'][0]['statistics']
+                total_videos = int(channel_stats.get('videoCount', 0))
+                subscribers = int(channel_stats.get('subscriberCount', 0))
+
+                # Update the channel information
+                supabase.table('channels').upsert({
+                    'channel_id': channel_id,
+                    'channel_name': channel_title,
+                    'link_to_channel': channel_url,
+                    'about': channel_description,
+                    'number_of_total_videos': total_videos,
+                    'number_of_retrieved_videos': len(videos),
+                    'ids_of_retrieved_videos': json.dumps(top_video_ids),
+                    'subscribers': subscribers,
+                    'channel_retrieval_date': datetime.utcnow().isoformat()
+                }).execute()
+
+                await send_update(manager, session_id, f"Updated channel info for {channel_title}", supabase)
+
+                supabase.table('videos').upsert(videos).execute()
+                await send_update(manager, session_id, f"Saved channel and videos for channel ID: {channel_id}", supabase)
+
+                # Step 5: Fetch and save comments for each video
+                comments_url = 'https://www.googleapis.com/youtube/v3/commentThreads'
+                for video in videos:
+                    comments_params = {
+                        'part': 'snippet,replies',  # Add 'replies' to fetch reply comments
+                        'videoId': video['video_id'],
+                        'maxResults': num_comments,
+                        'order': 'relevance',
+                        'key': YOUTUBE_API_KEY
+                    }
+                    comments_response = requests.get(comments_url, params=comments_params)
+                    comments_response.raise_for_status()
+                    comments_data = comments_response.json()
                     
-                    # Process reply comments
-                    if 'replies' in item:
-                        for reply in item['replies']['comments']:
-                            reply_snippet = reply['snippet']
-                            comments.append({
-                                'video_id': video['video_id'],
-                                'comment_id': reply['id'],
-                                'comment_author': reply_snippet.get('authorDisplayName', ''),
-                                'comment_likes': int(reply_snippet.get('likeCount', 0)),
-                                'comment_published_at': reply_snippet.get('publishedAt', ''),
-                                'comment_updated_at': reply_snippet.get('updatedAt', ''),
-                                'comment_parent_id': item['id'],  # Parent comment ID
-                                'comment_text': reply_snippet.get('textOriginal', ''),
-                                'comment_retrieval_date': datetime.utcnow().isoformat()
-                            })
+                    comments = []
+                    for item in comments_data['items']:
+                        comment = item['snippet']['topLevelComment']['snippet']
+                        comments.append({
+                            'video_id': video['video_id'],
+                            'comment_id': item['id'],
+                            'comment_author': comment.get('authorDisplayName', ''),
+                            'comment_likes': int(comment.get('likeCount', 0)),
+                            'comment_published_at': comment.get('publishedAt', ''),
+                            'comment_updated_at': comment.get('updatedAt', ''),
+                            'comment_parent_id': '',  # Top-level comment, no parent
+                            'comment_text': comment.get('textOriginal', ''),
+                            'comment_retrieval_date': datetime.utcnow().isoformat()
+                        })
+                        
+                        # Process reply comments
+                        if 'replies' in item:
+                            for reply in item['replies']['comments']:
+                                reply_snippet = reply['snippet']
+                                comments.append({
+                                    'video_id': video['video_id'],
+                                    'comment_id': reply['id'],
+                                    'comment_author': reply_snippet.get('authorDisplayName', ''),
+                                    'comment_likes': int(reply_snippet.get('likeCount', 0)),
+                                    'comment_published_at': reply_snippet.get('publishedAt', ''),
+                                    'comment_updated_at': reply_snippet.get('updatedAt', ''),
+                                    'comment_parent_id': item['id'],  # Parent comment ID
+                                    'comment_text': reply_snippet.get('textOriginal', ''),
+                                    'comment_retrieval_date': datetime.utcnow().isoformat()
+                                })
 
-                supabase.table('comments').upsert(comments).execute()
-                await send_update(manager, session_id, f"Saved {len(comments)} comments for video ID: {video['video_id']}", supabase)
+                    supabase.table('comments').upsert(comments).execute()
+                    await send_update(manager, session_id, f"Saved {len(comments)} comments for video ID: {video['video_id']}", supabase)
 
-            # Step 6: Process each video for transcription and tagging
-            for video in videos:
-                await process_video(manager, video, supabase, transcription_ids, session_id)
+                # Step 6: Process each video for transcription and tagging
+                logging.info("Starting to process individual videos")
+                for video in videos:
+                    try:
+                        await process_video(manager, video, supabase, transcription_ids, session_id)
+                    except Exception as e:
+                        error_message = f"Error processing video ID {video['video_id']}: {str(e)}"
+                        logging.error(error_message)
+                        logging.error(traceback.format_exc())
+                        await send_update(manager, session_id, error_message, supabase)
+                logging.info("Finished processing individual videos")
 
-        except Exception as e:
-            await send_update(manager, session_id, f"Error processing video ID {video_id}: {str(e)}", supabase)
+            except Exception as e:
+                error_message = f"Error processing video ID {video_id}: {str(e)}"
+                logging.error(error_message)
+                logging.error(traceback.format_exc())
+                await send_update(manager, session_id, error_message, supabase)
 
-    # Save transcription IDs if any new ones were added
-    save_transcription_ids(transcription_ids)
+        # Save transcription IDs if any new ones were added
+        save_transcription_ids(transcription_ids)
 
-    await send_update(manager, session_id, "Video processing completed.", supabase)
+        await send_update(manager, session_id, "Video processing completed.", supabase)
+    except Exception as e:
+        error_message = f"Error in process_videos: {str(e)}"
+        logging.error(error_message)
+        logging.error(traceback.format_exc())
+        await send_update(manager, session_id, error_message, supabase)

@@ -56,3 +56,11 @@ CREATE TABLE IF NOT EXISTS tags (
     tag TEXT,
     processed_date TIMESTAMP
 );
+
+-- Table: updates
+CREATE TABLE IF NOT EXISTS updates (
+    id SERIAL PRIMARY KEY,
+    session_id TEXT,
+    message TEXT,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
