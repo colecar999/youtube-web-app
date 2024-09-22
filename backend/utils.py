@@ -9,7 +9,7 @@ async def send_update(manager, session_id: str, message: str, supabase: Client):
         await manager.broadcast(json.dumps({"session_id": session_id, "message": message}))
         
         # Send update through Supabase
-        result = await supabase.table('updates').insert({
+        result = supabase.table('updates').insert({
             "session_id": session_id,
             "message": message
         }).execute()
