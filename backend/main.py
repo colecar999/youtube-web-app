@@ -61,7 +61,7 @@ async def initiate_processing(request: dict, background_tasks: BackgroundTasks):
         logger.info(f"Processing parameters: video_ids={video_ids}, num_videos={num_videos}, num_comments={num_comments}, num_tags={num_tags}, clustering_strength={clustering_strength}")
 
         # Send initial update
-        success = await send_update(None, session_id, "Processing started. Waiting for updates...", supabase)
+        success = await send_update(session_id, "Processing started. Waiting for updates...", supabase)
         if not success:
             logger.error(f"Failed to send initial update for session {session_id}")
             # You might want to handle this failure, perhaps by raising an exception
