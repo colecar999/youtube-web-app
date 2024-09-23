@@ -1,57 +1,40 @@
 // frontend/pages/index.js
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
+import RealtimeUpdates from '../components/RealtimeUpdates';
+import { supabase } from '../lib/supabaseClient';
 import {
-  Box,
   Button,
+  Input,
+  Textarea,
+  FormControl,
+  FormLabel,
   Container,
   Heading,
   VStack,
-  Text,
-  useToast,
-  Textarea,
   NumberInput,
   NumberInputField,
   NumberInputStepper,
   NumberIncrementStepper,
   NumberDecrementStepper,
-  FormControl,
-  FormLabel,
-  Slider,
-  SliderTrack,
-  SliderFilledTrack,
-  SliderThumb,
-  useColorModeValue,
-  Icon,
-  Fade,
+  Box,
+  Spinner,
   Alert,
   AlertIcon,
-  Spinner,
+  useToast
 } from '@chakra-ui/react';
-import { motion } from 'framer-motion';
-import { FaYoutube, FaNetworkWired } from 'react-icons/fa';
-import RealtimeUpdates from '../components/RealtimeUpdates';
-import { supabase } from '../utils/supabaseClient';
 
-const MotionBox = motion(Box);
+console.log('Index.js loaded');
 
 export default function Home() {
   console.log('Home component rendering');
 
-  const [videoIds, setVideoIds] = useState('');
-  const [numVideos, setNumVideos] = useState(10);
-  const [numComments, setNumComments] = useState(50);
-  const [numTags, setNumTags] = useState(5);
-  const [clusteringStrength, setClusteringStrength] = useState(0.3);
-  const [sessionId, setSessionId] = useState(null);
-  const [updates, setUpdates] = useState([]);
   const [isSupabaseInitialized, setIsSupabaseInitialized] = useState(false);
   const [error, setError] = useState(null);
-
+  const [updates, setUpdates] = useState([]);
+  const [sessionId, setSessionId] = useState(null);
   const toast = useToast();
-  const bgColor = useColorModeValue('gray.50', 'gray.900');
-  const cardBgColor = useColorModeValue('white', 'gray.800');
 
   useEffect(() => {
     console.log('Home component mounted');
@@ -109,6 +92,13 @@ export default function Home() {
     e.preventDefault();
     setUpdates([]);
     try {
+      console.log('Submitting form with data:', {
+        video_ids: videoIds,
+        num_videos: numVideos,
+        num_comments: numComments,
+        num_tags: numTags,
+        clustering_strength: clusteringStrength,
+      });
       const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/process`, {
         video_ids: videoIds.split('\n').map((id) => id.trim()).filter((id) => id),
         num_videos: parseInt(numVideos),
@@ -128,6 +118,7 @@ export default function Home() {
       });
     } catch (error) {
       console.error('Error initiating processing:', error);
+      setUpdates((prev) => [...prev, 'Error initiating processing. Please check your inputs and try again.']);
       toast({
         title: "Error",
         description: "Failed to start processing. Please try again.",
@@ -137,6 +128,12 @@ export default function Home() {
       });
     }
   };
+
+  const [videoIds, setVideoIds] = useState('');
+  const [numVideos, setNumVideos] = useState(10);
+  const [numComments, setNumComments] = useState(50);
+  const [numTags, setNumTags] = useState(5);
+  const [clusteringStrength, setClusteringStrength] = useState(0.3);
 
   if (error) {
     return (
@@ -161,41 +158,22 @@ export default function Home() {
   console.log('Rendering Home component', { isSupabaseInitialized, error });
 
   return (
-    <Box bg={bgColor} minHeight="100vh" py={10}>
-      <Container maxW="container.md">
-        <MotionBox
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <Heading as="h1" size="xl" textAlign="center" mb={6}>
-            Podcast Topic & Sentiment Analyzer
-          </Heading>
-        </MotionBox>
-        <VStack
-          as="form"
-          onSubmit={handleSubmit}
-          spacing={6}
-          align="stretch"
-          bg={cardBgColor}
-          p={8}
-          borderRadius="lg"
-          boxShadow="xl"
-        >
-          <FormControl>
-            <FormLabel>Enter video IDs for the YouTube channels you want analyzed (one per line):</FormLabel>
+    <Container maxW="container.md" p={8}>
+      <Heading mb={6}>YouTube Video Processor</Heading>
+      <Box as="form" onSubmit={handleSubmit}>
+        <VStack spacing={4} align="stretch">
+          <FormControl id="videoIds" isRequired>
+            <FormLabel>List of YouTube Video IDs (one per line):</FormLabel>
             <Textarea
               value={videoIds}
               onChange={(e) => setVideoIds(e.target.value)}
               placeholder="Enter video IDs here..."
-              size="sm"
-              rows={5}
             />
           </FormControl>
 
-          <FormControl>
-            <FormLabel>Number of videos to analyze per channel:</FormLabel>
-            <NumberInput min={1} max={50} value={numVideos} onChange={(value) => setNumVideos(Number(value))}>
+          <FormControl id="numVideos" isRequired>
+            <FormLabel>Number of Top Videos per Channel (NUM_VIDEOS):</FormLabel>
+            <NumberInput min={1} value={numVideos} onChange={(valueString) => setNumVideos(valueString)}>
               <NumberInputField />
               <NumberInputStepper>
                 <NumberIncrementStepper />
@@ -204,9 +182,9 @@ export default function Home() {
             </NumberInput>
           </FormControl>
 
-          <FormControl>
-            <FormLabel>Number of comments to analyze per video:</FormLabel>
-            <NumberInput min={1} max={100} value={numComments} onChange={(value) => setNumComments(Number(value))}>
+          <FormControl id="numComments" isRequired>
+            <FormLabel>Number of Comments per Video to Retrieve (NUM_COMMENTS_RETRIEVED):</FormLabel>
+            <NumberInput min={1} value={numComments} onChange={(valueString) => setNumComments(valueString)}>
               <NumberInputField />
               <NumberInputStepper>
                 <NumberIncrementStepper />
@@ -215,9 +193,9 @@ export default function Home() {
             </NumberInput>
           </FormControl>
 
-          <FormControl>
-            <FormLabel>Number of content tags to generate per video:</FormLabel>
-            <NumberInput min={1} max={20} value={numTags} onChange={(value) => setNumTags(Number(value))}>
+          <FormControl id="numTags" isRequired>
+            <FormLabel>Number of Tags per Video:</FormLabel>
+            <NumberInput min={1} value={numTags} onChange={(valueString) => setNumTags(valueString)}>
               <NumberInputField />
               <NumberInputStepper>
                 <NumberIncrementStepper />
@@ -226,48 +204,29 @@ export default function Home() {
             </NumberInput>
           </FormControl>
 
-          <FormControl>
-            <FormLabel>Strength of tag clustering:</FormLabel>
-            <Slider
+          <FormControl id="clusteringStrength" isRequired>
+            <FormLabel>Strength of Tag Clustering (0.0 - 1.0):</FormLabel>
+            <NumberInput
               min={0}
               max={1}
               step={0.1}
               value={clusteringStrength}
-              onChange={(value) => setClusteringStrength(value)}
+              onChange={(valueString) => setClusteringStrength(valueString)}
             >
-              <SliderTrack>
-                <SliderFilledTrack />
-              </SliderTrack>
-              <SliderThumb boxSize={6}>
-                <Box color="blue.500" as={FaNetworkWired} />
-              </SliderThumb>
-            </Slider>
-            <Text textAlign="center" mt={2}>
-              {clusteringStrength.toFixed(1)}
-            </Text>
+              <NumberInputField />
+              <NumberInputStepper>
+                <NumberIncrementStepper />
+                <NumberDecrementStepper />
+              </NumberInputStepper>
+            </NumberInput>
           </FormControl>
 
-          <Button
-            type="submit"
-            colorScheme="blue"
-            size="lg"
-            leftIcon={<Icon as={FaYoutube} />}
-            _hover={{
-              transform: 'translateY(-2px)',
-              boxShadow: 'lg',
-            }}
-            transition="all 0.2s"
-          >
-            Start Analysis
+          <Button type="submit" colorScheme="teal">
+            Start Processing
           </Button>
         </VStack>
-
-        <Fade in={updates.length > 0}>
-          <Box mt={8}>
-            <RealtimeUpdates updates={updates} />
-          </Box>
-        </Fade>
-      </Container>
-    </Box>
+      </Box>
+      <RealtimeUpdates updates={updates} />
+    </Container>
   );
 }
