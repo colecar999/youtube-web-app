@@ -262,11 +262,9 @@ export default function Home() {
           </Button>
         </VStack>
 
-        <Fade in={updates.length > 0}>
-          <Box mt={8}>
-            <RealtimeUpdates updates={updates} />
-          </Box>
-        </Fade>
+        <Box mt={8}>
+          <RealtimeUpdates updates={updates} />
+        </Box>
       </Container>
     </Box>
   );
