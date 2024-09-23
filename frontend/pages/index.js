@@ -32,7 +32,7 @@ import {
 import { motion } from 'framer-motion';
 import { FaYoutube, FaNetworkWired } from 'react-icons/fa';
 import RealtimeUpdates from '../components/RealtimeUpdates';
-import { supabase } from '../utils/supabaseClient';
+import { supabase } from '../lib/supabaseClient';
 
 const MotionBox = motion(Box);
 
